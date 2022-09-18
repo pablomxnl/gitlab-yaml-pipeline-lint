@@ -1,0 +1,46 @@
+stages:
+  - build
+  - publish_gitlab
+
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.internal.launcher.welcomeMessageEnabled=false"
+  CI: "gitlab-ci"
+
+cache:
+  key: ${CI_PROJECT_NAME}
+  paths:
+    - .gradle
+
+.build_release:
+  image: docker.io/library/gradle:7.5.1-jdk11
+  stage: publish_gitlab
+  only:
+    - master
+    - tags
+  artifacts:
+    when: always
+    paths:
+      - build/distributions/*.zip
+    expire_in: 360 days
+
+.build_artifact:
+  image: docker.io/library/gradle:7.5.1-jdk11
+  stage: build
+  only:
+    refs:
+      - merge_requests
+  artifacts:
+    when: always
+    paths:
+      - build/distributions/*.zip
+    expire_in: 7 days
+
+build_artifact:
+  extends: .build_artifact
+  script:
+    - gradle -Dversion.prerelease=$CI_PIPELINE_ID-SNAPSHOT buildPlugin
+
+release_artifact:
+  extends: .build_release
+  script:
+    - gradle buildPlugin
