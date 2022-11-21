@@ -2,6 +2,10 @@
 :icons: font
 
 image:https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/badges/release.svg[link="https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/releases",title="Latest Release"]
+image:https://img.shields.io/jetbrains/plugin/d/org.ideplugins.gitlab-yaml-pipeline-lint[link="https://plugins.jetbrains.com/plugin/19972-gitlab-pipeline-lint",title="Downloads"]
+image:https://img.shields.io/gitlab/issues/open/pablomxnl/gitlab-yaml-pipeline-lint?style=plastic[link="https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues", title="GitLab issues"]
+image:https://img.shields.io/jetbrains/plugin/r/stars/org.ideplugins.gitlab-yaml-pipeline-lint[link="https://plugins.jetbrains.com/plugin/19972-gitlab-pipeline-lint/reviews",title="Ratings"]
+image:https://img.shields.io/jetbrains/plugin/v/org.ideplugins.gitlab-yaml-pipeline-lint[link="https://plugins.jetbrains.com/plugin/19972-gitlab-pipeline-lint",title="Version"]
 
 Plugin for JetBrains IDE's that uses https://docs.gitlab.com/ee/api/lint.html[Gitlab CI Lint API] to validate the content of your `gitlab-ci.yml` file
 
