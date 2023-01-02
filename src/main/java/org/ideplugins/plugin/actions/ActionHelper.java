@@ -4,10 +4,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
+import com.intellij.ide.passwordSafe.PasswordSafe;
 import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationAction;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
@@ -15,6 +18,8 @@ import com.intellij.psi.PsiFile;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentManager;
 import org.ideplugins.plugin.linter.Constants;
+import org.ideplugins.plugin.settings.YamlPipelineLintSettingsConfigurable;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 
@@ -41,9 +46,7 @@ public final class ActionHelper implements Constants {
                     && "invalid".equals(result.get("status").getAsString())) {
                 JsonArray errorsArray = result.getAsJsonArray("errors");
                 StringBuilder errors = new StringBuilder("gitlab-ci.yml has errors\n" );
-                errorsArray.forEach(error -> {
-                    errors.append(error.getAsString()).append("\n");
-                });
+                errorsArray.forEach(error -> errors.append(error.getAsString()).append("\n"));
                 showResultsInConsole(actionEvent.getProject(), errors.toString(), ConsoleViewContentType.ERROR_OUTPUT);
             }
         } else {
@@ -68,8 +71,7 @@ public final class ActionHelper implements Constants {
         ToolWindow toolWindow = getToolWindow(project);
         ContentManager contentManager = toolWindow.getContentManager();
         Content content = contentManager.findContent("Lint Results");
-        ConsoleView consoleView = (ConsoleView) content.getComponent();
-        return consoleView;
+        return (ConsoleView) content.getComponent();
     }
 
     public static ToolWindow getToolWindow(Project project){
@@ -80,5 +82,22 @@ public final class ActionHelper implements Constants {
         Notification notification =
                 new Notification(GROUP_DISPLAY_ID, NOTIFICATION_TITLE, notificationBody, notificationType);
         Notifications.Bus.notify(notification);
+    }
+
+    public static void displayNotificationWihAction(final NotificationType notificationType, final String notificationBody) {
+        Notification notification =
+                new Notification(GROUP_DISPLAY_ID, NOTIFICATION_TITLE, notificationBody, notificationType);
+        notification.addAction(new NotificationAction("Click here to setup Gilab token") {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent anActionEvent, @NotNull Notification notification) {
+                ShowSettingsUtil.getInstance().showSettingsDialog(null,
+                        YamlPipelineLintSettingsConfigurable.class);
+            }
+        });
+        Notifications.Bus.notify(notification);
+    }
+
+    public static boolean checkGitlabToken() {
+        return PasswordSafe.getInstance().get(CREDENTIAL_ATTRIBUTES) != null;
     }
 }

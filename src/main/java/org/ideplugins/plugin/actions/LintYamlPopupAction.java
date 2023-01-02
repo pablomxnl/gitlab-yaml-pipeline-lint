@@ -1,6 +1,7 @@
 package org.ideplugins.plugin.actions;
 
 import com.google.gson.JsonObject;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -9,8 +10,7 @@ import com.intellij.psi.PsiFile;
 import org.ideplugins.plugin.linter.Constants;
 import org.jetbrains.annotations.NotNull;
 
-import static org.ideplugins.plugin.actions.ActionHelper.showLintResult;
-import static org.ideplugins.plugin.linter.YamlPipelineLinter.checkGitlabToken;
+import static org.ideplugins.plugin.actions.ActionHelper.*;
 import static org.ideplugins.plugin.linter.YamlPipelineLinter.ciLint;
 
 public class LintYamlPopupAction extends AnAction implements Constants {
@@ -31,7 +31,8 @@ public class LintYamlPopupAction extends AnAction implements Constants {
                     showLintResult(result, event);
                 });
             }
-
+        } else {
+            displayNotificationWihAction(NotificationType.WARNING, "Please setup your Gitlab token");
         }
     }
 }
