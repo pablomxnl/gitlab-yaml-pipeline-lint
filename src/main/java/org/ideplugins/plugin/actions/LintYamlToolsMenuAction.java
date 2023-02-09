@@ -11,6 +11,7 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import org.ideplugins.plugin.linter.Constants;
+import org.ideplugins.plugin.linter.YamlPipelineLinter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -18,7 +19,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.ideplugins.plugin.actions.ActionHelper.*;
-import static org.ideplugins.plugin.linter.YamlPipelineLinter.ciLint;
 
 public class LintYamlToolsMenuAction extends AnAction implements Constants {
 
@@ -48,8 +48,9 @@ public class LintYamlToolsMenuAction extends AnAction implements Constants {
             PsiManager psiManager = PsiManager.getInstance(event.getProject());
             JsonObject yamlJson = ActionHelper.getYamlJson(Objects.requireNonNull(psiManager.findFile(files.get(0))));
             ApplicationManager.getApplication().invokeLater(() -> {
-                JsonObject result = ciLint(yamlJson);
-                showLintResult(result, event);
+                YamlPipelineLinter linter =
+                        new YamlPipelineLinter(ActionHelper.getGitlabUrl(), ActionHelper.getGitlabToken());
+                showLintResult(linter.ciLint(yamlJson), event);
             });
         } else {
             displayNotificationWihAction(NotificationType.WARNING, "Please setup your Gitlab token");

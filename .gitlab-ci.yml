@@ -1,6 +1,5 @@
 stages:
   - build
-  - publish_gitlab
 
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.internal.launcher.welcomeMessageEnabled=false"
@@ -13,19 +12,25 @@ cache:
 
 .build_release:
   image: docker.io/library/gradle:7.5.1-jdk11
-  stage: publish_gitlab
+  stage: build
+  coverage: '/    - Instruction Coverage: ([0-9.]+)%/'
   only:
-    - master
+    - main
     - tags
   artifacts:
     when: always
     paths:
       - build/distributions/*.zip
+      - build/reports/tests
+      - build/reports/jacoco/test
+    reports:
+      junit: build/test-results/test/**/TEST-*.xml
     expire_in: 360 days
 
 .build_artifact:
   image: docker.io/library/gradle:7.5.1-jdk11
   stage: build
+  coverage: '/    - Instruction Coverage: ([0-9.]+)%/'
   only:
     refs:
       - merge_requests
@@ -33,14 +38,20 @@ cache:
     when: always
     paths:
       - build/distributions/*.zip
+      - build/reports/tests
+      - build/reports/jacoco/test
+    reports:
+      junit: build/test-results/test/**/TEST-*.xml
     expire_in: 7 days
 
 build_artifact:
   extends: .build_artifact
   script:
+    - gradle test
     - gradle -Dversion.prerelease=$CI_PIPELINE_ID-SNAPSHOT buildPlugin
 
 release_artifact:
   extends: .build_release
   script:
+    - gradle test
     - gradle buildPlugin
