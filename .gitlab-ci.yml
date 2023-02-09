@@ -16,7 +16,6 @@ cache:
   coverage: '/    - Instruction Coverage: ([0-9.]+)%/'
   only:
     - main
-    - tags
   artifacts:
     when: always
     paths:
