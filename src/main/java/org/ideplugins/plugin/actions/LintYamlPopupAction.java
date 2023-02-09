@@ -8,10 +8,10 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.psi.PsiFile;
 import org.ideplugins.plugin.linter.Constants;
+import org.ideplugins.plugin.linter.YamlPipelineLinter;
 import org.jetbrains.annotations.NotNull;
 
 import static org.ideplugins.plugin.actions.ActionHelper.*;
-import static org.ideplugins.plugin.linter.YamlPipelineLinter.ciLint;
 
 public class LintYamlPopupAction extends AnAction implements Constants {
     @Override
@@ -27,8 +27,9 @@ public class LintYamlPopupAction extends AnAction implements Constants {
             if (psiFile != null) {
                 JsonObject yamlJson = ActionHelper.getYamlJson(psiFile);
                 ApplicationManager.getApplication().invokeLater(() -> {
-                    JsonObject result = ciLint(yamlJson);
-                    showLintResult(result, event);
+                    YamlPipelineLinter linter =
+                            new YamlPipelineLinter(ActionHelper.getGitlabUrl(), ActionHelper.getGitlabToken());
+                    showLintResult(linter.ciLint(yamlJson), event);
                 });
             }
         } else {
