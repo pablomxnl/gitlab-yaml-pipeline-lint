@@ -20,7 +20,9 @@
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
-<!--    <depends>com.intellij.java</depends>    -->
+    <depends>org.jetbrains.plugins.yaml</depends>
+    <depends optional="true" config-file="org.ideplugins.java.xml">com.intellij.java</depends>
+
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
@@ -35,6 +37,16 @@
                     canCloseContents="false"
                     factoryClass="org.ideplugins.plugin.toolwindow.YamlPipelineLintToolWindow"
                     icon="/icons/yaml_pipeline_lint.svg"/>
+
+        <externalAnnotator order="last"
+                           implementationClass="org.ideplugins.plugin.annotator.PipelineLintResultsExternalAnnotator"
+                           language="yaml"
+        />
+        <notificationGroup displayType="STICKY_BALLOON" id="gitlab-yaml-lint-plugin-update"  />
+        <postStartupActivity implementation="org.ideplugins.plugin.activity.YamlPipelineLintPluginStartupActivity"/>
+
+        <errorHandler implementation="org.ideplugins.plugin.errorhandling.SentryErrorReporter"/>
+
 
     </extensions>
     <actions>

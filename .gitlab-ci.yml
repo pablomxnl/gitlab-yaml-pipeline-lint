@@ -2,7 +2,7 @@ stages:
   - build
 
 variables:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.internal.launcher.welcomeMessageEnabled=false"
+  GRADLE_OPTS: "-Dorg.gradle.internal.launcher.welcomeMessageEnabled=false"
   CI: "gitlab-ci"
 
 cache:
@@ -11,9 +11,11 @@ cache:
     - .gradle
 
 .build_release:
-  image: docker.io/library/gradle:7.5.1-jdk11
+  image: docker.io/library/gradle:7.6.1-jdk11
   stage: build
   coverage: '/    - Instruction Coverage: ([0-9.]+)%/'
+  tags:
+    - saas-linux-medium-amd64
   only:
     - main
   artifacts:
@@ -27,9 +29,11 @@ cache:
     expire_in: 360 days
 
 .build_artifact:
-  image: docker.io/library/gradle:7.5.1-jdk11
+  image: docker.io/library/gradle:7.6.1-jdk11
   stage: build
   coverage: '/    - Instruction Coverage: ([0-9.]+)%/'
+  tags:
+    - saas-linux-medium-amd64
   only:
     refs:
       - merge_requests

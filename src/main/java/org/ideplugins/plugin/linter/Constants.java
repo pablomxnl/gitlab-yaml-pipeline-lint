@@ -10,6 +10,8 @@ public interface Constants {
     String GITLAB_CI_YML = ".gitlab-ci.yml";
     String GITLAB_RESPONSE_BODY = "gitlabResponse";
     String GITLAB_RESPONSE_STATUS = "httpStatus";
+
+    String PLUGIN_ID = "org.ideplugins.gitlab-yaml-pipeline-lint";
     CredentialAttributes CREDENTIAL_ATTRIBUTES = new CredentialAttributes(
             CredentialAttributesKt.generateServiceName("ci-pipeline-lint", "gitlab-token")
     );

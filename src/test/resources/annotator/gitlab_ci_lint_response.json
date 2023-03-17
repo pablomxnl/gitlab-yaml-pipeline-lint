@@ -1,0 +1,13 @@
+{
+  "valid": false,
+  "errors": [
+    "jobs:scheduled_regression_test config contains unknown keys: bedfore_script",
+    "jobs:scheduled_regression_qa config contains unknown keys: bedfore_script"
+  ],
+  "warnings": [
+    "jobs:my_firs_tjob may allow multiple pipelines to run for a single action due to `rules:when` clause with no `workflow:rules` - read more: https://docs.gitlab.com/ee/ci/troubleshooting.html#pipeline-warnings",
+    "jobs:my_second_job may allow multiple pipelines to run for a single action due to `rules:when` clause with no `workflow:rules` - read more: https://docs.gitlab.com/ee/ci/troubleshooting.html#pipeline-warnings"
+  ],
+  "includes": [],
+  "status": "invalid"
+}

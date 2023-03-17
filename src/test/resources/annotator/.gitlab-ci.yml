@@ -1,0 +1,90 @@
+stages:
+  - build
+
+
+my_firs_tjob:
+  stage: build
+  script:
+    - ls
+  rules:
+    #    - if: $CI_PIPELINE_SOURCE == "push"
+    #    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - when: always
+
+my_second_job:
+  stage: build
+  script:
+    - ls
+  rules:
+    #    - if: $CI_PIPELINE_SOURCE == "push"
+    #    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - when: always
+
+compile:
+  only:
+    refs:
+      - master
+      - merge_requests
+      - api
+      - web
+  except:
+    refs:
+      - schedules
+    variables:
+      - $CI_MERGE_REQUEST_TITLE =~ /^WIP:.*/
+  tags:
+    - docker
+  stage: build
+  variables:
+    TEST_ENVIRONMENT: 'testing'
+  before_script:
+    - echo "before_tests"
+  script:
+    - cd myproject
+    - mvn -B -q test -Denv="${TEST_ENVIRONMENT}"
+  artifacts:
+    paths:
+      - myproject/target/surefire-reports
+    reports:
+      junit: myproject/target/surefire-reports/junitreports/*.xml
+    when: always
+    expire_in: 7 days
+
+.scheduled_pipeline:
+  only:
+    refs:
+      - schedules
+  bedfore_script:
+    - echo "before_tests"
+  variables:
+    TEST_ENVIRONMENT: 'dev'
+  script:
+    - cd myproject
+    - mvn -B -q test -Denv=${TEST_ENVIRONMENT} -DtestSuite=MySuite
+  artifacts:
+    when: always
+    reports:
+      junit: myproject/target/surefire-reports/junitreports/*.xml
+    paths:
+      - myproject/target/*.csv
+      - myproject/target/surefire-reports
+    expire_in: 7 days
+  stage: build
+
+scheduled_regression_test:
+  extends: .scheduled_pipeline
+  only:
+    variables:
+      - $TEST_JOB == "REGRESSION_DEV"
+  tags:
+    - docker
+
+scheduled_regression_qa:
+  extends: .scheduled_pipeline
+  variables:
+    TEST_ENVIRONMENT: 'qa'
+  only:
+    variables:
+      - $TEST_JOB == "REGRESSION_QA"
+  tags:
+    - docker
