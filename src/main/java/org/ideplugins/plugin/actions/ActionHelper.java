@@ -25,7 +25,12 @@ import org.ideplugins.plugin.settings.YamlPipelineLintSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+
+import static com.intellij.execution.ui.ConsoleViewContentType.ERROR_OUTPUT;
+import static com.intellij.execution.ui.ConsoleViewContentType.LOG_INFO_OUTPUT;
 
 
 public final class ActionHelper implements Constants {
@@ -99,17 +104,22 @@ public final class ActionHelper implements Constants {
         JsonObject result = gitlabResponse.getAsJsonObject(GITLAB_RESPONSE_BODY);
         switch (gitlabResponse.get(GITLAB_RESPONSE_STATUS).getAsInt()) {
             case 200:
-                if (result.has("status")
-                        && "valid".equals(result.get("status").getAsString())) {
-                    String successMessage = "✅ Congratulations!! pipeline yaml has no errors";
-                    displayNotification(NotificationType.INFORMATION, successMessage);
-                    showResultsInConsole(actionEvent.getProject(), successMessage, ConsoleViewContentType.LOG_INFO_OUTPUT);
+                if (    result.has("status")
+                        && "valid".equals(result.get("status").getAsString()) &&
+                        result.get("warnings").getAsJsonArray().isEmpty()
+                ) {
+
+                    String successMessage = "✅ Congratulations!! Pipeline yaml has no errors";
+                    showResultsInConsole(actionEvent.getProject(), successMessage, LOG_INFO_OUTPUT);
+                } else if (result.has("status")
+                        && "valid".equals(result.get("status").getAsString()) &&
+                        result.get("warnings").getAsJsonArray().size() > 0){
+
+                    showResultsInConsole(actionEvent, result, "warnings");
+
                 } else if (result.has("status")
                         && "invalid".equals(result.get("status").getAsString())) {
-                    JsonArray errorsArray = result.getAsJsonArray("errors");
-                    StringBuilder errors = new StringBuilder("gitlab-ci.yml has errors\n");
-                    errorsArray.forEach(error -> errors.append(error.getAsString()).append("\n"));
-                    showResultsInConsole(actionEvent.getProject(), errors.toString(), ConsoleViewContentType.ERROR_OUTPUT);
+                    showResultsInConsole(actionEvent, result, "warnings", "errors");
                 }
                 break;
             case 401:
@@ -117,7 +127,7 @@ public final class ActionHelper implements Constants {
                 showResultsInConsole(actionEvent.getProject(),
                         String.format("Unauthorized:, click the link in the notification to setup " +
                                 "a valid gitlab token for %s\n", gitlabHost) + result,
-                        ConsoleViewContentType.ERROR_OUTPUT);
+                        ERROR_OUTPUT);
                 displayNotificationWihAction(NotificationType.ERROR,
                         String.format("Please configure a valid Gitlab token for %s", gitlabHost));
                 break;
@@ -125,7 +135,7 @@ public final class ActionHelper implements Constants {
                 showResultsInConsole(actionEvent.getProject(),
                         String.format("Not able to reach gitlab at %s", gitlabResponse.get("host").getAsString())
                                 + "\nPlease check your network or verify the values on plugin settings \n" + result,
-                        ConsoleViewContentType.ERROR_OUTPUT);
+                        ERROR_OUTPUT);
                 displayNotificationWihAction(NotificationType.ERROR, "Double check gitlab host");
                 break;
             default:
@@ -137,5 +147,34 @@ public final class ActionHelper implements Constants {
 
                 break;
         }
+    }
+
+    private static void showResultsInConsole(AnActionEvent actionEvent, JsonObject result, String ... errorTypes) {
+        Set<String> processedErrorType = new HashSet<>();
+        StringBuilder errors = new StringBuilder();
+        for (String errorType : errorTypes) {
+            JsonArray errorsArray = result.getAsJsonArray(errorType);
+            if (!errorsArray.isEmpty()){
+                errors.append(errorType).append(":\n");
+            }
+            errorsArray.forEach(error -> {
+                errors.append(error.getAsString()).append("\n");
+                processedErrorType.add(errorType);
+            });
+            errors.append("\n");
+        }
+        String successMessage = "";
+        ConsoleViewContentType level = LOG_INFO_OUTPUT;
+        if (errorTypes.length ==1) {
+            successMessage = "⚠️ Pipeline yaml has warnings";
+        }
+        if (errorTypes.length == 2){
+            successMessage = processedErrorType.size()==2 ?
+                    "❌⚠️ Pipeline yaml has errors and warnings":
+                    "❌ Pipeline yaml has errors";
+            level = ERROR_OUTPUT;
+        }
+
+        showResultsInConsole(actionEvent.getProject(), successMessage + "\n" + errors, level);
     }
 }
