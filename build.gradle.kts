@@ -3,7 +3,7 @@ val typeIDE:String by project
 plugins {
     id("java")
     id("net.thauvin.erik.gradle.semver") version "1.0.4"
-    id("org.jetbrains.intellij") version "1.13.2"
+    id("org.jetbrains.intellij") version "1.13.3"
     id("org.barfuin.gradle.jacocolog") version "3.1.0"
     id("jacoco")
 }
@@ -35,29 +35,34 @@ repositories {
 intellij {
     version.set("2021.3.3")
     type.set(typeIDE) // Target IDE Platform
-//    downloadSources.set(false)
     updateSinceUntilBuild.set(false)
     plugins.set(listOf("java", "org.jetbrains.plugins.yaml:213.6777.22"))
 }
 
 dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
-    implementation("com.google.code.gson:gson" ){
-        version {
-            strictly("2.9.1")
-        }
-    }
+    implementation("com.google.code.gson:gson:2.10.1")
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
-    testImplementation("com.squareup.okhttp3:mockwebserver:4.10.0")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.10.0"){
+        exclude("junit")
+    }
     testImplementation("org.mockito:mockito-core:5.2.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.9.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
     implementation("org.ideplugins:pluginSettingsLibrary:0.0.1")
-    implementation("io.sentry:sentry:6.15.0"){
+    implementation("io.sentry:sentry:6.17.0"){
         exclude(group = "org.slf4j")
     }
 }
+
+tasks.register<JavaExec>("FetchGitlabVariables") {
+    dependsOn("classes")
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("org.ideplugins.gitlab_pipeline_lint.gitlab.FetchGitlabVariables")
+    setArgsString(file("${projectDir}/src/main/resources/gitlab-variables.json").path)
+}
+
 tasks {
     // Set the JVM compatibility versions
     withType<JavaCompile> {
@@ -82,6 +87,11 @@ tasks {
         changeNotes.set(
             """
     <ul>
+    <li>0.0.5
+        <ul>
+        <li>Add autocomplete for gitlab variables</li>
+        </ul>
+    </li>      
     <li>0.0.4
         <ul>
         <li>Annotating the results in the problem view / editor </li>
@@ -127,4 +137,8 @@ tasks {
             xml.required.set(true)
         }
     }
+
+//    runPluginVerifier {
+//        ideVersions.set(listOf("IU-231.8109.175","IC-213.7172.25"))
+//    }
 }

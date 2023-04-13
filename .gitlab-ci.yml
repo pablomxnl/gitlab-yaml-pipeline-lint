@@ -5,13 +5,14 @@ variables:
   GRADLE_OPTS: "-Dorg.gradle.internal.launcher.welcomeMessageEnabled=false"
   CI: "gitlab-ci"
 
+image: docker.io/library/gradle:8.0.1-jdk11
+
 cache:
   key: ${CI_PROJECT_NAME}
   paths:
     - .gradle
 
 .build_release:
-  image: docker.io/library/gradle:7.6.1-jdk11
   stage: build
   coverage: '/    - Instruction Coverage: ([0-9.]+)%/'
   tags:
@@ -29,7 +30,6 @@ cache:
     expire_in: 360 days
 
 .build_artifact:
-  image: docker.io/library/gradle:7.6.1-jdk11
   stage: build
   coverage: '/    - Instruction Coverage: ([0-9.]+)%/'
   tags:
