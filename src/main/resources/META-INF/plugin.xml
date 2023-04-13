@@ -27,44 +27,45 @@
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable parentId="tools"
-                                 instance="org.ideplugins.plugin.settings.YamlPipelineLintSettingsConfigurable"
+                                 instance="org.ideplugins.gitlab_pipeline_lint.settings.YamlPipelineLintSettingsConfigurable"
                                  id="org.ideplugins.PluginSettingsConfigurable"
                                  displayName="Gitlab Pipeline Lint"/>
-        <applicationService serviceImplementation="org.ideplugins.plugin.settings.YamlPipelineLintSettingsState"/>
+        <applicationService serviceImplementation="org.ideplugins.gitlab_pipeline_lint.settings.YamlPipelineLintSettingsState"/>
 
         <toolWindow id="Gitlab Pipeline Lint Results"
                     anchor="bottom"
                     canCloseContents="false"
-                    factoryClass="org.ideplugins.plugin.toolwindow.YamlPipelineLintToolWindow"
+                    factoryClass="org.ideplugins.gitlab_pipeline_lint.toolwindow.YamlPipelineLintToolWindow"
                     icon="/icons/yaml_pipeline_lint.svg"/>
 
         <externalAnnotator order="last"
-                           implementationClass="org.ideplugins.plugin.annotator.PipelineLintResultsExternalAnnotator"
+                           implementationClass="org.ideplugins.gitlab_pipeline_lint.annotator.PipelineLintResultsExternalAnnotator"
                            language="yaml"
         />
         <notificationGroup displayType="STICKY_BALLOON" id="gitlab-yaml-lint-plugin-update"  />
-        <postStartupActivity implementation="org.ideplugins.plugin.activity.YamlPipelineLintPluginStartupActivity"/>
+        <postStartupActivity implementation="org.ideplugins.gitlab_pipeline_lint.activity.YamlPipelineLintPluginStartupActivity"/>
 
-        <errorHandler implementation="org.ideplugins.plugin.errorhandling.SentryErrorReporter"/>
-
+        <errorHandler implementation="org.ideplugins.gitlab_pipeline_lint.errorhandling.SentryErrorReporter"/>
+        <completion.contributor language="yaml" order="first"
+            implementationClass="org.ideplugins.gitlab_pipeline_lint.completion.GitlabCIVariablesCompletionContributor"/>
 
     </extensions>
     <actions>
         <action id="org.ideplugins.pipelinelint.LintYamlToolsMenuAction" icon="/icons/yaml_pipeline_lint.svg"
-                class="org.ideplugins.plugin.actions.LintYamlToolsMenuAction" text="Gitlab Pipeline Lint"
+                class="org.ideplugins.gitlab_pipeline_lint.actions.LintYamlToolsMenuAction" text="Gitlab Pipeline Lint"
                 description="Validate your gitlab-ci yaml file">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
 
         <action
                 id="org.ideplugins.pipelinelint.LintYamlPopupAction" icon="/icons/yaml_pipeline_lint.svg"
-                class="org.ideplugins.plugin.actions.LintYamlPopupAction" text="Gitlab Pipeline Lint"
+                class="org.ideplugins.gitlab_pipeline_lint.actions.LintYamlPopupAction" text="Gitlab Pipeline Lint"
                 description="Validate your gitlab-ci yaml file">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
         </action>
         <action
                 id="org.ideplugins.pipelinelint.LintYamlEditorPopupAction" icon="/icons/yaml_pipeline_lint.svg"
-                class="org.ideplugins.plugin.actions.LintYamlPopupAction" text="Gitlab Pipeline Lint"
+                class="org.ideplugins.gitlab_pipeline_lint.actions.LintYamlPopupAction" text="Gitlab Pipeline Lint"
                 description="Validate your gitlab-ci yaml file">
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>
