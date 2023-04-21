@@ -3,7 +3,7 @@ val typeIDE:String by project
 plugins {
     id("java")
     id("net.thauvin.erik.gradle.semver") version "1.0.4"
-    id("org.jetbrains.intellij") version "1.13.3"
+    id("org.jetbrains.intellij") version "1.13.1"
     id("org.barfuin.gradle.jacocolog") version "3.1.0"
     id("jacoco")
 }
