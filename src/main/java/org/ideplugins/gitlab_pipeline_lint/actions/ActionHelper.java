@@ -25,8 +25,9 @@ import org.ideplugins.gitlab_pipeline_lint.settings.YamlPipelineLintSettingsStat
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.net.HttpURLConnection;
 import java.util.HashSet;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.intellij.execution.ui.ConsoleViewContentType.ERROR_OUTPUT;
@@ -90,8 +91,12 @@ public final class ActionHelper implements Constants {
     }
 
     public static String getGitlabToken() {
-        Credentials credentials = PasswordSafe.getInstance().get(CREDENTIAL_ATTRIBUTES);
-        return Objects.requireNonNull(credentials).getPasswordAsString();
+        String token = "";
+        Optional<Credentials> credentials = Optional.ofNullable(PasswordSafe.getInstance().get(CREDENTIAL_ATTRIBUTES));
+        if (credentials.isPresent()){
+            token = credentials.get().getPasswordAsString();
+        }
+        return token;
     }
 
     public static String getGitlabUrl() {
@@ -102,28 +107,29 @@ public final class ActionHelper implements Constants {
 
     public static void showLintResult(final JsonObject gitlabResponse, final AnActionEvent actionEvent) {
         JsonObject result = gitlabResponse.getAsJsonObject(GITLAB_RESPONSE_BODY);
+        String gitlabHost = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class)
+                .gitlabHost;
         switch (gitlabResponse.get(GITLAB_RESPONSE_STATUS).getAsInt()) {
-            case 200:
-                if (    result.has("status")
-                        && "valid".equals(result.get("status").getAsString()) &&
+            case HttpURLConnection.HTTP_OK :
+                if (    result.has("valid")
+                        && result.get("valid").getAsBoolean() &&
                         result.get("warnings").getAsJsonArray().isEmpty()
                 ) {
 
                     String successMessage = "✅ Congratulations!! Pipeline yaml has no errors";
                     showResultsInConsole(actionEvent.getProject(), successMessage, LOG_INFO_OUTPUT);
-                } else if (result.has("status")
-                        && "valid".equals(result.get("status").getAsString()) &&
+                } else if (result.has("valid")
+                        && result.get("valid").getAsBoolean()  &&
                         result.get("warnings").getAsJsonArray().size() > 0){
 
                     showResultsInConsole(actionEvent, result, "warnings");
 
-                } else if (result.has("status")
-                        && "invalid".equals(result.get("status").getAsString())) {
+                } else if (result.has("valid")
+                        && !result.get("valid").getAsBoolean() ) {
                     showResultsInConsole(actionEvent, result, "warnings", "errors");
                 }
                 break;
-            case 401:
-                String gitlabHost = gitlabResponse.get("host").getAsString();
+            case HttpURLConnection.HTTP_UNAUTHORIZED:
                 showResultsInConsole(actionEvent.getProject(),
                         String.format("Unauthorized:, click the link in the notification to setup " +
                                 "a valid gitlab token for %s\n", gitlabHost) + result,
@@ -131,17 +137,28 @@ public final class ActionHelper implements Constants {
                 displayNotificationWithAction(NotificationType.ERROR,
                         String.format("Please configure a valid Gitlab token for %s", gitlabHost));
                 break;
-            case 408:
+            case HttpURLConnection.HTTP_NOT_FOUND:
                 showResultsInConsole(actionEvent.getProject(),
-                        String.format("Not able to reach gitlab at %s", gitlabResponse.get("host").getAsString())
+                        String.format("Project ID not found:\n" +
+                                "Please double check your project ID at %s, click the link in the notification to set it up \n", gitlabHost) + result,
+                        ERROR_OUTPUT);
+                displayNotificationWithAction(NotificationType.ERROR,
+                        String.format("Please configure Gitlab Project ID at %s", gitlabHost));
+                break;
+            case HttpURLConnection.HTTP_CLIENT_TIMEOUT:
+                showResultsInConsole(actionEvent.getProject(),
+                        String.format("Not able to reach gitlab at %s", gitlabHost)
                                 + "\nPlease check your network or verify the values on plugin settings \n" + result,
                         ERROR_OUTPUT);
                 displayNotificationWithAction(NotificationType.ERROR, "Double check gitlab host");
                 break;
             default:
-                displayNotification(NotificationType.ERROR,
-                        "ERROR posting yaml to gitlab lint api; please check plugin settings."
-                                + "\n Response status from gitlab: " + gitlabResponse.get(GITLAB_RESPONSE_STATUS).getAsInt()
+                showResultsInConsole(actionEvent.getProject(),
+                        String.format("ERROR using gitlab lint api at %s", gitlabHost)
+                                + "\nplease check plugin settings \n" + result,
+                        ERROR_OUTPUT);
+                displayNotificationWithAction(NotificationType.ERROR,
+                        "ERROR using gitlab lint api; please check plugin settings."
                                 + "\n Response body: \n" + result
                 );
 

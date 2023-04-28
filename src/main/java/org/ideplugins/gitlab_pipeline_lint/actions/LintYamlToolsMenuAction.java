@@ -15,7 +15,10 @@ import org.ideplugins.gitlab_pipeline_lint.linter.YamlPipelineLinter;
 import org.ideplugins.gitlab_pipeline_lint.service.PipelineIssuesReporter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.ideplugins.gitlab_pipeline_lint.actions.ActionHelper.*;
 
@@ -29,9 +32,11 @@ public class LintYamlToolsMenuAction extends AnAction implements Constants {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        if (checkGitlabToken()) {
+        String gitlabCILintEndpoint = getGitlabUrl();
+        Optional<Project> optionalProject = Optional.ofNullable(event.getProject());
+        if (checkGitlabToken() && !gitlabCILintEndpoint.contains("%")) {
             Optional.ofNullable(event.getProject()).ifPresent(project -> {
-                GlobalSearchScope scope = GlobalSearchScope.projectScope(Objects.requireNonNull(event.getProject()));
+                GlobalSearchScope scope = GlobalSearchScope.projectScope(project);
                 List<VirtualFile> files = new ArrayList<>(FilenameIndex.getVirtualFilesByName(GITLAB_CI_YML, scope));
 
                 if (files.size() == 0) {
@@ -48,7 +53,7 @@ public class LintYamlToolsMenuAction extends AnAction implements Constants {
                     JsonObject yamlJson = ActionHelper.getYamlJson(psiFile);
                     ApplicationManager.getApplication().invokeLater(() -> {
                         YamlPipelineLinter linter =
-                                new YamlPipelineLinter(ActionHelper.getGitlabUrl(), ActionHelper.getGitlabToken());
+                                new YamlPipelineLinter(gitlabCILintEndpoint, ActionHelper.getGitlabToken());
                         JsonObject gitlabResponse = linter.ciLint(yamlJson);
                         showLintResult(gitlabResponse, event);
                         PipelineIssuesReporter reporter = project.getService(PipelineIssuesReporter.class);
@@ -58,7 +63,7 @@ public class LintYamlToolsMenuAction extends AnAction implements Constants {
 
             });
         } else {
-            displayNotificationWithAction(NotificationType.WARNING, "Please setup your Gitlab token");
+            displayNotificationWithAction(NotificationType.WARNING, "Please setup your Gitlab token/Project ID");
         }
     }
 

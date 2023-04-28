@@ -27,7 +27,7 @@ https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/releases[releases distr
 
 == Configuration
 
-The plugin requires a Gitlab token in order to invoke the Gitlab Lint API.
+The plugin requires a Gitlab token and a project ID in order to invoke the Gitlab Lint API.
 
 To enter this configuration go to
 `Settings` (or `Preferences` if using mac) -> `Tools` -> `Gitlab Pipeline Lint`

@@ -28,14 +28,15 @@ public class LintYamlPopupAction extends AnAction implements Constants {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        if (checkGitlabToken()) {
+        String gitlabCILintEndpoint = getGitlabUrl();
+        if (checkGitlabToken() && !gitlabCILintEndpoint.contains("%")) {
             Optional.ofNullable(event.getProject()).ifPresent(project -> {
                 PsiFile psiFile = event.getData(CommonDataKeys.PSI_FILE);
                 if (psiFile != null) {
                     JsonObject yamlJson = ActionHelper.getYamlJson(psiFile);
                     ApplicationManager.getApplication().invokeLater(() -> {
                         YamlPipelineLinter linter =
-                                new YamlPipelineLinter(ActionHelper.getGitlabUrl(), ActionHelper.getGitlabToken());
+                                new YamlPipelineLinter(gitlabCILintEndpoint, ActionHelper.getGitlabToken());
                         JsonObject gitlabResponse = linter.ciLint(yamlJson);
                         showLintResult(gitlabResponse, event);
 
@@ -46,7 +47,7 @@ public class LintYamlPopupAction extends AnAction implements Constants {
                 }
             });
         } else {
-            displayNotificationWithAction(NotificationType.WARNING, "Please setup your Gitlab token");
+            displayNotificationWithAction(NotificationType.WARNING, "Please setup your Gitlab token/Project ID");
         }
     }
 }

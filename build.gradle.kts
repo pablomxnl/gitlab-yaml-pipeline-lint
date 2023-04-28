@@ -3,7 +3,7 @@ val typeIDE:String by project
 plugins {
     id("java")
     id("net.thauvin.erik.gradle.semver") version "1.0.4"
-    id("org.jetbrains.intellij") version "1.13.3"
+    id("org.jetbrains.intellij") version "1.13.1"
     id("org.barfuin.gradle.jacocolog") version "3.1.0"
     id("jacoco")
 }
@@ -87,6 +87,11 @@ tasks {
         changeNotes.set(
             """
     <ul>
+    <li>0.0.6
+        <ul>
+        <li>Adjust to use new pipeline lint endpoint per project as old global endpoint is removed in Gitlab 16.0 </li>
+        </ul>
+    </li>       
     <li>0.0.5
         <ul>
         <li>Add autocomplete for gitlab variables</li>
