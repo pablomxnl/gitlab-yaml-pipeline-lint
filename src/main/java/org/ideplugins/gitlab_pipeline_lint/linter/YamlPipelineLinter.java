@@ -39,7 +39,6 @@ public class YamlPipelineLinter implements Constants {
         JsonObject jsonObject = new JsonObject();
         Request request = createPostRequest(yamlJson);
         String host = request.url().host();
-        jsonObject.addProperty("host", host);
         try (Response response = client.newCall(request).execute()) {
             Optional<ResponseBody> body = Optional.ofNullable(response.body());
             if (body.isPresent()){

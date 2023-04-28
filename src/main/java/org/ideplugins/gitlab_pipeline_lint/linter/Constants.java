@@ -2,9 +2,13 @@ package org.ideplugins.gitlab_pipeline_lint.linter;
 
 import com.intellij.credentialStore.CredentialAttributes;
 import com.intellij.credentialStore.CredentialAttributesKt;
+import com.intellij.openapi.util.IconLoader;
+
+import javax.swing.*;
 
 public interface Constants {
-    String GITLAB_URL = "https://gitlab.com/api/v4/ci/lint";
+    String GITLAB_URL = "https://%s/api/v4/projects/%s/ci/lint";
+    String GITLAB_HOST = "gitlab.com";
     String NOTIFICATION_TITLE = "Gitlab Pipeline Lint";
     String GROUP_DISPLAY_ID = "org.ideplugins.pipeline-lint";
     String GITLAB_CI_YML = ".gitlab-ci.yml";
@@ -15,4 +19,6 @@ public interface Constants {
     CredentialAttributes CREDENTIAL_ATTRIBUTES = new CredentialAttributes(
             CredentialAttributesKt.generateServiceName("ci-pipeline-lint", "gitlab-token")
     );
+
+    Icon gitlabProjectIdScreenshot = IconLoader.getIcon("/icons/gitlabProjectID.png", Constants.class);
 }

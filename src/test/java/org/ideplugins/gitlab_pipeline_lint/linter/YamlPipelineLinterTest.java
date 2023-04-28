@@ -46,7 +46,6 @@ class YamlPipelineLinterTest implements Constants {
                 new YamlPipelineLinter(mockWebServer.url("/").toString(), "", 500);
         JsonObject result = linterWithTimeout.ciLint(contentJson);
         assertEquals(HttpStatus.SC_REQUEST_TIMEOUT, result.get(GITLAB_RESPONSE_STATUS).getAsInt());
-        assertEquals(result.get("host").getAsString(), mockWebServer.getHostName());
     }
 
     @Test

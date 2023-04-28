@@ -5,6 +5,7 @@ import com.intellij.ide.passwordSafe.PasswordSafe;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
+import org.ideplugins.gitlab_pipeline_lint.actions.ActionHelper;
 import org.ideplugins.gitlab_pipeline_lint.linter.Constants;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,7 +17,7 @@ public class YamlPipelineLintSettingsConfigurable implements Configurable, Const
 
     @Override
     public String getDisplayName() {
-        return "Gitlab-CI Pipeline Lint";
+        return "Gitlab Pipeline Lint";
     }
 
     @Override
@@ -26,26 +27,35 @@ public class YamlPipelineLintSettingsConfigurable implements Configurable, Const
     }
 
     @Override
+    public @Nullable JComponent getPreferredFocusedComponent() {
+        return settingsComponent.getPreferredFocusedComponent();
+    }
+
+    @Override
     public boolean isModified() {
         YamlPipelineLintSettingsState settingsState = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class);
         boolean endpointModified = !settingsComponent.getGitlabEndpoint().equals(settingsState.gitlabEndpoint);
+        boolean hostModified = !settingsComponent.getGitlabHost().equals(settingsState.gitlabHost);
         boolean tokenModified = !settingsComponent.getGitlabToken().equals(settingsState.gitlabToken);
-        return endpointModified || tokenModified;
+        return endpointModified || tokenModified || hostModified;
     }
 
     @Override
     public void apply() throws ConfigurationException {
         YamlPipelineLintSettingsState settingsState = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class);
-        settingsState.gitlabToken = "*".repeat(25);
         Credentials credentials = new Credentials("", settingsComponent.getGitlabToken());
         PasswordSafe.getInstance().set(CREDENTIAL_ATTRIBUTES, credentials);
+        settingsState.gitlabHost = settingsComponent.getGitlabHost();
         settingsState.gitlabEndpoint = settingsComponent.getGitlabEndpoint();
+        settingsState.gitlabProjectID = settingsComponent.getGitlabProjectID();
     }
 
     @Override
     public void reset() {
         YamlPipelineLintSettingsState settingsState = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class);
         settingsComponent.setGitlabEndpoint(settingsState.gitlabEndpoint);
-        settingsComponent.setGitlabToken(settingsState.gitlabToken);
+        settingsComponent.setGitlabToken(ActionHelper.getGitlabToken());
+        settingsComponent.setGitlabProjectID(settingsState.gitlabProjectID);
+        settingsComponent.setGitlabHost(settingsState.gitlabHost);
     }
 }

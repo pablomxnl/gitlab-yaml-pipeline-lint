@@ -87,6 +87,11 @@ tasks {
         changeNotes.set(
             """
     <ul>
+    <li>0.0.6
+        <ul>
+        <li>Adjust to use new pipeline lint endpoint per project as old global endpoint is removed in Gitlab 16.0 </li>
+        </ul>
+    </li>       
     <li>0.0.5
         <ul>
         <li>Add autocomplete for gitlab variables</li>
