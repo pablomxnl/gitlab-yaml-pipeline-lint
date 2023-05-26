@@ -5,7 +5,7 @@ variables:
   GRADLE_OPTS: "-Dorg.gradle.internal.launcher.welcomeMessageEnabled=false"
   CI: "gitlab-ci"
 
-image: docker.io/library/gradle:8.0.1-jdk11
+image: docker.io/library/gradle:8.1.1-jdk11
 
 cache:
   key: ${CI_PROJECT_NAME}

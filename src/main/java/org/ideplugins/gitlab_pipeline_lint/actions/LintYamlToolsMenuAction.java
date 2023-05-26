@@ -33,7 +33,6 @@ public class LintYamlToolsMenuAction extends AnAction implements Constants {
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
         String gitlabCILintEndpoint = getGitlabUrl();
-        Optional<Project> optionalProject = Optional.ofNullable(event.getProject());
         if (checkGitlabToken() && !gitlabCILintEndpoint.contains("%")) {
             Optional.ofNullable(event.getProject()).ifPresent(project -> {
                 GlobalSearchScope scope = GlobalSearchScope.projectScope(project);

@@ -1,0 +1,35 @@
+= Vale CLI Plugin Changelog
+
+== About
+
+This document provides an overview of the changes by release.
+
+[[releasenotes]]
+== Release notes
+
+=== 0.0.6
+
+- Adjust to use new pipeline lint endpoint per project as old global endpoint is removed in Gitlab 16.0
+
+=== 0.0.5
+
+- Add autocomplete for gitlab variables
+
+=== 0.0.4
+
+- Annotating the results in the problem view / editor
+- Improve error reporting to include warnings
+- Add uncaught error reporting
+- Plugin update notification begging for rate/review 🤣
+
+=== 0.0.3
+
+- Minor changes displaying lint results
+
+=== 0.0.2
+
+- Add link action to jump to plugin settings to add gitlab token
+
+=== 0.0.1
+
+- Initial version

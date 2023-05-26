@@ -1,19 +1,26 @@
-val typeIDE:String by project
+import org.jsoup.Jsoup
+
+fun properties(key: String) = providers.gradleProperty(key)
+fun environment(key: String) = providers.environmentVariable(key)
+
+val ciEnvVar: String? = System.getenv("CI")
+val isInCI: Boolean = ciEnvVar?.isNotEmpty() ?: false
+
+group = properties("pluginGroup").get()
+
 
 plugins {
     id("java")
-    id("net.thauvin.erik.gradle.semver") version "1.0.4"
-    id("org.jetbrains.intellij") version "1.13.1"
-    id("org.barfuin.gradle.jacocolog") version "3.1.0"
     id("jacoco")
+    alias(libs.plugins.asciidoc)
+    alias(libs.plugins.gradleIntelliJPlugin) // Gradle IntelliJ Plugin
+    alias(libs.plugins.semver)
+    alias(libs.plugins.jacocolog)
 }
 
 configurations.all {
     resolutionStrategy.sortArtifacts(ResolutionStrategy.SortOrder.DEPENDENCY_FIRST)
 }
-
-val ciEnvVar: String? = System.getenv("CI")
-val isInCI: Boolean = ciEnvVar?.isNotEmpty() ?: false
 
 repositories {
     mavenCentral()
@@ -33,27 +40,29 @@ repositories {
 // Configure Gradle IntelliJ Plugin
 // Read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
 intellij {
-    version.set("2021.3.3")
-    type.set(typeIDE) // Target IDE Platform
-    updateSinceUntilBuild.set(false)
-    plugins.set(listOf("java", "org.jetbrains.plugins.yaml:213.6777.22"))
+    version = properties("platformVersion")
+    plugins = properties("platformPlugins").map { it.split(',').map(String::trim).filter(String::isNotEmpty) }
+    updateSinceUntilBuild = false
+    type = properties("platformType") // Target IDE Platform
 }
 
 dependencies {
-    implementation("com.squareup.okhttp3:okhttp:4.10.0")
-    implementation("com.google.code.gson:gson:2.10.1")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
-    testImplementation("com.squareup.okhttp3:mockwebserver:4.10.0"){
-        exclude("junit")
-    }
-    testImplementation("org.mockito:mockito-core:5.2.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.9.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
-    implementation("org.ideplugins:pluginSettingsLibrary:0.0.1")
-    implementation("io.sentry:sentry:6.17.0"){
+    implementation(libs.okhttp)
+    implementation(libs.gson)
+    implementation(libs.pluginsettings)
+    implementation(libs.sentrysdk){
         exclude(group = "org.slf4j")
     }
+
+    testImplementation(libs.junit)
+    testImplementation(libs.mockwebserver){
+        exclude("junit")
+    }
+    testImplementation(libs.mockito)
+
+    testRuntimeOnly(libs.junitplatform)
+    testRuntimeOnly(libs.junitengine)
+
 }
 
 tasks.register<JavaExec>("FetchGitlabVariables") {
@@ -73,77 +82,65 @@ tasks {
 
     withType<Test> {
         useJUnitPlatform()
+        configure<JacocoTaskExtension> {
+            isIncludeNoLocationClasses = true
+            excludes = listOf("jdk.internal.*")
+        }
         finalizedBy("jacocoTestReport")
     }
 
     init {
         version = semver.version
-        group = "org.ideplugins.yaml-pipeline-lint-plugin"
+    }
+
+    asciidoctor {
+        dependsOn(processTestResources)
+        setSourceDir(baseDir)
+        sources {
+            include("CHANGELOG.adoc")
+        }
+        setOutputDir(file("build/docs"))
     }
 
     patchPluginXml {
-        sinceBuild.set("213")
-        untilBuild.set("231.*")
-        changeNotes.set(
-            """
-    <ul>
-    <li>0.0.6
-        <ul>
-        <li>Adjust to use new pipeline lint endpoint per project as old global endpoint is removed in Gitlab 16.0 </li>
-        </ul>
-    </li>       
-    <li>0.0.5
-        <ul>
-        <li>Add autocomplete for gitlab variables</li>
-        </ul>
-    </li>      
-    <li>0.0.4
-        <ul>
-        <li>Annotating the results in the problem view / editor </li>
-        <li>Improve error reporting to include warnings</li>
-        <li>Add uncaught error reporting</li>
-        <li>Plugin update notification begging for rate/review 🤣 </li>
-        </ul>
-    </li>    
-    <li>0.0.3
-        <ul>
-        <li>Minor changes displaying lint results</li>
-        </ul>
-    </li>
-    
-    <li>0.0.2
-        <ul>
-        <li>Add link action to jump to plugin settings to add gitlab token</li>
-        </ul>
-    </li>
-    <li>0.0.1
-      <ul>
-      <li>Initial version</li>
-      </ul>
-    </li>      
-    </ul>            
-        """.trimIndent()
-        )
-
+        dependsOn("asciidoctor")
+        sinceBuild = properties("pluginSinceBuild")
+        untilBuild = properties("pluginUntilBuild")
+        changeNotes = provider {
+            Jsoup.parse(file("build/docs/CHANGELOG.html"))
+                .select("#releasenotes")[0].nextElementSibling()?.children()
+                ?.toString()
+        }
     }
 
     signPlugin {
-        certificateChain.set(System.getenv("JBM_CERTIFICATE_CHAIN"))
-        privateKey.set(System.getenv("JBM_PRIVATE_KEY"))
-        password.set(System.getenv("JBM_PRIVATE_KEY_PASSWORD"))
+        certificateChain = environment("JBM_CERTIFICATE_CHAIN")
+        privateKey = environment("JBM_PRIVATE_KEY")
+        password = environment("JBM_PRIVATE_KEY_PASSWORD")
     }
 
     publishPlugin {
-        token.set(System.getenv("JBM_PUBLISH_TOKEN"))
+        token = environment("JBM_PUBLISH_TOKEN")
     }
 
     jacocoTestReport {
         reports {
-            xml.required.set(true)
+            xml.required = true
         }
     }
 
-//    runPluginVerifier {
-//        ideVersions.set(listOf("IU-231.8109.175","IC-213.7172.25"))
-//    }
+    runIde {
+        doFirst{
+            copy{
+                from("${projectDir}/src/test/resources/ide/options/")
+                into("${intellij.sandboxDir.get()}/config/options/")
+                include("*.xml")
+            }
+        }
+        systemProperty("idea.auto.reload.plugins", "false")
+        systemProperty("idea.trust.all.projects", "true")
+        systemProperty("ide.show.tips.on.startup.default.value", "false")
+        args = listOf("${projectDir}/src/test/resources/annotator/")
+    }
+
 }

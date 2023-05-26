@@ -11,11 +11,8 @@
     </vendor>
 
     <description><![CDATA[
-    Validates content of your .gitlab-ci.yaml file by posting it to to Gitlab Pipeline CI Lint API     <br/>
-    <img src="https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/raw/main/docimages/gitlab-yaml-pipeline-lint-plugin.png" />
-
+    Validates content of your .gitlab-ci.yaml file by posting it to to Gitlab Pipeline CI Lint API
     ]]></description>
-
 
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
@@ -42,12 +39,12 @@
                            implementationClass="org.ideplugins.gitlab_pipeline_lint.annotator.PipelineLintResultsExternalAnnotator"
                            language="yaml"
         />
-        <notificationGroup displayType="STICKY_BALLOON" id="gitlab-yaml-lint-plugin-update"  />
+        <notificationGroup displayType="STICKY_BALLOON" id="gitlab-yaml-lint-plugin-update"/>
         <postStartupActivity implementation="org.ideplugins.gitlab_pipeline_lint.activity.YamlPipelineLintPluginStartupActivity"/>
 
         <errorHandler implementation="org.ideplugins.gitlab_pipeline_lint.errorhandling.SentryErrorReporter"/>
         <completion.contributor language="yaml" order="first"
-            implementationClass="org.ideplugins.gitlab_pipeline_lint.completion.GitlabCIVariablesCompletionContributor"/>
+                                implementationClass="org.ideplugins.gitlab_pipeline_lint.completion.GitlabCIVariablesCompletionContributor"/>
 
     </extensions>
     <actions>

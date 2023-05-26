@@ -1,0 +1,40 @@
+[versions]
+# libraries
+gson = "2.10.1"
+okhttp = "4.10.0"
+pluginsettings = "0.0.1"
+sentrysdk = "6.17.0"
+
+# test libraries
+junit = "5.9.2"
+junitplatform = "1.9.2"
+mockwebserver = "4.10.0"
+mockito = "5.2.0"
+
+# plugins
+gradleIntelliJPlugin = "1.13.1"
+semver = "1.0.4"
+jacocolog = "3.1.0"
+asciidoc = "3.3.2"
+
+[libraries]
+gson = { group = "com.google.code.gson", name= "gson",  version.ref = "gson" }
+okhttp = { group = "com.squareup.okhttp3", name= "okhttp",  version.ref = "okhttp" }
+pluginsettings = { group = "org.ideplugins", name= "pluginSettingsLibrary", version.ref = "pluginsettings" }
+sentrysdk = { group = "io.sentry", name="sentry", version.ref = "sentrysdk" }
+
+#test libraries
+junit = { group = "org.junit.jupiter", name= "junit-jupiter",  version.ref = "junit" }
+junitengine = { group = "org.junit.jupiter", name= "junit-jupiter-engine",  version.ref = "junit" }
+junitplatform = { group = "org.junit.platform", name= "junit-platform-launcher",  version.ref = "junitplatform" }
+mockwebserver = { group = "com.squareup.okhttp3", name= "mockwebserver", version.ref = "mockwebserver" }
+mockito = { group = "org.mockito", name="mockito-core", version.ref = "mockito" }
+
+[plugins]
+gradleIntelliJPlugin = { id = "org.jetbrains.intellij", version.ref = "gradleIntelliJPlugin" }
+semver = { id="net.thauvin.erik.gradle.semver" , version.ref="semver"}
+jacocolog = {id= "org.barfuin.gradle.jacocolog", version.ref= "jacocolog"}
+asciidoc = {id="org.asciidoctor.jvm.convert", version.ref="asciidoc"}
+
+
+
