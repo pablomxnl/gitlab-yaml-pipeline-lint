@@ -45,6 +45,7 @@ public class YamlPipelineLintSettingsConfigurable implements Configurable, Const
         YamlPipelineLintSettingsState settingsState = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class);
         Credentials credentials = new Credentials("", settingsComponent.getGitlabToken());
         PasswordSafe.getInstance().set(CREDENTIAL_ATTRIBUTES, credentials);
+        settingsState.setCredentials(credentials);
         settingsState.gitlabHost = settingsComponent.getGitlabHost();
         settingsState.gitlabEndpoint = settingsComponent.getGitlabEndpoint();
         settingsState.gitlabProjectID = settingsComponent.getGitlabProjectID();
