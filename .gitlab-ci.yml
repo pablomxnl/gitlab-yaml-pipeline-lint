@@ -65,8 +65,6 @@ release_artifact:
 
 build-documentation:
   image: registry.jetbrains.team/p/writerside/builder/writerside-builder:2.1.1256-p3333
-  tags:
-    - saas-linux-medium-amd64
   stage: build-docs
   script:
     - set -e

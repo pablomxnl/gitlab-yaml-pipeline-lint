@@ -2,7 +2,7 @@
 
 <!--Writerside adds this topic when you create a new documentation project.
 You can use it as a sandbox to play with Writerside features, and remove it from the TOC when you don't need it anymore.-->
-Plugin for JetBrains IDE’s that uses Gitlab CI Lint API to validate the content of a project gitlab-ci.yml pipeline file
+Plugin for JetBrains IDE’s that uses [Gitlab CI Lint API](https://docs.gitlab.com/ee/api/lint.html) to validate the content of a project gitlab-ci.yml pipeline file
 
 ## Installation
 <tabs>
@@ -21,20 +21,20 @@ To install, grab a zip file from
 
 ## Configuration
 
-The plugin requires a Gitlab token and a Project ID to work with the Gitlab Pipeline Lint API.
+The plugin requires a Gitlab token and a Project ID to work with the Gitlab CI Lint API.
 To setup this configuration go to 
 
 <kbd>Settings</kbd> (or <kbd>Preferences</kbd> if using mac) -> <kbd>Tools</kbd> -> <kbd>Gitlab Pipeline Lint</kbd> 
 
-<img src="plugin_settings.png" alt="Plugin settings" border-effect="line"/>
+<img src="plugin_settings.png" alt="Plugin settings" thumbnail="true" border-effect="line"/>
 
 1. Gitlab host: default to https://gitlab.com , change it if using a private or self hosted instance
-2. Gitlab Project ID: To obtain the Project ID go to a gitlab repository you own and at the top, below the project name the Project ID is displayed, there is also a copy button next to the Project ID. Gitlab 16.0 deprecated the global lint endpoint, and now is per project, that's why a Project ID is now required.
+2. Gitlab Project ID: To obtain the Project ID go to a gitlab repository you own and at the top, below the project name the Project ID is displayed, there is also a copy button next to the Project ID. Gitlab 16.0 [deprecated](https://docs.gitlab.com/ee/api/lint.html#validate-the-ci-yaml-configuration-deprecated) the global lint endpoint, and now is per project, that's why a Project ID is now required.
 3. Access token: create a Gitlab personal access token with api access, the link on the label will open the browser at <a href="https://gitlab.com/-/profile/personal_access_tokens">https://gitlab.com/-/profile/personal_access_tokens</a> to obtain a token if needed. 
 
 Alternatively, whenever the plugin is invoked with incomplete configuration, the settings can be entered by clicking on the notification link:
 
-<img src="plugin_settings_when_not_configured.png" alt="Plugin settings from notification" border-effect="line" />
+<img src="plugin_settings_when_not_configured.png" alt="Plugin settings from notification" thumbnail="true" border-effect="line" />
 
 
 ## Usage
@@ -42,15 +42,15 @@ Alternatively, whenever the plugin is invoked with incomplete configuration, the
 To validate the gitlab pipeline file, do one of the following:
 
 * Using the global tools menu action: <kbd>Tools</kbd> -> <kbd>Gitlab Pipeline Lint</kbd>
-  <img src="usage_tools_menu.png" alt="Tools menu action" border-effect="line"/>
+  <img src="usage_tools_menu.png" alt="Tools menu action" thumbnail="true" border-effect="line"/>
 * Using the popup action in the editor window
-  <img src="usage_editor_context_menu.png" alt="Editor popup action" border-effect="line"/>
+  <img src="usage_editor_context_menu.png" alt="Editor popup action" thumbnail="true" border-effect="line"/>
 * Using the popup action on the project view by selecting the <path>.gitlab-ci.yml</path> file
-  <img src="usage_project_context_menu.png" alt="Project view popup action" border-effect="line"/>
+  <img src="usage_project_context_menu.png" alt="Project view popup action" thumbnail="true" border-effect="line"/>
 
 ## Results
 
-The results of the call to the Gitlab Pipeline Lint API are displayed in 
+The results of the call to the Gitlab CI Lint API are displayed in 
 
 * The plugin tool window
 * On the problem view (if there are errors or warnings)
@@ -58,27 +58,27 @@ The results of the call to the Gitlab Pipeline Lint API are displayed in
 
 ### Results in plugin tool window
 
-<img src="results_toolwindow_annotator.png" alt="Results in plugin window and editor annotator" border-effect="line" />
+<img src="results_toolwindow_annotator.png" alt="Results in plugin window and editor annotator" thumbnail="true" border-effect="line" />
 
-The plugin tool window will show the errors and warnings returned by the Gitlap Pipeline Lint API , if the pipeline file is in the editor the results
+The plugin tool window will show the errors and warnings returned by the Gitlab CI Lint API , if the pipeline file is in the editor the results
 are annotated (those little gutters in red/yellow ).
 
 ### Results in problem view
 
-<img src="results_problemview_annotator.png" alt="Results in problem view" border-effect="line" />
+<img src="results_problemview_annotator.png" alt="Results in problem view" thumbnail="true" border-effect="line" />
 
-The errors and warnings returned by the Gitlap Pipeline Lint API can also be visualized on the problem view clicking on them will navigate to the line 
+The errors and warnings returned by the Gitlab CI Lint API can also be visualized on the problem view clicking on them will navigate to the line 
 where the job definition with error or warning is (unfortunately the Gitlab API doesn't provide a line number so the whole job definition is annotated).
 
 ### Results of a valid pipeline
 
-<img src="results_toolwindow_no_errors_or_warnings.png" alt="Valid pipeline results"/>
+<img src="results_toolwindow_no_errors_or_warnings.png" alt="Valid pipeline results" thumbnail="true" border-effect="line"/>
 
 When no errors/warnings are returned a simple success message is displayed in the plugin tool window.
 
 > **NOTE:**
 >
-> It means the yaml pipeline is correct, but not there are no guarantees the pipeline will succeed
+> It means the yaml int the pipeline file is correct, but there are no guarantees that the pipeline will succeed
 >
 {style="note"}
 
