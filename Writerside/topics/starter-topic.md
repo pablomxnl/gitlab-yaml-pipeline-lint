@@ -85,4 +85,4 @@ When no errors/warnings are returned a simple success message is displayed in th
 
 ## Feedback 
 Please report any issues or feature requests at
-<a href="hhttps://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues">Gitlab Issues</a> (a gitlab.com account is required).
+<a href="https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues">Gitlab Issues</a> (a gitlab.com account is required).
