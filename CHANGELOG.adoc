@@ -7,6 +7,11 @@ This document provides an overview of the changes by release.
 [[releasenotes]]
 == Release notes
 
+=== 0.0.7
+
+- Enable settings sync and update pluginUntilBuild to support 2023.2 EAP
+- Java 17 now required
+
 === 0.0.6
 
 - Adjust to use new pipeline lint endpoint per project as old global endpoint is removed in Gitlab 16.0
