@@ -1,11 +1,14 @@
 stages:
   - build
+  - build-docs
+  - deploy
 
 variables:
   GRADLE_OPTS: "-Dorg.gradle.internal.launcher.welcomeMessageEnabled=false"
   CI: "gitlab-ci"
-
-image: docker.io/library/gradle:8.1.1-jdk11
+  PRODUCT: Writerside/pd
+  ARTIFACT: webHelpPD2-all.zip
+image: docker.io/library/gradle:8.1.1-jdk17
 
 cache:
   key: ${CI_PROJECT_NAME}
@@ -58,3 +61,39 @@ release_artifact:
   script:
     - gradle test
     - gradle buildPlugin
+
+
+build-documentation:
+  image: registry.jetbrains.team/p/writerside/builder/writerside-builder:2.1.1256-p3333
+  tags:
+    - saas-linux-medium-amd64
+  stage: build-docs
+  script:
+    - set -e
+    - /opt/builder/bin/idea.sh helpbuilderinspect -source-dir . -product $PRODUCT --runner gitlab -output-dir public/ || true
+    - echo "Test existing of $ARTIFACT artifact"
+    - test -e public/$ARTIFACT
+  artifacts:
+    paths:
+      # The folder that contains the built HTML files to be published.
+      - public/$ARTIFACT
+
+pages:
+  stage: deploy
+  image: alpine:latest
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  before_script:
+    - pwd
+    - ls -altrs
+    - apk add zip
+  script:
+    - pwd
+    - cp -R build/reports/jacoco/test public/
+    - mv public/test public/coverage
+    - cd public
+    - unzip $ARTIFACT
+
+  artifacts:
+    paths:
+      - public

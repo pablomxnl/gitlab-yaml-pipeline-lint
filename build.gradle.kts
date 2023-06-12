@@ -75,8 +75,8 @@ tasks.register<JavaExec>("FetchGitlabVariables") {
 tasks {
     // Set the JVM compatibility versions
     withType<JavaCompile> {
-        sourceCompatibility = "11"
-        targetCompatibility = "11"
+        sourceCompatibility = "17"
+        targetCompatibility = "17"
         options.compilerArgs = listOf("-Xlint:deprecation","-Xlint:unchecked")
     }
 
@@ -121,6 +121,9 @@ tasks {
 
     publishPlugin {
         token = environment("JBM_PUBLISH_TOKEN")
+        if (semver.preRelease.contains("SNAPSHOT")) {
+            channels = listOf("EAP");
+        }
     }
 
     jacocoTestReport {

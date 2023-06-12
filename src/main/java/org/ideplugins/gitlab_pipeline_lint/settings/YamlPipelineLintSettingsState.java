@@ -1,22 +1,25 @@
 package org.ideplugins.gitlab_pipeline_lint.settings;
 
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.Service;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
+import com.intellij.credentialStore.Credentials;
+import com.intellij.ide.passwordSafe.PasswordSafe;
+import com.intellij.openapi.components.*;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import com.intellij.util.xmlb.annotations.Transient;
 import org.ideplugins.gitlab_pipeline_lint.linter.Constants;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static com.intellij.openapi.components.SettingsCategory.TOOLS;
 import static org.ideplugins.gitlab_pipeline_lint.actions.ActionHelper.getGitlabToken;
+import static org.ideplugins.gitlab_pipeline_lint.linter.Constants.CREDENTIAL_ATTRIBUTES;
 import static org.ideplugins.gitlab_pipeline_lint.linter.Constants.GITLAB_HOST;
 
 @Service(Service.Level.PROJECT)
 @State(
         name = "PluginSettingsState",
-        storages = {@Storage("gitlabPipelineYamlLinter.xml")}
+        storages = {@Storage("gitlabPipelineYamlLinter.xml")},
+        category = TOOLS ,
+        reloadable = true
 )
 public class YamlPipelineLintSettingsState implements PersistentStateComponent<YamlPipelineLintSettingsState> {
 
@@ -27,6 +30,11 @@ public class YamlPipelineLintSettingsState implements PersistentStateComponent<Y
 
     public String gitlabProjectID = "";
 
+    private Credentials credentials = PasswordSafe.getInstance().get(CREDENTIAL_ATTRIBUTES);
+
+    public void setCredentials(Credentials credentials) {
+        this.credentials = credentials;
+    }
 
     @Override
     public @Nullable YamlPipelineLintSettingsState getState() {
