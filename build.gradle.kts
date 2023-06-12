@@ -121,6 +121,9 @@ tasks {
 
     publishPlugin {
         token = environment("JBM_PUBLISH_TOKEN")
+        if (semver.preRelease.contains("SNAPSHOT")) {
+            channels = listOf("EAP");
+        }
     }
 
     jacocoTestReport {
