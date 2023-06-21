@@ -1,7 +1,5 @@
 # Gitlab Pipeline Lint Plugin Documentation
 
-<!--Writerside adds this topic when you create a new documentation project.
-You can use it as a sandbox to play with Writerside features, and remove it from the TOC when you don't need it anymore.-->
 Plugin for JetBrains IDE’s that uses [Gitlab CI Lint API](https://docs.gitlab.com/ee/api/lint.html) to validate the content of a project gitlab-ci.yml pipeline file
 
 ## Installation
@@ -26,15 +24,15 @@ To setup this configuration go to
 
 <kbd>Settings</kbd> (or <kbd>Preferences</kbd> if using mac) -> <kbd>Tools</kbd> -> <kbd>Gitlab Pipeline Lint</kbd> 
 
-<img src="plugin_settings.png" alt="Plugin settings" thumbnail="true" border-effect="line"/>
+![Plugin settings](plugin_settings.png){thumbnail="true" border-effect="line"}
 
 1. Gitlab host: default to https://gitlab.com , change it if using a private or self hosted instance
 2. Gitlab Project ID: To obtain the Project ID go to a gitlab repository you own and at the top, below the project name the Project ID is displayed, there is also a copy button next to the Project ID. Gitlab 16.0 [deprecated](https://docs.gitlab.com/ee/api/lint.html#validate-the-ci-yaml-configuration-deprecated) the global lint endpoint, and now is per project, that's why a Project ID is now required.
-3. Access token: create a Gitlab personal access token with api access, the link on the label will open the browser at <a href="https://gitlab.com/-/profile/personal_access_tokens">https://gitlab.com/-/profile/personal_access_tokens</a> to obtain a token if needed. 
+3. Access token: create a Gitlab personal access token with api access, the link on the label will open the browser at [https://gitlab.com/-/profile/personal_access_tokens](https://gitlab.com/-/profile/personal_access_tokens) to obtain a token if needed. 
 
 Alternatively, whenever the plugin is invoked with incomplete configuration, the settings can be entered by clicking on the notification link:
 
-<img src="plugin_settings_when_not_configured.png" alt="Plugin settings from notification" thumbnail="true" border-effect="line" />
+![Plugin settings from notification](plugin_settings_when_not_configured.png){thumbnail="true" border-effect="line"}
 
 
 ## Usage
@@ -42,11 +40,11 @@ Alternatively, whenever the plugin is invoked with incomplete configuration, the
 To validate the gitlab pipeline file, do one of the following:
 
 * Using the global tools menu action: <kbd>Tools</kbd> -> <kbd>Gitlab Pipeline Lint</kbd>
-  <img src="usage_tools_menu.png" alt="Tools menu action" thumbnail="true" border-effect="line"/>
+  ![Tools menu action](usage_tools_menu.png){ thumbnail="true" border-effect="line" }
 * Using the popup action in the editor window
-  <img src="usage_editor_context_menu.png" alt="Editor popup action" thumbnail="true" border-effect="line"/>
+  ![Editor popup action](usage_editor_context_menu.png){ thumbnail="true" border-effect="line" }
 * Using the popup action on the project view by selecting the <path>.gitlab-ci.yml</path> file
-  <img src="usage_project_context_menu.png" alt="Project view popup action" thumbnail="true" border-effect="line"/>
+  ![Project view popup action](usage_project_context_menu.png){thumbnail="true" border-effect="line"}
 
 ## Results
 
@@ -85,4 +83,4 @@ When no errors/warnings are returned a simple success message is displayed in th
 
 ## Feedback 
 Please report any issues or feature requests at
-<a href="https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues">Gitlab Issues</a> (a gitlab.com account is required).
+[Gitlab Issues](https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues) (a gitlab.com account is required).
