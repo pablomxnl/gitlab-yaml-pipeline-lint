@@ -64,8 +64,14 @@ release_artifact:
 
 
 build-documentation:
-  image: registry.jetbrains.team/p/writerside/builder/writerside-builder:2.1.1256-p3333
+  image: registry.jetbrains.team/p/writerside/builder/writerside-builder:2.1.1435-p3718.
   stage: build-docs
+  only:
+    refs:
+      - merge_requests
+      - main
+    changes:
+      - Writerside/**/*
   script:
     - set -e
     - /opt/builder/bin/idea.sh helpbuilderinspect -source-dir . -product $PRODUCT --runner gitlab -output-dir public/ || true
@@ -73,7 +79,6 @@ build-documentation:
     - test -e public/$ARTIFACT
   artifacts:
     paths:
-      # The folder that contains the built HTML files to be published.
       - public/$ARTIFACT
 
 pages:
@@ -82,16 +87,14 @@ pages:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   before_script:
-    - pwd
-    - ls -altrs
     - apk add zip
   script:
-    - pwd
     - cp -R build/reports/jacoco/test public/
     - mv public/test public/coverage
+    - cp -R build/reports/tests/test public/
+    - mv public/test public/testreport
     - cd public
     - unzip $ARTIFACT
-
   artifacts:
     paths:
       - public
