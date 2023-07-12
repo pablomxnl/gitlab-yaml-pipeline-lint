@@ -69,13 +69,13 @@ build-documentation:
     refs:
       - merge_requests
       - main
-    changes:
-      - Writerside/**/*
+#    changes:
+#      - Writerside/**/*
   script:
     - set -e
     - export DISPLAY=:99
     - Xvfb :99 &
-    - /opt/builder/bin/idea.sh helpbuilderinspect -source-dir . -product $PRODUCT --runner gitlab -output-dir public/ || true
+    - /opt/builder/bin/idea.sh helpbuilderinspect -source-dir . -product $PRODUCT --runner gitlab -output-dir public/
     - echo "Test existing of $ARTIFACT artifact"
     - test -e public/$ARTIFACT
   artifacts:

@@ -122,11 +122,12 @@ tasks {
     publishPlugin {
         token = environment("JBM_PUBLISH_TOKEN")
         if (semver.preRelease.contains("SNAPSHOT")) {
-            channels = listOf("EAP");
+            channels = listOf("EAP")
         }
     }
 
     jacocoTestReport {
+        classDirectories.setFrom(instrumentCode)
         reports {
             xml.required = true
         }
