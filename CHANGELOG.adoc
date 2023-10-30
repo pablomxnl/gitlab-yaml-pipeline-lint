@@ -1,4 +1,4 @@
-= Vale CLI Plugin Changelog
+= Gitlab Pipeline Lint Plugin Changelog
 
 == About
 
@@ -6,6 +6,10 @@ This document provides an overview of the changes by release.
 
 [[releasenotes]]
 == Release notes
+
+=== 0.0.8
+
+- Support for 2023.3 (EAP)
 
 === 0.0.7
 

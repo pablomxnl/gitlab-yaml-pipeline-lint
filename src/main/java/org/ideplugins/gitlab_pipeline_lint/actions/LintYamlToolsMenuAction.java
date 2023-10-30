@@ -2,6 +2,7 @@ package org.ideplugins.gitlab_pipeline_lint.actions;
 
 import com.google.gson.JsonObject;
 import com.intellij.notification.NotificationType;
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
@@ -22,12 +23,18 @@ import java.util.Optional;
 
 import static org.ideplugins.gitlab_pipeline_lint.actions.ActionHelper.*;
 
+
 public class LintYamlToolsMenuAction extends AnAction implements Constants {
 
     @Override
     public void update(@NotNull AnActionEvent e) {
         Project project = e.getProject();
         e.getPresentation().setEnabledAndVisible(project != null);
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
     }
 
     @Override
@@ -38,7 +45,7 @@ public class LintYamlToolsMenuAction extends AnAction implements Constants {
                 GlobalSearchScope scope = GlobalSearchScope.projectScope(project);
                 List<VirtualFile> files = new ArrayList<>(FilenameIndex.getVirtualFilesByName(GITLAB_CI_YML, scope));
 
-                if (files.size() == 0) {
+                if (files.isEmpty()) {
                     displayNotification(NotificationType.WARNING, "No .gitlab-ci.yml file found.");
                     return;
                 }
@@ -51,8 +58,7 @@ public class LintYamlToolsMenuAction extends AnAction implements Constants {
                 Optional.ofNullable(psiManager.findFile(files.get(0))).ifPresent(psiFile -> {
                     JsonObject yamlJson = ActionHelper.getYamlJson(psiFile);
                     ApplicationManager.getApplication().invokeLater(() -> {
-                        YamlPipelineLinter linter =
-                                new YamlPipelineLinter(gitlabCILintEndpoint, ActionHelper.getGitlabToken());
+                        YamlPipelineLinter linter = new YamlPipelineLinter(gitlabCILintEndpoint, getGitlabToken());
                         JsonObject gitlabResponse = linter.ciLint(yamlJson);
                         showLintResult(gitlabResponse, event);
                         PipelineIssuesReporter reporter = project.getService(PipelineIssuesReporter.class);

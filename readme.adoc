@@ -7,40 +7,10 @@ image:https://img.shields.io/gitlab/issues/open/pablomxnl/gitlab-yaml-pipeline-l
 image:https://img.shields.io/jetbrains/plugin/r/stars/org.ideplugins.gitlab-yaml-pipeline-lint[link="https://plugins.jetbrains.com/plugin/19972-gitlab-pipeline-lint/reviews",title="Ratings"]
 image:https://img.shields.io/jetbrains/plugin/v/org.ideplugins.gitlab-yaml-pipeline-lint[link="https://plugins.jetbrains.com/plugin/19972-gitlab-pipeline-lint",title="Version"]
 image:https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/badges/main/coverage.svg[link="https://pablomxnl.gitlab.io/gitlab-yaml-pipeline-lint/coverage/html/index.html",title="Coverage report"]
+image:https://img.shields.io/badge/Plugin-Documenation-blue?link=https%3A%2F%2Fplugins.jetbrains.com%2Fplugin%2F19972-gitlab-pipeline-lint%2Fdocs[Static Badge]
+
 
 Plugin for JetBrains IDE's that uses https://docs.gitlab.com/ee/api/lint.html[Gitlab CI Lint API] to validate the content of your `gitlab-ci.yml` file
 
-
-TIP: This is a pet project. Not associated with Gitlab or JetBrains whatsoever
-
-== Installation
-
-=== From plugin marketplace
-
-`Settings` (or `Preferences` if using mac) -> `Plugins` -> `Marketplace` Search for `Gitlab Pipeline Lint` -> Click `Install`
-
-=== From gitlab releases
-To install, grab a zip file from the
-https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/releases[releases distributions] according to your IDE
-
-`Settings` (or `Preferences` if using mac) -> `Plugins` -> `⚙` -> `Install Plugin from Disk...`
-
-== Configuration
-
-The plugin requires a Gitlab token and a project ID in order to invoke the Gitlab Lint API.
-
-To enter this configuration go to
-`Settings` (or `Preferences` if using mac) -> `Tools` -> `Gitlab Pipeline Lint`
-
-image::docimages/pluginConfiguration.png["Plugin Configuration"]
-
-Depending on your Operating System you may get a dialog to store the gitlab token encrypted  on a KeePass format (windows), a keychain (macOS) or libsecret (linux).
-
-image::docimages/keyring.png["Plugin Configuration"]
-
-== Uninstall
-
-. Go to `Settings` => `Plugins` => `Installed`
-. Click `Gitlab Pipeline Lint` entry and click the gear `⚙` icon. Older Intellij versions had a `Disabled` dropdown
-. Select `Uninstall`
-
+See the plugin documentation at https://plugins.jetbrains.com/plugin/19972-gitlab-pipeline-lint/docs[Gitlab Pipeline Lint Documentation] on JetBrains
+Plugin Marketplace or at https://pablomxnl.gitlab.io/gitlab-yaml-pipeline-lint/starter-topic.html[Gitlab Pages]

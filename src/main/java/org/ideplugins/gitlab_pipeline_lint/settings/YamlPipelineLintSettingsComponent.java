@@ -4,7 +4,6 @@ package org.ideplugins.gitlab_pipeline_lint.settings;
 import com.intellij.ui.DocumentAdapter;
 import com.intellij.ui.components.*;
 import com.intellij.util.ui.FormBuilder;
-import org.apache.commons.lang.StringUtils;
 import org.ideplugins.gitlab_pipeline_lint.linter.Constants;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,7 +30,7 @@ public class YamlPipelineLintSettingsComponent {
         return new DocumentAdapter() {
             @Override
             protected void textChanged(@NotNull DocumentEvent e) {
-                if (StringUtils.isNumeric(gitlabProjectID.getText())){
+                if (gitlabProjectID.getText().matches("\\d+")){
                     gitlabEndpoint.setText(String.format(Constants.GITLAB_URL, gitlabHost.getText(), gitlabProjectID.getText()));
                 }
             }
