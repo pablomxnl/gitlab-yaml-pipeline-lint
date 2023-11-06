@@ -27,7 +27,6 @@
                                  instance="org.ideplugins.gitlab_pipeline_lint.settings.YamlPipelineLintSettingsConfigurable"
                                  id="org.ideplugins.PluginSettingsConfigurable"
                                  displayName="Gitlab Pipeline Lint"/>
-        <applicationService serviceImplementation="org.ideplugins.gitlab_pipeline_lint.settings.YamlPipelineLintSettingsState"/>
 
         <toolWindow id="Gitlab Pipeline Lint Results"
                     anchor="bottom"

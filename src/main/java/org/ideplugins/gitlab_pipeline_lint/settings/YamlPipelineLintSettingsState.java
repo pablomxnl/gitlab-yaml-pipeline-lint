@@ -14,14 +14,13 @@ import static org.ideplugins.gitlab_pipeline_lint.actions.ActionHelper.getGitlab
 import static org.ideplugins.gitlab_pipeline_lint.linter.Constants.CREDENTIAL_ATTRIBUTES;
 import static org.ideplugins.gitlab_pipeline_lint.linter.Constants.GITLAB_HOST;
 
-@Service(Service.Level.PROJECT)
+@Service
 @State(
         name = "PluginSettingsState",
         storages = {@Storage("gitlabPipelineYamlLinter.xml")},
-        category = TOOLS ,
-        reloadable = true
+        category = TOOLS
 )
-public class YamlPipelineLintSettingsState implements PersistentStateComponent<YamlPipelineLintSettingsState> {
+public final class YamlPipelineLintSettingsState implements PersistentStateComponent<YamlPipelineLintSettingsState> {
 
     @Transient
     public String gitlabToken = getGitlabToken();
@@ -45,5 +44,7 @@ public class YamlPipelineLintSettingsState implements PersistentStateComponent<Y
     public void loadState(@NotNull YamlPipelineLintSettingsState state) {
         XmlSerializerUtil.copyBean(state, this);
     }
+
+
 
 }

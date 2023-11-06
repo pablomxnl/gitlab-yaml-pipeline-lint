@@ -6,8 +6,9 @@ variables:
   GRADLE_OPTS: "-Dorg.gradle.internal.launcher.welcomeMessageEnabled=false"
   CI: "gitlab-ci"
   PRODUCT: Writerside/pd
+  WRS_VERSION: 2.1.1479-p3869
   ARTIFACT: webHelpPD2-all.zip
-image: docker.io/library/gradle:8.1.1-jdk17
+image: docker.io/library/gradle:8.2.1-jdk17
 
 cache:
   key: ${CI_PROJECT_NAME}
@@ -63,7 +64,7 @@ release_artifact:
 
 
 build-documentation:
-  image: registry.jetbrains.team/p/writerside/builder/writerside-builder:2.1.1435-p3718
+  image: registry.jetbrains.team/p/writerside/builder/writerside-builder:$WRS_VERSION
   stage: build
   only:
     refs:
@@ -80,6 +81,7 @@ build-documentation:
     - test -e public/$ARTIFACT
   artifacts:
     paths:
+      - public/
       - public/$ARTIFACT
 
 pages:

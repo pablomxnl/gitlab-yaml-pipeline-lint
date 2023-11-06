@@ -140,6 +140,10 @@ tasks {
                 into("${intellij.sandboxDir.get()}/config/options/")
                 include("*.xml")
             }
+            copy{
+                from("${projectDir}/src/test/resources/ide/options/inspectionProfiles")
+                into("${intellij.sandboxDir.get()}/config/options/")
+            }
         }
         systemProperty("idea.auto.reload.plugins", "false")
         systemProperty("idea.trust.all.projects", "true")

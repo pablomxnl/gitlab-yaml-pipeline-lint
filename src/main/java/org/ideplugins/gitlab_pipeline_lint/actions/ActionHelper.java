@@ -120,7 +120,7 @@ public final class ActionHelper implements Constants {
                     showResultsInConsole(actionEvent.getProject(), successMessage, LOG_INFO_OUTPUT);
                 } else if (result.has("valid")
                         && result.get("valid").getAsBoolean()  &&
-                        result.get("warnings").getAsJsonArray().size() > 0){
+                        !result.get("warnings").getAsJsonArray().isEmpty()){
 
                     showResultsInConsole(actionEvent, result, "warnings");
 
