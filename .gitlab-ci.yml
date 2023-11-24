@@ -20,8 +20,8 @@ cache:
   coverage: '/    - Instruction Coverage: ([0-9.]+)%/'
   tags:
     - saas-linux-medium-amd64
-  only:
-    - main
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   artifacts:
     when: always
     paths:
@@ -37,9 +37,8 @@ cache:
   coverage: '/    - Instruction Coverage: ([0-9.]+)%/'
   tags:
     - saas-linux-medium-amd64
-  only:
-    refs:
-      - merge_requests
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   artifacts:
     when: always
     paths:
@@ -66,12 +65,9 @@ release_artifact:
 build-documentation:
   image: registry.jetbrains.team/p/writerside/builder/writerside-builder:$WRS_VERSION
   stage: build
-  only:
-    refs:
-      - merge_requests
-      - main
-#    changes:
-#      - Writerside/**/*
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   script:
     - set -e
     - export DISPLAY=:99

@@ -139,8 +139,10 @@ public final class ActionHelper implements Constants {
                 break;
             case HttpURLConnection.HTTP_NOT_FOUND:
                 showResultsInConsole(actionEvent.getProject(),
-                        String.format("Project ID not found:\n" +
-                                "Please double check your project ID at %s, click the link in the notification to set it up \n", gitlabHost) + result,
+                        String.format("""
+                                Project ID not found:
+                                Please double check your project ID at %s, click the link in the notification to set it up\s
+                                """, gitlabHost) + result,
                         ERROR_OUTPUT);
                 displayNotificationWithAction(NotificationType.ERROR,
                         String.format("Please configure Gitlab Project ID at %s", gitlabHost));

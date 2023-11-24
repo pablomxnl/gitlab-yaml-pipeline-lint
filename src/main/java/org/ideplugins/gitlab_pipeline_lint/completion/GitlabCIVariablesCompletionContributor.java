@@ -13,16 +13,18 @@ public class GitlabCIVariablesCompletionContributor extends CompletionContributo
 
     public GitlabCIVariablesCompletionContributor() {
         extend(CompletionType.BASIC,
-                PlatformPatterns.psiElement().withLanguage(YAMLLanguage.INSTANCE),
+                PlatformPatterns.psiElement().withLanguage(YAMLLanguage.INSTANCE)
+                        .inFile(PlatformPatterns.psiFile().withName(".gitlab-ci.yml")),
                 new GitLabCompletionProvider()
         );
 
         extend(CompletionType.BASIC,
-                psiElement().withElementType(YAMLElementTypes.TEXT_SCALAR_ITEMS)
-                        .and(psiElement().withText("$"))
-                        .and(psiElement().withParent(psiElement(YAMLElementTypes.SCALAR_PLAIN_VALUE)))
-                        .and(psiElement().withSuperParent(2, psiElement(YAMLSequenceItem.class)))
-
+                PlatformPatterns.psiElement().withLanguage(YAMLLanguage.INSTANCE)
+                        .inFile(PlatformPatterns.psiFile().withName(".gitlab-ci.yml"))
+                                .and(psiElement().withElementType(YAMLElementTypes.TEXT_SCALAR_ITEMS)
+                                .and(psiElement().withText("$"))
+                                .and(psiElement().withParent(psiElement(YAMLElementTypes.SCALAR_PLAIN_VALUE)))
+                                .and(psiElement().withSuperParent(2, psiElement(YAMLSequenceItem.class))))
                 ,
                 new GitLabCompletionProvider()
         );

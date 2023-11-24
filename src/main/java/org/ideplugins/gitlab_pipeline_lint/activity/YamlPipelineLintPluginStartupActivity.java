@@ -9,7 +9,6 @@ import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
 import org.ideplugins.gitlab_pipeline_lint.settings.PipelinePluginConfigurationState;
-import org.ideplugins.settings.SettingsProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -35,7 +34,6 @@ public class YamlPipelineLintPluginStartupActivity implements StartupActivity {
             PipelinePluginConfigurationState pluginSettings =
                     ApplicationManager.getApplication().getService(PipelinePluginConfigurationState.class);
             String lastKnownVersion = pluginSettings.getLastVersion();
-            pluginSettings.setSentryDsn(SettingsProvider.getInstance().getSentryUrl(pluginId.getIdString()));
 
             if (!lastKnownVersion.isEmpty() && !Objects.equals(lastKnownVersion, pluginDescriptor.getVersion()) ) {
                 showUpdateNotification(project, pluginDescriptor, pluginSettings);
