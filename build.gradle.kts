@@ -3,9 +3,6 @@ import org.jsoup.Jsoup
 fun properties(key: String) = providers.gradleProperty(key)
 fun environment(key: String) = providers.environmentVariable(key)
 
-val ciEnvVar: String? = System.getenv("CI")
-val isInCI: Boolean = ciEnvVar?.isNotEmpty() ?: false
-
 group = properties("pluginGroup").get()
 
 
@@ -24,17 +21,6 @@ configurations.all {
 
 repositories {
     mavenCentral()
-    maven {
-        name = "GITLAB_MAVEN"
-        setUrl("https://gitlab.com/api/v4/projects/44083372/packages/maven")
-        credentials(HttpHeaderCredentials::class) {
-            name = if (isInCI) "Job-Token" else "Private-Token"
-            value = if (isInCI) System.getenv("CI_JOB_TOKEN") else System.getenv("GITLAB_TOKEN")
-        }
-        authentication {
-            create("header", HttpHeaderAuthentication::class)
-        }
-    }
 }
 
 // Configure Gradle IntelliJ Plugin
@@ -49,7 +35,6 @@ intellij {
 dependencies {
     implementation(libs.okhttp)
     implementation(libs.gson)
-    implementation(libs.pluginsettings)
     implementation(libs.sentrysdk){
         exclude(group = "org.slf4j")
     }
