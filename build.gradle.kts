@@ -1,3 +1,4 @@
+import org.jetbrains.intellij.tasks.RunIdeTask
 import org.jsoup.Jsoup
 
 fun properties(key: String) = providers.gradleProperty(key)
@@ -48,6 +49,37 @@ dependencies {
     testRuntimeOnly(libs.junitplatform)
     testRuntimeOnly(libs.junitengine)
 
+}
+
+val dir1 = file("${intellij.sandboxDir.get()}/manualtest")
+val dirConfig = file("${intellij.sandboxDir.get()}/manualtest/config")
+val dirSystem = file("${intellij.sandboxDir.get()}/manualtest/system")
+
+tasks.register("createDirsManualTesting"){
+    mkdir(dir1.toPath())
+    mkdir(dirConfig.toPath())
+    mkdir(dirSystem.toPath())
+}
+
+tasks.register<RunIdeTask>("runForManualTests"){
+    dependsOn("createDirsManualTesting")
+    doFirst{
+        copy{
+            from("${projectDir}/src/test/resources/ide/options/")
+            into("${dirConfig}/options/")
+            include("*.xml")
+        }
+        copy{
+            from("${projectDir}/src/test/resources/ide/options/inspectionProfiles")
+            into("${intellij.sandboxDir.get()}/config/options/")
+        }
+    }
+    configDir = dirConfig
+    systemDir = dirSystem
+    systemProperty("idea.auto.reload.plugins", "false")
+    systemProperty("idea.trust.all.projects", "true")
+    systemProperty("ide.show.tips.on.startup.default.value", "false")
+    args = listOf("${projectDir}/src/test/resources/annotator/")
 }
 
 tasks.register<JavaExec>("FetchGitlabVariables") {
@@ -133,7 +165,6 @@ tasks {
         systemProperty("idea.auto.reload.plugins", "false")
         systemProperty("idea.trust.all.projects", "true")
         systemProperty("ide.show.tips.on.startup.default.value", "false")
-        args = listOf("${projectDir}/src/test/resources/annotator/")
     }
 
 }

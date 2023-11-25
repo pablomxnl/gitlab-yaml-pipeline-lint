@@ -1,4 +1,4 @@
-# Gitlab Pipeline Lint Plugin Documentation
+# Gitlab Pipeline Lint Plugin Documentation v %plugin_version%
 
 Plugin for JetBrains IDE’s that uses [Gitlab CI Lint API](https://docs.gitlab.com/ee/api/lint.html) to validate the content of a project gitlab-ci.yml pipeline file
 
