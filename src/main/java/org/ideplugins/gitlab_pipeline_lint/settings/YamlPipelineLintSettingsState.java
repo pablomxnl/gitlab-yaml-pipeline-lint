@@ -23,7 +23,7 @@ import static org.ideplugins.gitlab_pipeline_lint.linter.Constants.GITLAB_HOST;
 public final class YamlPipelineLintSettingsState implements PersistentStateComponent<YamlPipelineLintSettingsState> {
 
     @Transient
-    public String gitlabToken = getGitlabToken();
+    public final String gitlabToken = getGitlabToken();
     public String gitlabEndpoint = String.format(Constants.GITLAB_URL, GITLAB_HOST, "%s");
     public String gitlabHost = GITLAB_HOST;
 
