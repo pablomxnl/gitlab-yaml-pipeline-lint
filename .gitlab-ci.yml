@@ -19,7 +19,7 @@ cache:
   stage: build
   coverage: '/    - Instruction Coverage: ([0-9.]+)%/'
   tags:
-    - saas-linux-medium-amd64
+    -  selfhosted-temporary 
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   artifacts:
@@ -39,6 +39,7 @@ cache:
     - saas-linux-medium-amd64
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: never
   artifacts:
     when: always
     paths:
@@ -67,7 +68,9 @@ build-documentation:
   stage: build
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: never
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: never
   script:
     - set -e
     - export DISPLAY=:99
@@ -85,6 +88,7 @@ pages:
   image: alpine:latest
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: never
   before_script:
     - apk add zip
   script:
