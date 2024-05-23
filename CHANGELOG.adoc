@@ -7,10 +7,15 @@ This document provides an overview of the changes by release.
 [[releasenotes]]
 == Release notes
 
+=== 0.0.10
+
+- Fixes https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues/6[#6] Slow operations are prohibited on EDT
+
+
 === 0.0.9
 
-- Fixes https://gitlab.com/pablomxnl/vale-cli-plugin/-/issues/4[#4] Gitlab CI autocomplete popup shows when editing docker-compose file
-- Fixes https://gitlab.com/pablomxnl/vale-cli-plugin/-/issues/3[#3] Slow operations are prohibited on EDT
+- Fixes https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues/4[#4] Gitlab CI autocomplete popup shows when editing docker-compose file
+- Fixes https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues/3[#3] Slow operations are prohibited on EDT
 
 === 0.0.8
 

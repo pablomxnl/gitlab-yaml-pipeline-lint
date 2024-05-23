@@ -12,3 +12,9 @@ image:https://img.shields.io/badge/Plugin-Documenation-blue[link="https://plugin
 Plugin for JetBrains IDE's that uses https://docs.gitlab.com/ee/api/lint.html[Gitlab CI Lint API] to validate the content of your `gitlab-ci.yml` file
 
 See the user plugin documentation at the https://plugins.jetbrains.com/plugin/19972-gitlab-pipeline-lint/docs[JetBrains Plugin Marketplace, window=_blank]  or at the project https://pablomxnl.gitlab.io/gitlab-yaml-pipeline-lint/starter-topic.html[Gitlab Pages, window=_blank]
+
+++++
+<iframe width="384px" height="319px" src="https://plugins.jetbrains.com/embeddable/card/19972" style="border:none;"></iframe>
+
+<iframe width="245px" height="48px" src="https://plugins.jetbrains.com/embeddable/install/19972" style="border:none;"></iframe>
+++++
