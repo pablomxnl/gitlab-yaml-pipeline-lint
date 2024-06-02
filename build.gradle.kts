@@ -111,7 +111,7 @@ tasks {
     }
 
     asciidoctor {
-        dependsOn(processTestResources)
+        dependsOn(processTestResources,downloadAndroidStudioProductReleasesXml, downloadIdeaProductReleasesXml)
         setSourceDir(baseDir)
         sources {
             include("CHANGELOG.adoc")

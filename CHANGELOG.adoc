@@ -9,7 +9,7 @@ This document provides an overview of the changes by release.
 
 === 0.0.10
 
-- Fixes https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues/6[#6] Slow operations are prohibited on EDT
+- Fixes https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues/6[#6] Update pluginUntilBuild to support 2024.x versions
 
 
 === 0.0.9
