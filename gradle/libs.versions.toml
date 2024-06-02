@@ -1,17 +1,17 @@
 [versions]
 # libraries
-gson = "2.10.1"
-okhttp = "4.10.0"
-sentrysdk = "6.17.0"
+gson = "2.11.0"
+okhttp = "4.12.0"
+sentrysdk = "7.9.0"
 
 # test libraries
 junit = "5.9.2"
 junitplatform = "1.9.2"
-mockwebserver = "4.10.0"
+mockwebserver = "4.12.0"
 mockito = "5.2.0"
 
 # plugins
-gradleIntelliJPlugin = "1.16.0"
+gradleIntelliJPlugin = "1.17.3"
 semver = "1.0.4"
 jacocolog = "3.1.0"
 asciidoc = "3.3.2"
