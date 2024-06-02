@@ -129,6 +129,14 @@ release_job:
     description: release_notes.md
     tag_name: '$CI_COMMIT_TAG'
     ref: '$CI_COMMIT_SHA'
+    assets:
+      links:
+        - name: "Gitlab Pipeline Lint Plugin v$CI_COMMIT_TAG for Jetbrain's IDEs"
+          url: "$CI_SERVER_URL/$CI_PROJECT_PATH/-/jobs/$CI_JOB_ID/artifacts/file/build/distributions/yaml-pipeline-lint-$CI_COMMIT_TAG.zip"
+  artifacts:
+    when: always
+    paths:
+      - build/distributions/*.zip
 
 upload_marketplace:
   stage: release

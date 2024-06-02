@@ -131,16 +131,13 @@ tasks {
     }
 
     signPlugin {
-        certificateChain = environment("JBM_CERTIFICATE_CHAIN")
-        privateKey = environment("JBM_PRIVATE_KEY")
+        certificateChainFile = file(environment("JBM_CERTIFICATE_CHAIN"))
+        privateKeyFile = file(environment("JBM_PRIVATE_KEY"))
         password = environment("JBM_PRIVATE_KEY_PASSWORD")
     }
 
     publishPlugin {
         token = environment("JBM_PUBLISH_TOKEN")
-        if (semver.preRelease.contains("SNAPSHOT")) {
-            channels = listOf("EAP")
-        }
     }
 
     jacocoTestReport {
