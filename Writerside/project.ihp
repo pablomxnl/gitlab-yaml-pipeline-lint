@@ -4,5 +4,5 @@
 <ihp version="2.0">
     <topics dir="topics"/>
     <images dir="images" web-path="img"/>
-    <instance src="pd.tree" web-path="/plugin-docs/" version="0.0.7"/>
+    <instance src="pd.tree" web-path="/plugin-docs/" version="%plugin_version%"/>
 </ihp>
