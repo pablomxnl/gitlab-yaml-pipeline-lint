@@ -1,0 +1,26 @@
+<application>
+  <component name="PropertyService"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.VFSInitializationConditionsToFusReporter": "true",
+    "RunOnceActivity.ide.auto-popup.quick-doc.initialized": "true",
+    "experimental.ui.on.first.startup": "true",
+    "experimental.ui.switch": "true",
+    "experimental.ui.used.version": "242.21829.15",
+    "fileTypeChangedCounter": "1",
+    "fontSizeToResetConsole": "12.0",
+    "fontSizeToResetEditor": "12.0",
+    "ide.memory.adjusted": "true",
+    "ignore.ide.script.launcher.used": "true",
+    "installed.kotlin.plugin.version": "242.21829.15-IJ",
+    "llm.installer.last.toolwindow.state": "LLM_INSTALLER",
+    "previousColorScheme": "_@user_Dark",
+    "registry.to.advanced.settings.migration.build": "IC-242.21829.15"
+  },
+  "keyToStringList": {
+    "fileTypeDetectors": [
+      "com.intellij.ide.scratch.ScratchFileServiceImpl$Detector",
+      "org.jetbrains.plugins.textmate.TextMateFileType$TextMateFileDetector"
+    ]
+  }
+}]]></component>
+</application>

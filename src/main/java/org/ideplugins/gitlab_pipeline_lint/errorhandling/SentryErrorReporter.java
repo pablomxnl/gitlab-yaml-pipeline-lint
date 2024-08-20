@@ -31,7 +31,7 @@ import java.awt.Component;
 
 public class SentryErrorReporter extends ErrorReportSubmitter {
 
-    private static void submitErrors(IdeaLoggingEvent @NotNull [] events, String additionalInfo, IHub sentryHub) {
+    private static void submitErrors(IdeaLoggingEvent [] events, String additionalInfo, IHub sentryHub) {
         for (IdeaLoggingEvent ideaEvent : events) {
             if (ideaEvent instanceof IdeaReportingEvent) {
                 Throwable throwable = ((AbstractMessage) ideaEvent.getData()).getThrowable();
@@ -57,7 +57,7 @@ public class SentryErrorReporter extends ErrorReportSubmitter {
     }
 
     @Override
-    public boolean submit(IdeaLoggingEvent @NotNull [] events, @Nullable String additionalInfo,
+    public boolean submit(IdeaLoggingEvent [] events, @Nullable String additionalInfo,
                           @NotNull Component parentComponent,
                           @NotNull Consumer<? super SubmittedReportInfo> consumer) {
         DataContext context = DataManager.getInstance().getDataContext(parentComponent);

@@ -26,12 +26,20 @@ public class FetchGitlabVariables {
 
                 content.lines().filter(line -> line.startsWith("| `")).forEach(line -> {
                     String[] values = line.split("\\|");
+                    int columns = values.length;
                     JsonObject object = new JsonObject();
                     object.add("Variable",
                             new JsonPrimitive(values[1].strip().replaceAll("`", "")));
-                    object.add("GitLab", new JsonPrimitive(values[2].strip()));
-                    object.add("Runner", new JsonPrimitive(values[3].strip()));
-                    object.add("Description", new JsonPrimitive(values[4].stripLeading()));
+                    if (columns == 5){
+                        object.add("GitLab", new JsonPrimitive(values[2].strip()));
+                        object.add("Runner", new JsonPrimitive(values[3].strip()));
+                        object.add("Description", new JsonPrimitive(values[4].stripLeading()));
+                    } else {
+                        object.add("Defined for", new JsonPrimitive(values[2].strip()));
+                        object.add("GitLab", new JsonPrimitive(values[3].strip()));
+                        object.add("Runner", new JsonPrimitive(values[4].strip()));
+                        object.add("Description", new JsonPrimitive(values[5].stripLeading()));
+                    }
                     jsonArray.add(object);
                 });
                 Files.writeString(Path.of(filePath), jsonArray.toString());

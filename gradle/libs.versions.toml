@@ -2,7 +2,7 @@
 # libraries
 gson = "2.11.0"
 okhttp = "4.12.0"
-sentrysdk = "7.9.0"
+sentrysdk = "7.12.1"
 
 # test libraries
 junit = "5.9.2"
@@ -11,10 +11,10 @@ mockwebserver = "4.12.0"
 mockito = "5.2.0"
 
 # plugins
-gradleIntelliJPlugin = "1.17.3"
+gradleIntelliJPlugin = "2.0.1"
 semver = "1.0.4"
 jacocolog = "3.1.0"
-asciidoc = "3.3.2"
+asciidoc = "4.0.2"
 
 [libraries]
 gson = { group = "com.google.code.gson", name= "gson",  version.ref = "gson" }
@@ -29,7 +29,7 @@ mockwebserver = { group = "com.squareup.okhttp3", name= "mockwebserver", version
 mockito = { group = "org.mockito", name="mockito-core", version.ref = "mockito" }
 
 [plugins]
-gradleIntelliJPlugin = { id = "org.jetbrains.intellij", version.ref = "gradleIntelliJPlugin" }
+gradleIntelliJPlugin = { id = "org.jetbrains.intellij.platform", version.ref = "gradleIntelliJPlugin" }
 semver = { id="net.thauvin.erik.gradle.semver" , version.ref="semver"}
 jacocolog = {id= "org.barfuin.gradle.jacocolog", version.ref= "jacocolog"}
 asciidoc = {id="org.asciidoctor.jvm.convert", version.ref="asciidoc"}
