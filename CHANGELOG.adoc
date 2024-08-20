@@ -7,6 +7,10 @@ This document provides an overview of the changes by release.
 [[releasenotes]]
 == Release notes
 
+=== 0.0.11
+
+- Update to new intellij platform gradle plugin / java 21 to support EAP 242
+
 === 0.0.10
 
 - Fixes https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues/5[#5] ClassCastException reported by plugin user through sentry error reporter

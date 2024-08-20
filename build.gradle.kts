@@ -1,4 +1,4 @@
-import org.jetbrains.intellij.tasks.RunIdeTask
+import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 import org.jsoup.Jsoup
 
 fun properties(key: String) = providers.gradleProperty(key)
@@ -6,14 +6,22 @@ fun environment(key: String) = providers.environmentVariable(key)
 
 group = properties("pluginGroup").get()
 
-
 plugins {
     id("java")
     id("jacoco")
     alias(libs.plugins.asciidoc)
-    alias(libs.plugins.gradleIntelliJPlugin) // Gradle IntelliJ Plugin
+    alias(libs.plugins.gradleIntelliJPlugin)
     alias(libs.plugins.semver)
     alias(libs.plugins.jacocolog)
+}
+
+develocity {
+    buildScan {
+        publishing.onlyIf { !System.getenv("CI").isNullOrEmpty() }
+        termsOfUseUrl.set("https://gradle.com/help/legal-terms-of-use")
+        termsOfUseAgree.set("yes")
+        uploadInBackground.set(System.getenv("CI").isNullOrEmpty())
+    }
 }
 
 configurations.all {
@@ -22,64 +30,93 @@ configurations.all {
 
 repositories {
     mavenCentral()
+    intellijPlatform {
+        defaultRepositories()
+        jetbrainsRuntime()
+    }
 }
 
 // Configure Gradle IntelliJ Plugin
-// Read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
-intellij {
-    version = properties("platformVersion")
-    plugins = properties("platformPlugins").map { it.split(',').map(String::trim).filter(String::isNotEmpty) }
-    updateSinceUntilBuild = false
-    type = properties("platformType") // Target IDE Platform
+intellijPlatform {
+    pluginConfiguration {
+        name = properties("pluginName")
+        changeNotes = provider {
+            Jsoup.parse(file("build/docs/CHANGELOG.html"))
+                    .select("#releasenotes")[0].nextElementSibling()?.children()
+                    ?.toString()
+        }
+        ideaVersion {
+            sinceBuild = properties("pluginSinceBuild")
+            untilBuild = properties("pluginUntilBuild")
+        }
+    }
+    pluginVerification {
+        ides {
+            recommended()
+        }
+    }
+
+    signing {
+        certificateChainFile = file(environment("JBM_CERTIFICATE_CHAIN"))
+        privateKeyFile = file(environment("JBM_PRIVATE_KEY"))
+        password = environment("JBM_PRIVATE_KEY_PASSWORD")
+    }
+
+    publishing {
+        token = environment("JBM_PUBLISH_TOKEN")
+        channels.set(
+                listOf(if ("true" == environment("PUSH_EAP").getOrElse("false")) "eap" else "default")
+        )
+    }
 }
 
 dependencies {
     implementation(libs.okhttp)
     implementation(libs.gson)
-    implementation(libs.sentrysdk){
+    implementation(libs.sentrysdk) {
         exclude(group = "org.slf4j")
     }
-
     testImplementation(libs.junit)
-    testImplementation(libs.mockwebserver){
+    testImplementation(libs.mockito)
+    testImplementation(libs.mockwebserver) {
         exclude("junit")
     }
-    testImplementation(libs.mockito)
-
     testRuntimeOnly(libs.junitplatform)
     testRuntimeOnly(libs.junitengine)
-
-}
-
-val dir1 = file("${intellij.sandboxDir.get()}/manualtest")
-val dirConfig = file("${intellij.sandboxDir.get()}/manualtest/config")
-val dirSystem = file("${intellij.sandboxDir.get()}/manualtest/system")
-
-tasks.register("createDirsManualTesting"){
-    mkdir(dir1.toPath())
-    mkdir(dirConfig.toPath())
-    mkdir(dirSystem.toPath())
-}
-
-tasks.register<RunIdeTask>("runForManualTests"){
-    dependsOn("createDirsManualTesting")
-    doFirst{
-        copy{
-            from("${projectDir}/src/test/resources/ide/options/")
-            into("${dirConfig}/options/")
-            include("*.xml")
-        }
-        copy{
-            from("${projectDir}/src/test/resources/ide/options/inspectionProfiles")
-            into("${intellij.sandboxDir.get()}/config/options/")
-        }
+    intellijPlatform {
+        intellijIdeaCommunity(properties("platformVersion"), useInstaller = false)
+        bundledPlugins(properties("platformBundledPlugins").map { it.split(',') })
+        instrumentationTools()
+        pluginVerifier()
+        zipSigner()
+        testFramework(TestFrameworkType.Platform)
     }
-    configDir = dirConfig
-    systemDir = dirSystem
-    systemProperty("idea.auto.reload.plugins", "false")
-    systemProperty("idea.trust.all.projects", "true")
-    systemProperty("ide.show.tips.on.startup.default.value", "false")
-    args = listOf("${projectDir}/src/test/resources/annotator/")
+}
+
+val runIdeForManualTests by intellijPlatformTesting.runIde.registering {
+    prepareSandboxTask {
+        sandboxDirectory = project.layout.buildDirectory.dir("custom-sandbox")
+        sandboxSuffix = ""
+    }
+
+    task {
+        doFirst {
+            copy {
+                from("${projectDir}/src/test/resources/ide/options/")
+                into(project.layout.buildDirectory.dir("custom-sandbox/config/options"))
+                include("*.xml")
+            }
+            copy {
+                from("${projectDir}/src/test/resources/ide/options/inspectionProfiles")
+                into(project.layout.buildDirectory.dir("custom-sandbox/config/options/inspectionProfiles"))
+            }
+        }
+        systemProperty("idea.auto.reload.plugins", "false")
+        systemProperty("idea.trust.all.projects", "true")
+        systemProperty("ide.show.tips.on.startup.default.value", "false")
+        systemProperty("nosplash", "true")
+        args = listOf("${projectDir}/src/test/resources/annotator/")
+    }
 }
 
 tasks.register<JavaExec>("FetchGitlabVariables") {
@@ -92,9 +129,9 @@ tasks.register<JavaExec>("FetchGitlabVariables") {
 tasks {
     // Set the JVM compatibility versions
     withType<JavaCompile> {
-        sourceCompatibility = "17"
-        targetCompatibility = "17"
-        options.compilerArgs = listOf("-Xlint:deprecation","-Xlint:unchecked")
+        sourceCompatibility = "21"
+        targetCompatibility = "21"
+        options.compilerArgs = listOf("-Xlint:deprecation", "-Xlint:unchecked")
     }
 
     withType<Test> {
@@ -111,7 +148,6 @@ tasks {
     }
 
     asciidoctor {
-        dependsOn(processTestResources,downloadAndroidStudioProductReleasesXml, downloadIdeaProductReleasesXml)
         setSourceDir(baseDir)
         sources {
             include("CHANGELOG.adoc")
@@ -119,26 +155,6 @@ tasks {
         setOutputDir(file("build/docs"))
     }
 
-    patchPluginXml {
-        dependsOn("asciidoctor")
-        sinceBuild = properties("pluginSinceBuild")
-        untilBuild = properties("pluginUntilBuild")
-        changeNotes = provider {
-            Jsoup.parse(file("build/docs/CHANGELOG.html"))
-                .select("#releasenotes")[0].nextElementSibling()?.children()
-                ?.toString()
-        }
-    }
-
-    signPlugin {
-        certificateChainFile = file(environment("JBM_CERTIFICATE_CHAIN"))
-        privateKeyFile = file(environment("JBM_PRIVATE_KEY"))
-        password = environment("JBM_PRIVATE_KEY_PASSWORD")
-    }
-
-    publishPlugin {
-        token = environment("JBM_PUBLISH_TOKEN")
-    }
 
     jacocoTestReport {
         classDirectories.setFrom(instrumentCode)
@@ -147,21 +163,8 @@ tasks {
         }
     }
 
-    runIde {
-        doFirst{
-            copy{
-                from("${projectDir}/src/test/resources/ide/options/")
-                into("${intellij.sandboxDir.get()}/config/options/")
-                include("*.xml")
-            }
-            copy{
-                from("${projectDir}/src/test/resources/ide/options/inspectionProfiles")
-                into("${intellij.sandboxDir.get()}/config/options/")
-            }
-        }
-        systemProperty("idea.auto.reload.plugins", "false")
-        systemProperty("idea.trust.all.projects", "true")
-        systemProperty("ide.show.tips.on.startup.default.value", "false")
+    patchPluginXml {
+        dependsOn(asciidoctor)
     }
 
 }

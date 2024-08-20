@@ -3,23 +3,21 @@ stages:
   - deploy
   - release
 
+default:
+  tags:
+    - pluginbuilder
+
 variables:
-  GRADLE_OPTS: "-Dorg.gradle.internal.launcher.welcomeMessageEnabled=false"
+  GRADLE_OPTS: "-Dorg.gradle.internal.launcher.welcomeMessageEnabled=false -Dorg.gradle.daemon=false"
   PRODUCT: Writerside/pd
   WRS_VERSION: 2.1.1479-p3869
   ARTIFACT: webHelpPD2-all.zip
-image: docker.io/library/gradle:8.4.0-jdk17
 
-cache:
-  key: ${CI_PROJECT_NAME}
-  paths:
-    - .gradle
+image: gradle:8.9.0-jdk21
 
 .build_release:
   stage: build
   coverage: '/    - Instruction Coverage: ([0-9.]+)%/'
-  tags:
-    - saas-linux-medium-amd64
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: '$CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+$/'
@@ -36,8 +34,6 @@ cache:
 .build_artifact:
   stage: build
   coverage: '/    - Instruction Coverage: ([0-9.]+)%/'
-  tags:
-    - saas-linux-medium-amd64
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   artifacts:
@@ -53,18 +49,18 @@ cache:
 build_artifact:
   extends: .build_artifact
   script:
-    - gradle test
-    - gradle -Dversion.prerelease=$CI_PIPELINE_ID-SNAPSHOT buildPlugin
+    - gradle -Dversion.prerelease=$CI_PIPELINE_ID-SNAPSHOT build
 
 build_release_artifact:
   extends: .build_release
   script:
-    - gradle test
-    - gradle buildPlugin
+    - gradle build
 
 build-documentation:
   image: registry.jetbrains.team/p/writerside/builder/writerside-builder:$WRS_VERSION
   stage: build
+  tags:
+  - saas-linux-medium-amd64
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
