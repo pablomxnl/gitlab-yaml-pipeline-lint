@@ -7,14 +7,16 @@ sentrysdk = "7.12.1"
 # test libraries
 junit = "5.9.2"
 junitplatform = "1.9.2"
+junit4 = "4.13.2"
 mockwebserver = "4.12.0"
 mockito = "5.2.0"
 
 # plugins
-gradleIntelliJPlugin = "2.0.1"
+gradleIntelliJPlugin = "2.1.0"
 semver = "1.0.4"
 jacocolog = "3.1.0"
 asciidoc = "4.0.2"
+kotlin = "1.9.25"
 
 [libraries]
 gson = { group = "com.google.code.gson", name= "gson",  version.ref = "gson" }
@@ -25,6 +27,7 @@ sentrysdk = { group = "io.sentry", name="sentry", version.ref = "sentrysdk" }
 junit = { group = "org.junit.jupiter", name= "junit-jupiter",  version.ref = "junit" }
 junitengine = { group = "org.junit.jupiter", name= "junit-jupiter-engine",  version.ref = "junit" }
 junitplatform = { group = "org.junit.platform", name= "junit-platform-launcher",  version.ref = "junitplatform" }
+junit4 = { group = "junit", name="junit", version.ref="junit4"}
 mockwebserver = { group = "com.squareup.okhttp3", name= "mockwebserver", version.ref = "mockwebserver" }
 mockito = { group = "org.mockito", name="mockito-core", version.ref = "mockito" }
 
@@ -33,6 +36,7 @@ gradleIntelliJPlugin = { id = "org.jetbrains.intellij.platform", version.ref = "
 semver = { id="net.thauvin.erik.gradle.semver" , version.ref="semver"}
 jacocolog = {id= "org.barfuin.gradle.jacocolog", version.ref= "jacocolog"}
 asciidoc = {id="org.asciidoctor.jvm.convert", version.ref="asciidoc"}
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 
 
 

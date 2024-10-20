@@ -10,10 +10,10 @@ default:
 variables:
   GRADLE_OPTS: "-Dorg.gradle.internal.launcher.welcomeMessageEnabled=false -Dorg.gradle.daemon=false"
   PRODUCT: Writerside/pd
-  WRS_VERSION: 2.1.1479-p3869
+  WRS_VERSION: "242.21870"
   ARTIFACT: webHelpPD2-all.zip
 
-image: gradle:8.9.0-jdk21
+image: "gradle:8.10.2-jdk21"
 
 .build_release:
   stage: build
@@ -49,18 +49,18 @@ image: gradle:8.9.0-jdk21
 build_artifact:
   extends: .build_artifact
   script:
-    - gradle -Dversion.prerelease=$CI_PIPELINE_ID-SNAPSHOT build
+    - gradle -Dversion.prerelease=$CI_PIPELINE_ID-SNAPSHOT test buildPlugin
 
 build_release_artifact:
   extends: .build_release
   script:
-    - gradle build
+    - gradle test buildPlugin
 
 build-documentation:
   image: registry.jetbrains.team/p/writerside/builder/writerside-builder:$WRS_VERSION
   stage: build
   tags:
-  - saas-linux-medium-amd64
+    - saas-linux-medium-amd64
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
