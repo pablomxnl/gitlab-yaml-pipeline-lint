@@ -1,6 +1,5 @@
 package org.ideplugins.gitlab_pipeline_lint.settings;
 
-
 import com.intellij.ui.DocumentAdapter;
 import com.intellij.ui.components.*;
 import com.intellij.util.ui.FormBuilder;

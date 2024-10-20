@@ -2,10 +2,8 @@ package org.ideplugins.gitlab_pipeline_lint.actions;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.intellij.credentialStore.Credentials;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
-import com.intellij.ide.passwordSafe.PasswordSafe;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationAction;
 import com.intellij.notification.NotificationType;
@@ -27,7 +25,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.net.HttpURLConnection;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import static com.intellij.execution.ui.ConsoleViewContentType.ERROR_OUTPUT;
@@ -84,25 +81,6 @@ public final class ActionHelper implements Constants {
             }
         });
         Notifications.Bus.notify(notification);
-    }
-
-    public static boolean checkGitlabToken() {
-        return PasswordSafe.getInstance().get(CREDENTIAL_ATTRIBUTES) != null;
-    }
-
-    public static String getGitlabToken() {
-        String token = "";
-        Optional<Credentials> credentials = Optional.ofNullable(PasswordSafe.getInstance().get(CREDENTIAL_ATTRIBUTES));
-        if (credentials.isPresent()){
-            token = credentials.get().getPasswordAsString();
-        }
-        return token;
-    }
-
-    public static String getGitlabUrl() {
-        return ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class)
-                .gitlabEndpoint;
-
     }
 
     public static void showLintResult(final JsonObject gitlabResponse, final AnActionEvent actionEvent) {

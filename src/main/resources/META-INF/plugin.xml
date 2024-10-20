@@ -23,7 +23,7 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-        <applicationConfigurable parentId="tools"
+        <applicationConfigurable parentId="tools" dynamic="true"
                                  instance="org.ideplugins.gitlab_pipeline_lint.settings.YamlPipelineLintSettingsConfigurable"
                                  id="org.ideplugins.PluginSettingsConfigurable"
                                  displayName="Gitlab Pipeline Lint"/>

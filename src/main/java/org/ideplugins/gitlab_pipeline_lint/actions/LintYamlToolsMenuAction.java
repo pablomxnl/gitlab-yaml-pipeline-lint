@@ -29,8 +29,7 @@ public class LintYamlToolsMenuAction extends BaseAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        String gitlabCILintEndpoint = getGitlabUrl();
-        if (checkGitlabToken() && !gitlabCILintEndpoint.contains("%") && event.getProject() != null) {
+        if ( checkPluginSettings( event.getProject() ) ) {
             Project project = getEventProject(event);
             DumbService dumbService = DumbService.getInstance(Objects.requireNonNull(project));
             if (dumbService.isDumb()){
