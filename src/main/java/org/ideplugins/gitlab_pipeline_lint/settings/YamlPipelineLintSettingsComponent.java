@@ -10,6 +10,8 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import java.awt.event.ItemEvent;
+
 import static org.ideplugins.gitlab_pipeline_lint.linter.Constants.GITLAB_HOST;
 
 public class YamlPipelineLintSettingsComponent {
@@ -20,6 +22,7 @@ public class YamlPipelineLintSettingsComponent {
     private final JBTextField gitlabHost = new JBTextField();
 
     private final JBPasswordField gitLabToken = new JBPasswordField();
+    private final JBCheckBox showToken = new JBCheckBox("Show token");
 
     private final JBTextField gitlabProjectID = new JBTextField();
     private final DocumentListener changeListener = createFieldsListener();
@@ -55,7 +58,8 @@ public class YamlPipelineLintSettingsComponent {
                 .addLabeledComponent(new JBLabel("Enter project ID"), gitlabProjectID, 2, false)
                 .addLabeledComponent("How to get Project ID", screenshot,3,false)
                 .addLabeledComponent(tokenLink, gitLabToken, 4, false)
-                .addLabeledComponent(new JBLabel("Endpoint to be used"), gitlabEndpoint, 5, false)
+                .addLabeledComponent("", showToken, 5, false)
+                .addLabeledComponent(new JBLabel("Endpoint to be used"), gitlabEndpoint, 6, false)
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
 
@@ -66,7 +70,18 @@ public class YamlPipelineLintSettingsComponent {
         gitlabEndpoint.setEditable(false);
         gitlabProjectID.getDocument().addDocumentListener(changeListener);
         gitlabHost.getDocument().addDocumentListener(changeListener);
-        gitlabProjectID.setToolTipText("To get the gitlab Project ID\n, go to your repository and click the copy button in the screenshot.");
+        char defaultEcho = gitLabToken.getEchoChar();
+        showToken.addItemListener(itemEvent -> {
+            if (itemEvent.getStateChange() == ItemEvent.SELECTED){
+               gitLabToken.setEchoChar((char)0);
+            } else {
+               gitLabToken.setEchoChar(defaultEcho);
+            }
+        });
+
+        gitlabProjectID.setToolTipText("To get the gitlab Project ID\n, " +
+                "go to your repository and click the 'More actions' three dots button, " +
+                "and then click 'Copy project ID' menu item.");
     }
 
     public JComponent getPreferredFocusedComponent() {

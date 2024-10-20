@@ -43,7 +43,7 @@ public class PipelineLintResultsExternalAnnotator extends ExternalAnnotator<Pipe
     public void apply(@NotNull PsiFile file, PipelineLintResult annotationResult,
                       @NotNull AnnotationHolder holder) {
         List<JsonObject> lintresults = annotationResult.getLintResults();
-        JsonObject result = lintresults.get(0).getAsJsonObject(GITLAB_RESPONSE_BODY);
+        JsonObject result = lintresults.getFirst().getAsJsonObject(GITLAB_RESPONSE_BODY);
         JsonArray errorsArray = result.getAsJsonArray("errors");
         JsonArray warningsArray = result.getAsJsonArray("warnings");
         iterateIssues(file, errorsArray, ERROR, holder);

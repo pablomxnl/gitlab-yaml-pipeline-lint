@@ -11,6 +11,8 @@ This document provides an overview of the changes by release.
 
 - Update to support EAP 243
 - Fixes https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues/9[#9] NPE reported by plugin user through sentry error reporter
+- Added Show token checkbox to plugin settings dialog https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues/10[#10]
+
 
 === 0.0.11
 
