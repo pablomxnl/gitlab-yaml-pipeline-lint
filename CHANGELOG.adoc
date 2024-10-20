@@ -7,6 +7,10 @@ This document provides an overview of the changes by release.
 [[releasenotes]]
 == Release notes
 
+=== 0.0.12
+
+- Update to support EAP 243
+
 === 0.0.11
 
 - Update to new intellij platform gradle plugin / java 21 to support EAP 242

@@ -1,4 +1,6 @@
+import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+import org.jetbrains.intellij.platform.gradle.models.ProductRelease
 import org.jsoup.Jsoup
 
 fun properties(key: String) = providers.gradleProperty(key)
@@ -13,6 +15,7 @@ plugins {
     alias(libs.plugins.gradleIntelliJPlugin)
     alias(libs.plugins.semver)
     alias(libs.plugins.jacocolog)
+    alias(libs.plugins.kotlin)
 }
 
 develocity {
@@ -52,7 +55,14 @@ intellijPlatform {
     }
     pluginVerification {
         ides {
-            recommended()
+            select {
+                types = listOf(IntelliJPlatformType.IntellijIdeaCommunity, IntelliJPlatformType.IntellijIdeaUltimate )
+                channels = listOf(ProductRelease.Channel.EAP)
+            }
+            select {
+                types = listOf(IntelliJPlatformType.IntellijIdeaCommunity, IntelliJPlatformType.IntellijIdeaUltimate )
+                channels = listOf(ProductRelease.Channel.RELEASE)
+            }
         }
     }
 
@@ -71,6 +81,15 @@ intellijPlatform {
 }
 
 dependencies {
+    intellijPlatform {
+        create(properties("platformType"), properties("platformVersion"), useInstaller = false)
+        bundledPlugins(properties("platformBundledPlugins").map { it.split(',') })
+        instrumentationTools()
+        pluginVerifier()
+        zipSigner()
+        testFramework(TestFrameworkType.Platform)
+        testFramework(TestFrameworkType.Plugin.Java)
+    }
     implementation(libs.okhttp)
     implementation(libs.gson)
     implementation(libs.sentrysdk) {
@@ -81,16 +100,9 @@ dependencies {
     testImplementation(libs.mockwebserver) {
         exclude("junit")
     }
+    testImplementation(libs.junit4)
     testRuntimeOnly(libs.junitplatform)
     testRuntimeOnly(libs.junitengine)
-    intellijPlatform {
-        intellijIdeaCommunity(properties("platformVersion"), useInstaller = false)
-        bundledPlugins(properties("platformBundledPlugins").map { it.split(',') })
-        instrumentationTools()
-        pluginVerifier()
-        zipSigner()
-        testFramework(TestFrameworkType.Platform)
-    }
 }
 
 val runIdeForManualTests by intellijPlatformTesting.runIde.registering {
@@ -167,4 +179,7 @@ tasks {
         dependsOn(asciidoctor)
     }
 
+}
+kotlin {
+    jvmToolchain(21)
 }
