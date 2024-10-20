@@ -1,12 +1,10 @@
 package org.ideplugins.gitlab_pipeline_lint.settings;
 
-import com.intellij.credentialStore.Credentials;
-import com.intellij.ide.passwordSafe.PasswordSafe;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
-import org.ideplugins.gitlab_pipeline_lint.actions.ActionHelper;
 import org.ideplugins.gitlab_pipeline_lint.linter.Constants;
+import org.ideplugins.gitlab_pipeline_lint.service.PasswordSafeService;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -14,6 +12,10 @@ import javax.swing.*;
 public class YamlPipelineLintSettingsConfigurable implements Configurable, Constants {
 
     private YamlPipelineLintSettingsComponent settingsComponent;
+
+    public YamlPipelineLintSettingsConfigurable(){
+
+    }
 
     @Override
     public String getDisplayName() {
@@ -33,7 +35,7 @@ public class YamlPipelineLintSettingsConfigurable implements Configurable, Const
 
     @Override
     public boolean isModified() {
-        YamlPipelineLintSettingsState settingsState = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class);
+        var settingsState = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class);
         boolean endpointModified = !settingsComponent.getGitlabEndpoint().equals(settingsState.gitlabEndpoint);
         boolean hostModified = !settingsComponent.getGitlabHost().equals(settingsState.gitlabHost);
         boolean tokenModified = !settingsComponent.getGitlabToken().equals(settingsState.gitlabToken);
@@ -42,21 +44,25 @@ public class YamlPipelineLintSettingsConfigurable implements Configurable, Const
 
     @Override
     public void apply() throws ConfigurationException {
-        YamlPipelineLintSettingsState settingsState = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class);
-        Credentials credentials = new Credentials("", settingsComponent.getGitlabToken());
-        PasswordSafe.getInstance().set(CREDENTIAL_ATTRIBUTES, credentials);
-        settingsState.setCredentials(credentials);
+        var settingsState = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class);
         settingsState.gitlabHost = settingsComponent.getGitlabHost();
         settingsState.gitlabEndpoint = settingsComponent.getGitlabEndpoint();
         settingsState.gitlabProjectID = settingsComponent.getGitlabProjectID();
+        PasswordSafeService.storeToken(settingsComponent.getGitlabToken());
+        settingsState.gitlabToken = settingsComponent.getGitlabToken();
     }
 
     @Override
     public void reset() {
-        YamlPipelineLintSettingsState settingsState = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class);
+        var settingsState = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class);
         settingsComponent.setGitlabEndpoint(settingsState.gitlabEndpoint);
-        settingsComponent.setGitlabToken(ActionHelper.getGitlabToken());
+        settingsComponent.setGitlabToken(settingsState.gitlabToken);
         settingsComponent.setGitlabProjectID(settingsState.gitlabProjectID);
         settingsComponent.setGitlabHost(settingsState.gitlabHost);
+    }
+
+    @Override
+    public void disposeUIResources() {
+        settingsComponent = null;
     }
 }
