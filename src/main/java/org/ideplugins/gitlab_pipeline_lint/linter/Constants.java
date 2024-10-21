@@ -21,4 +21,10 @@ public interface Constants {
     );
 
     Icon gitlabProjectIdScreenshot = IconLoader.getIcon("/icons/gitlabProjectID.png", Constants.class);
+    String UPDATE_NOTIFICATION_TITLE = "Pipeline Lint plugin has been updated!!";
+    String JB_MARKETPLACE_URL = "https://plugins.jetbrains.com/plugin/19972-gitlab-pipeline-lint/reviews";
+    String UPDATE_NOTIFICATION_BODY =
+            "Useful? Please rate / review";
+    String NOTIFICATION_GROUP = "gitlab-yaml-lint-plugin-update";
+
 }

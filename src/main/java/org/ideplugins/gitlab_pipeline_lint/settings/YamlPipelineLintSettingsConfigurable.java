@@ -56,7 +56,7 @@ public class YamlPipelineLintSettingsConfigurable implements Configurable, Const
     public void reset() {
         var settingsState = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class);
         settingsComponent.setGitlabEndpoint(settingsState.gitlabEndpoint);
-        settingsComponent.setGitlabToken(settingsState.gitlabToken);
+        settingsComponent.setGitlabToken(settingsState.gitlabToken!=null? settingsState.gitlabToken : "" );
         settingsComponent.setGitlabProjectID(settingsState.gitlabProjectID);
         settingsComponent.setGitlabHost(settingsState.gitlabHost);
     }

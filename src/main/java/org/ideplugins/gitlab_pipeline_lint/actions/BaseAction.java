@@ -26,7 +26,7 @@ public abstract class BaseAction extends AnAction implements Constants {
 
     protected boolean checkGitlabToken() {
         String token = PasswordSafeService.retrieveToken();
-        return token != null && !token.isBlank();
+        return !token.isBlank();
     }
 
     protected boolean checkPluginSettings(Project project) {

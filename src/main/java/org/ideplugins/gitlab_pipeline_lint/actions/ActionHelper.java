@@ -87,7 +87,8 @@ public final class ActionHelper implements Constants {
         if (!gitlabResponse.get(GITLAB_RESPONSE_BODY).isJsonObject() ){
             displayNotificationWithAction(NotificationType.ERROR,
                     String.format("There was an error executing Gitlab Lint API, this was the response %s",
-                            gitlabResponse.getAsString()));
+                            gitlabResponse.get(GITLAB_RESPONSE_BODY).getAsString()));
+            return;
         }
         JsonObject result = gitlabResponse.getAsJsonObject(GITLAB_RESPONSE_BODY);
         String gitlabHost = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class)

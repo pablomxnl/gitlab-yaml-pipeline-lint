@@ -31,7 +31,7 @@ import java.awt.Component;
 
 public class SentryErrorReporter extends ErrorReportSubmitter {
 
-    private static void submitErrors(IdeaLoggingEvent [] events, String additionalInfo, IHub sentryHub) {
+    private static void submitErrors(IdeaLoggingEvent[] events, String additionalInfo, IHub sentryHub) {
         for (IdeaLoggingEvent ideaEvent : events) {
             if (ideaEvent instanceof IdeaReportingEvent) {
                 Throwable throwable = ((AbstractMessage) ideaEvent.getData()).getThrowable();
@@ -57,8 +57,8 @@ public class SentryErrorReporter extends ErrorReportSubmitter {
     }
 
     @Override
-    public boolean submit(IdeaLoggingEvent [] events, @Nullable String additionalInfo,
-                          @NotNull Component parentComponent,
+    public boolean submit(IdeaLoggingEvent @NotNull [] events,
+                          @Nullable String additionalInfo, @NotNull Component parentComponent,
                           @NotNull Consumer<? super SubmittedReportInfo> consumer) {
         DataContext context = DataManager.getInstance().getDataContext(parentComponent);
         Project project = CommonDataKeys.PROJECT.getData(context);
@@ -89,7 +89,7 @@ public class SentryErrorReporter extends ErrorReportSubmitter {
         options.setEnvironment(pluginDescriptor.getPluginId().getIdString());
         options.setDiagnosticLevel(SentryLevel.ERROR);
         Hub hub = new Hub(options);
-        String os = SystemInfo.getOsNameAndVersion();
+        String os = SystemInfo.getOsNameAndVersion() + "-" + SystemInfo.OS_ARCH;
         if (SystemInfo.isLinux) {
             os += (SystemInfo.isChromeOS) ? " [Chrome OS] " : "";
             os += (SystemInfo.isKDE) ? " [KDE] " : "";
@@ -100,7 +100,6 @@ public class SentryErrorReporter extends ErrorReportSubmitter {
         hub.setTag("jb_platform_type", applicationInfo.getBuild().getProductCode());
         hub.setTag("jb_platform_version", applicationInfo.getBuild().asStringWithoutProductCode());
         hub.setTag("jb_ide", applicationInfo.getVersionName());
-//        hub.setTag("jb_new_ui_enabled", ""+ NewUiValue.isEnabled());
         return hub;
     }
 
