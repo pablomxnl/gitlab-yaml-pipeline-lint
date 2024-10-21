@@ -16,7 +16,7 @@ buildCache {
     }
     remote<HttpBuildCache> {
         url = uri( System.getenv("GRADLE_CACHE_SERVER"))
-        setAllowInsecureProtocol(!System.getenv("CI").isNullOrEmpty())
+        isAllowInsecureProtocol = !System.getenv("CI").isNullOrEmpty()
         isPush = true
         credentials {
             username = System.getenv("GRADLE_CACHE_USERNAME")

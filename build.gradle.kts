@@ -95,6 +95,7 @@ dependencies {
     implementation(libs.sentrysdk) {
         exclude(group = "org.slf4j")
     }
+    implementation(libs.annotations)
     testImplementation(libs.junit)
     testImplementation(libs.mockito)
     testImplementation(libs.mockwebserver) {

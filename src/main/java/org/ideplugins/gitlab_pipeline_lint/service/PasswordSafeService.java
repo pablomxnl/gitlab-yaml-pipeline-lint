@@ -6,6 +6,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.Service;
 import com.intellij.openapi.ui.Messages;
 import org.ideplugins.gitlab_pipeline_lint.linter.Constants;
+import org.jetbrains.annotations.NotNull;
 
 @Service(Service.Level.APP)
 public final class PasswordSafeService implements Constants {
@@ -21,7 +22,9 @@ public final class PasswordSafeService implements Constants {
         );
     }
 
+    @NotNull
     public static String retrieveToken() {
-        return PasswordSafe.getInstance().getPassword(CREDENTIAL_ATTRIBUTES);
+        var token = PasswordSafe.getInstance().getPassword(CREDENTIAL_ATTRIBUTES);
+        return token!=null? token : "";
     }
 }
