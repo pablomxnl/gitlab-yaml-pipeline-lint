@@ -18,12 +18,11 @@
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
     <depends>org.jetbrains.plugins.yaml</depends>
-    <depends optional="true" config-file="org.ideplugins.gitlab-yaml-pipeline-lint-java.xml">com.intellij.java</depends>
 
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-        <applicationConfigurable parentId="tools" dynamic="true"
+        <applicationConfigurable parentId="tools"
                                  instance="org.ideplugins.gitlab_pipeline_lint.settings.YamlPipelineLintSettingsConfigurable"
                                  id="org.ideplugins.PluginSettingsConfigurable"
                                  displayName="Gitlab Pipeline Lint"/>

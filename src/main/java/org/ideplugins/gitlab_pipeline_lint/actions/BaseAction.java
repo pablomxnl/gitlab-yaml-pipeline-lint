@@ -9,6 +9,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.FileContentUtil;
 import com.intellij.util.concurrency.annotations.RequiresBackgroundThread;
+import okhttp3.HttpUrl;
 import org.ideplugins.gitlab_pipeline_lint.linter.Constants;
 import org.ideplugins.gitlab_pipeline_lint.linter.YamlPipelineLinter;
 import org.ideplugins.gitlab_pipeline_lint.service.PasswordSafeService;
@@ -32,7 +33,7 @@ public abstract class BaseAction extends AnAction implements Constants {
     protected boolean checkPluginSettings(Project project) {
         String gitlabCILintEndpoint = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class)
                 .gitlabEndpoint;
-        return checkGitlabToken() && !gitlabCILintEndpoint.contains("%");
+        return HttpUrl.parse(gitlabCILintEndpoint)!=null && checkGitlabToken() && !gitlabCILintEndpoint.contains("%");
     }
 
     @RequiresBackgroundThread

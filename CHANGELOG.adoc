@@ -7,6 +7,10 @@ This document provides an overview of the changes by release.
 [[releasenotes]]
 == Release notes
 
+=== 0.0.13
+
+- Fixes https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues/11[#11] IllegalArgumentException reported by plugin user through sentry error reporter
+
 === 0.0.12
 
 - Update to support EAP 243

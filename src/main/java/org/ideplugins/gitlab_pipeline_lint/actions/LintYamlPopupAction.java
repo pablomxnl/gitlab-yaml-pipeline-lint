@@ -19,11 +19,11 @@ public class LintYamlPopupAction extends BaseAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        if (checkPluginSettings(event.getProject())) {
-            PsiFile psiFile = event.getData(CommonDataKeys.PSI_FILE);
+        PsiFile psiFile = event.getData(CommonDataKeys.PSI_FILE);
+        if (psiFile != null && checkPluginSettings(event.getProject())) {
             doLintInBackground(event, psiFile);
         } else {
-            displayNotificationWithAction(NotificationType.WARNING, "Please setup your Gitlab token/Project ID");
+            displayNotificationWithAction(NotificationType.WARNING, "Please setup your Gitlab Host, Token and Project ID");
         }
     }
 

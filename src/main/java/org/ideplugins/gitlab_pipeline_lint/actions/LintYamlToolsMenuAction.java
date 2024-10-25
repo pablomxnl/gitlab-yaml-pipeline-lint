@@ -38,7 +38,7 @@ public class LintYamlToolsMenuAction extends BaseAction {
                 lintPipelineFile(project, event);
             }
         } else {
-            displayNotificationWithAction(NotificationType.WARNING, "Please setup your Gitlab token/Project ID");
+            displayNotificationWithAction(NotificationType.WARNING, "Please setup your Gitlab Host, Token and Project ID");
         }
     }
 
