@@ -10,6 +10,7 @@
         The Dude Plugins
     </vendor>
 
+
     <description><![CDATA[
     Validates content of your .gitlab-ci.yaml file by posting it to Gitlab Pipeline CI Lint API
     ]]></description>
