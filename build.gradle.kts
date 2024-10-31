@@ -135,7 +135,7 @@ val runIdeForManualTests by intellijPlatformTesting.runIde.registering {
 tasks.register<JavaExec>("FetchGitlabVariables") {
     dependsOn("classes")
     classpath = sourceSets["main"].runtimeClasspath
-    mainClass.set("org.ideplugins.gitlab_pipeline_lint.gitlab.FetchGitlabVariables")
+    mainClass.set("org.ideplugins.ci_pipeline_lint.gitlab.FetchGitlabVariables")
     setArgsString(file("${projectDir}/src/main/resources/gitlab-variables.json").path)
 }
 

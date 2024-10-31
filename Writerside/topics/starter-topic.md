@@ -1,11 +1,11 @@
-# Gitlab Pipeline Lint Plugin Documentation v %plugin_version%
+# CI Pipeline Lint Plugin Documentation v %plugin_version%
 
 Plugin for JetBrains IDE’s that uses [Gitlab CI Lint API](https://docs.gitlab.com/ee/api/lint.html) to validate the content of a project gitlab-ci.yml pipeline file
 
 ## Installation
 <tabs>
     <tab title="From Jetbrains Plugin Marketplace">
-    <kbd>Settings</kbd> (or <kbd>Preferences</kbd> if using mac) -> <kbd>Plugins</kbd> -> <kbd>Marketplace</kbd> Search for Gitlab Pipeline Lint -> Click <control>Install</control>
+    <kbd>Settings</kbd> (or <kbd>Preferences</kbd> if using mac) -> <kbd>Plugins</kbd> -> <kbd>Marketplace</kbd> Search for CI Pipeline Lint -> Click <control>Install</control>
     <img src="install_plugin.png" border-effect="line" alt="Install plugin" /> 
 </tab>
     <tab title="From Gitlab Releases">
@@ -17,14 +17,12 @@ Then select the zip file just downloaded from gitlab releases.
     </tab>
 </tabs>
 
-
-
 ## Configuration
 
 The plugin requires a Gitlab token and a Project ID to work with the Gitlab CI Lint API.
 To setup this configuration go to 
 
-<kbd>Settings</kbd> (or <kbd>Preferences</kbd> if using mac) -> <kbd>Tools</kbd> -> <kbd>Gitlab Pipeline Lint</kbd> 
+<kbd>Settings</kbd> (or <kbd>Preferences</kbd> if using mac) -> <kbd>Tools</kbd> -> <kbd>CI Pipeline Lint</kbd> 
 
 ![Plugin settings](plugin_settings.png){border-effect="line"}
 

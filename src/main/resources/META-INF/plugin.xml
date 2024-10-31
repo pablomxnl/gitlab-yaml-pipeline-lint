@@ -1,17 +1,18 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
-    <id>org.ideplugins.gitlab-yaml-pipeline-lint</id>
+    <id>org.ideplugins.ci_pipeline_lint</id>
     <!-- Public plugin name should be written in Title Case.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
-    <name>Gitlab Pipeline Lint</name>
+    <name>CI Pipeline Lint</name>
     <vendor email="plugin_dude@yeahwellyouknowthatsjustlikeuhyouropinionman.com"
             url="https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/">
         The Dude Plugins
     </vendor>
 
+
     <description><![CDATA[
-    Validates content of your .gitlab-ci.yaml file by posting it to to Gitlab Pipeline CI Lint API
+    Validates content of your .gitlab-ci.yaml file by posting it to Gitlab Pipeline CI Lint API
     ]]></description>
 
     <!-- Product and plugin compatibility requirements.
@@ -23,44 +24,44 @@
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable parentId="tools"
-                                 instance="org.ideplugins.gitlab_pipeline_lint.settings.YamlPipelineLintSettingsConfigurable"
-                                 id="org.ideplugins.PluginSettingsConfigurable"
-                                 displayName="Gitlab Pipeline Lint"/>
+                                 instance="org.ideplugins.ci_pipeline_lint.settings.YamlPipelineLintSettingsConfigurable"
+                                 id="org.ideplugins.ci_pipeline_lint_configurable"
+                                 displayName="CI Pipeline Lint"/>
 
-        <toolWindow id="Gitlab Pipeline Lint Results"
+        <toolWindow id="CI Pipeline Lint Results"
                     anchor="bottom"
                     canCloseContents="false"
-                    factoryClass="org.ideplugins.gitlab_pipeline_lint.toolwindow.YamlPipelineLintToolWindow"
-                    icon="/icons/yaml_pipeline_lint.svg"/>
+                    factoryClass="org.ideplugins.ci_pipeline_lint.toolwindow.YamlPipelineLintToolWindow"
+                    icon="/icons/file-lines.svg"/>
 
         <externalAnnotator order="last"
-                           implementationClass="org.ideplugins.gitlab_pipeline_lint.annotator.PipelineLintResultsExternalAnnotator"
+                           implementationClass="org.ideplugins.ci_pipeline_lint.annotator.PipelineLintResultsExternalAnnotator"
                            language="yaml"
         />
-        <notificationGroup displayType="STICKY_BALLOON" id="gitlab-yaml-lint-plugin-update"/>
-        <postStartupActivity implementation="org.ideplugins.gitlab_pipeline_lint.activity.YamlPipelineLintPluginStartupActivity"/>
+        <notificationGroup displayType="STICKY_BALLOON" id="ci-pipeline-lint-plugin-update"/>
+        <postStartupActivity implementation="org.ideplugins.ci_pipeline_lint.activity.YamlPipelineLintPluginStartupActivity"/>
 
-        <errorHandler implementation="org.ideplugins.gitlab_pipeline_lint.errorhandling.SentryErrorReporter"/>
+        <errorHandler implementation="org.ideplugins.ci_pipeline_lint.errorhandling.SentryErrorReporter"/>
         <completion.contributor language="yaml" order="first"
-                                implementationClass="org.ideplugins.gitlab_pipeline_lint.completion.GitlabCIVariablesCompletionContributor"/>
+                                implementationClass="org.ideplugins.ci_pipeline_lint.completion.GitlabCIVariablesCompletionContributor"/>
 
     </extensions>
     <actions>
-        <action id="org.ideplugins.pipelinelint.LintYamlToolsMenuAction" icon="/icons/yaml_pipeline_lint.svg"
-                class="org.ideplugins.gitlab_pipeline_lint.actions.LintYamlToolsMenuAction" text="Gitlab Pipeline Lint"
+        <action id="org.ideplugins.pipelinelint.LintYamlToolsMenuAction" icon="/icons/file-lines.svg"
+                class="org.ideplugins.ci_pipeline_lint.actions.LintYamlToolsMenuAction" text="CI Pipeline Lint"
                 description="Validate your gitlab-ci yaml file">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
 
         <action
-                id="org.ideplugins.pipelinelint.LintYamlPopupAction" icon="/icons/yaml_pipeline_lint.svg"
-                class="org.ideplugins.gitlab_pipeline_lint.actions.LintYamlPopupAction" text="Gitlab Pipeline Lint"
+                id="org.ideplugins.pipelinelint.LintYamlPopupAction" icon="/icons/file-lines.svg"
+                class="org.ideplugins.ci_pipeline_lint.actions.LintYamlPopupAction" text="CI Pipeline Lint"
                 description="Validate your gitlab-ci yaml file">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
         </action>
         <action
-                id="org.ideplugins.pipelinelint.LintYamlEditorPopupAction" icon="/icons/yaml_pipeline_lint.svg"
-                class="org.ideplugins.gitlab_pipeline_lint.actions.LintYamlPopupAction" text="Gitlab Pipeline Lint"
+                id="org.ideplugins.pipelinelint.LintYamlEditorPopupAction" icon="/icons/file-lines.svg"
+                class="org.ideplugins.ci_pipeline_lint.actions.LintYamlPopupAction" text="CI Pipeline Lint"
                 description="Validate your gitlab-ci yaml file">
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>

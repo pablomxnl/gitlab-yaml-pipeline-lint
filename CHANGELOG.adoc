@@ -8,7 +8,7 @@ This document provides an overview of the changes by release.
 == Release notes
 
 === 0.0.13
-
+- Closes https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues/12[#12] Rename plugin to address Unauthorized Use of GitLab Intellectual Property email
 - Fixes https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues/11[#11] IllegalArgumentException reported by plugin user through sentry error reporter
 
 === 0.0.12
