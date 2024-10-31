@@ -15,14 +15,14 @@ public interface Constants {
     String GITLAB_RESPONSE_BODY = "gitlabResponse";
     String GITLAB_RESPONSE_STATUS = "httpStatus";
 
-    String PLUGIN_ID = "org.ideplugins.ci_pipeline_lint";
+    String PLUGIN_ID = "org.ideplugins.gitlab-yaml-pipeline-lint";
     CredentialAttributes CREDENTIAL_ATTRIBUTES = new CredentialAttributes(
-            CredentialAttributesKt.generateServiceName("pipeline-ci-lint", "gitlab-token")
+            CredentialAttributesKt.generateServiceName("ci-pipeline-lint", "gitlab-token")
     );
 
     Icon gitlabProjectIdScreenshot = IconLoader.getIcon("/icons/gitlabProjectID.png", Constants.class);
     String UPDATE_NOTIFICATION_TITLE = "Pipeline Lint plugin has been updated!!";
-    String JB_MARKETPLACE_URL = "https://plugins.jetbrains.com/plugin/25717-ci-pipeline-lint/reviews";
+    String JB_MARKETPLACE_URL = "https://plugins.jetbrains.com/plugin/19972-gitlab-pipeline-lint/reviews";
     String UPDATE_NOTIFICATION_BODY =
             "Useful? Please rate / review";
     String NOTIFICATION_GROUP = "ci-pipeline-lint-plugin-update";

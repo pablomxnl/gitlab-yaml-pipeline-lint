@@ -14,9 +14,9 @@ public class YamlPipelineLintToolWindow implements ToolWindowFactory {
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
         ConsoleView consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
         Content content = toolWindow.getContentManager().getFactory().createContent(consoleView.getComponent(),
-                "Pipeline Lint Results", true);
+                "CI Pipeline Lint Results", true);
         content.setDisplayName("Lint Results");
-        toolWindow.setTitle("Pipeline Lint Results");
+        toolWindow.setTitle("CI Pipeline Lint Results");
         toolWindow.setType(ToolWindowType.DOCKED, null);
         toolWindow.getContentManager().addContent(content);
 

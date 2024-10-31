@@ -12,7 +12,7 @@ import static org.ideplugins.ci_pipeline_lint.linter.Constants.GITLAB_HOST;
 @Service
 @State(
         name = "PluginSettingsState",
-        storages = {@Storage("ciPipelineYamlLinter.xml")},
+        storages = {@Storage("gitlabPipelineYamlLinter.xml")},
         category = TOOLS
 )
 public final class YamlPipelineLintSettingsState implements PersistentStateComponent<YamlPipelineLintSettingsState> {
