@@ -39,7 +39,7 @@ Alternatively, whenever the plugin is invoked with incomplete configuration, the
 
 To validate the gitlab pipeline file, do one of the following:
 
-* Using the global tools menu action: <kbd>Tools</kbd> -> <kbd>Gitlab Pipeline Lint</kbd>
+* Using the global tools menu action: <kbd>Tools</kbd> -> <kbd>CI Pipeline Lint</kbd>
   ![Tools menu action](usage_tools_menu.png){ border-effect="line" }
 * Using the popup action in the editor window
   ![Editor popup action](usage_editor_context_menu.png){ border-effect="line" }
