@@ -12,3 +12,14 @@ image:https://img.shields.io/badge/Plugin-Documenation-blue[link="https://plugin
 Plugin for JetBrains IDE's that uses https://docs.gitlab.com/ee/api/lint.html[Gitlab CI Lint API] to validate the content of your `gitlab-ci.yml` file
 
 See the user plugin documentation at the https://plugins.jetbrains.com/plugin/25717-ci-pipeline-lint/docs[JetBrains Plugin Marketplace, window=_blank]  or at the project https://pablomxnl.gitlab.io/gitlab-yaml-pipeline-lint/starter-topic.html[Gitlab Pages, window=_blank]
+
+[IMPORTANT]
+====
+This plugin has been renamed to CI Pipeline Lint due to:
+
+- https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues/12[#12] Rename plugin to address Unauthorized Use of GitLab Intellectual Property email
+
+Soon plugin with Gilab name and logo will be removed from marketplace and replaced with:
+
+- https://plugins.jetbrains.com/plugin/25717-ci-pipeline-lint[CI Pipeline Lint]
+====

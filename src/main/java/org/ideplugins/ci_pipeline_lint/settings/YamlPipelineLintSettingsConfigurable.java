@@ -19,7 +19,7 @@ public class YamlPipelineLintSettingsConfigurable implements Configurable, Const
 
     @Override
     public String getDisplayName() {
-        return "Gitlab Pipeline Lint";
+        return "CI Pipeline Lint";
     }
 
     @Override

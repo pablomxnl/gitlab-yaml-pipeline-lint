@@ -76,7 +76,7 @@ public final class ActionHelper implements Constants {
     public static void displayNotificationWithAction(final NotificationType notificationType, final String notificationBody) {
         Notification notification =
                 new Notification(GROUP_DISPLAY_ID, NOTIFICATION_TITLE, notificationBody, notificationType);
-        notification.addAction(new NotificationAction("Configure Gitlab Pipeline Lint") {
+        notification.addAction(new NotificationAction("Configure CI Pipeline Lint") {
             @Override
             public void actionPerformed(@NotNull AnActionEvent anActionEvent, @NotNull Notification notification) {
                 ShowSettingsUtil.getInstance().showSettingsDialog(null,

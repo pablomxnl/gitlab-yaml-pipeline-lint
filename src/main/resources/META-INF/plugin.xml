@@ -25,7 +25,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable parentId="tools"
                                  instance="org.ideplugins.ci_pipeline_lint.settings.YamlPipelineLintSettingsConfigurable"
-                                 id="org.ideplugins.PluginSettingsConfigurable"
+                                 id="org.ideplugins.ci_pipeline_lint_configurable"
                                  displayName="CI Pipeline Lint"/>
 
         <toolWindow id="CI Pipeline Lint Results"
@@ -48,20 +48,20 @@
     </extensions>
     <actions>
         <action id="org.ideplugins.pipelinelint.LintYamlToolsMenuAction" icon="/icons/file-lines.svg"
-                class="org.ideplugins.ci_pipeline_lint.actions.LintYamlToolsMenuAction" text="Gitlab Pipeline Lint"
+                class="org.ideplugins.ci_pipeline_lint.actions.LintYamlToolsMenuAction" text="CI Pipeline Lint"
                 description="Validate your gitlab-ci yaml file">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
 
         <action
                 id="org.ideplugins.pipelinelint.LintYamlPopupAction" icon="/icons/file-lines.svg"
-                class="org.ideplugins.ci_pipeline_lint.actions.LintYamlPopupAction" text="Gitlab Pipeline Lint"
+                class="org.ideplugins.ci_pipeline_lint.actions.LintYamlPopupAction" text="CI Pipeline Lint"
                 description="Validate your gitlab-ci yaml file">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
         </action>
         <action
                 id="org.ideplugins.pipelinelint.LintYamlEditorPopupAction" icon="/icons/file-lines.svg"
-                class="org.ideplugins.ci_pipeline_lint.actions.LintYamlPopupAction" text="Gitlab Pipeline Lint"
+                class="org.ideplugins.ci_pipeline_lint.actions.LintYamlPopupAction" text="CI Pipeline Lint"
                 description="Validate your gitlab-ci yaml file">
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>

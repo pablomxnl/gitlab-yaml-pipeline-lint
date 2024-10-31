@@ -9,13 +9,13 @@ import javax.swing.*;
 public interface Constants {
     String GITLAB_URL = "https://%s/api/v4/projects/%s/ci/lint";
     String GITLAB_HOST = "gitlab.com";
-    String NOTIFICATION_TITLE = "Gitlab Pipeline Lint";
+    String NOTIFICATION_TITLE = "CI Pipeline Lint";
     String GROUP_DISPLAY_ID = "org.ideplugins.pipeline-lint";
     String GITLAB_CI_YML = ".gitlab-ci.yml";
     String GITLAB_RESPONSE_BODY = "gitlabResponse";
     String GITLAB_RESPONSE_STATUS = "httpStatus";
 
-    String PLUGIN_ID = "org.ideplugins.gitlab-yaml-pipeline-lint";
+    String PLUGIN_ID = "org.ideplugins.ci_pipeline_lint";
     CredentialAttributes CREDENTIAL_ATTRIBUTES = new CredentialAttributes(
             CredentialAttributesKt.generateServiceName("pipeline-ci-lint", "gitlab-token")
     );
