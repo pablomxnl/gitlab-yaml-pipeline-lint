@@ -1,11 +1,11 @@
-= Gitlab Pipeline Lint Plugin
+= CI Pipeline Lint Plugin
 :icons: font
 
 image:https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/badges/release.svg[link="https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/releases",title="Latest Release"]
-image:https://img.shields.io/jetbrains/plugin/d/org.ideplugins.ci_pipeline_lint[link="https://plugins.jetbrains.com/plugin/19972-ci-pipeline-lint",title="Downloads"]
+image:https://img.shields.io/jetbrains/plugin/d/org.ideplugins.gitlab-yaml-pipeline-lint[link="https://plugins.jetbrains.com/plugin/19972-ci-pipeline-lint",title="Downloads"]
 image:https://img.shields.io/gitlab/issues/open/pablomxnl/gitlab-yaml-pipeline-lint?style=plastic[link="https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues", title="GitLab issues"]
-image:https://img.shields.io/jetbrains/plugin/r/stars/org.ideplugins.ci_pipeline_lint[link="https://plugins.jetbrains.com/plugin/19972-ci-pipeline-lint/reviews",title="Ratings"]
-image:https://img.shields.io/jetbrains/plugin/v/org.ideplugins.ci_pipeline_lint[link="https://plugins.jetbrains.com/plugin/19972-ci-pipeline-lint",title="Version"]
+image:https://img.shields.io/jetbrains/plugin/r/stars/org.ideplugins.gitlab-yaml-pipeline-lint[link="https://plugins.jetbrains.com/plugin/19972-ci-pipeline-lint/reviews",title="Ratings"]
+image:https://img.shields.io/jetbrains/plugin/v/org.ideplugins.gitlab-yaml-pipeline-lint[link="https://plugins.jetbrains.com/plugin/19972-ci-pipeline-lint",title="Version"]
 image:https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/badges/main/coverage.svg[link="https://pablomxnl.gitlab.io/gitlab-yaml-pipeline-lint/coverage/html/index.html",title="Coverage report"]
 image:https://img.shields.io/badge/Plugin-Documenation-blue[link="https://plugins.jetbrains.com/plugin/19972-ci-pipeline-lint/docs",title="Plugin Documentation"]
 

@@ -134,14 +134,14 @@ release_job:
     paths:
       - build/distributions/*.zip
 
-upload_marketplace:
-  stage: release
-  rules:
-    - if: '$CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+$/'
-  needs:
-    - job: build_release_artifact
-      artifacts: true
-    - job: release_job
-      artifacts: false
-  script:
-    - gradle publishPlugin
+#upload_marketplace:
+#  stage: release
+#  rules:
+#    - if: '$CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+$/'
+#  needs:
+#    - job: build_release_artifact
+#      artifacts: true
+#    - job: release_job
+#      artifacts: false
+#  script:
+#    - gradle publishPlugin
