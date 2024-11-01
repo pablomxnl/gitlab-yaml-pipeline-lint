@@ -44,7 +44,7 @@ intellijPlatform {
     pluginConfiguration {
         name = properties("pluginName")
         changeNotes = provider {
-            Jsoup.parse(file("build/docs/CHANGELOG.html"))
+            Jsoup.parse(file("build/docs/changelog.html"))
                     .select("#releasenotes")[0].nextElementSibling()?.children()
                     ?.toString()
         }
