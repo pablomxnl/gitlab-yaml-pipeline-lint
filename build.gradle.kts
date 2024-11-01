@@ -163,7 +163,7 @@ tasks {
     asciidoctor {
         setSourceDir(baseDir)
         sources {
-            include("CHANGELOG.adoc")
+            include("changelog.adoc")
         }
         setOutputDir(file("build/docs"))
     }

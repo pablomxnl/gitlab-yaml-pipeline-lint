@@ -1,4 +1,4 @@
-= Gitlab Pipeline Lint Plugin Changelog
+= CI Pipeline Lint Plugin Changelog
 
 == About
 

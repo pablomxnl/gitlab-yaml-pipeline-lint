@@ -28,7 +28,7 @@ To setup this configuration go to
 
 1. Gitlab host: default to https://gitlab.com , change it if using a private or self hosted instance
 2. Gitlab Project ID: To obtain the Project ID go to a gitlab repository you own and at the top, below the project name the Project ID is displayed, there is also a copy button next to the Project ID. Gitlab 16.0 [deprecated](https://docs.gitlab.com/ee/api/lint.html#validate-the-ci-yaml-configuration-deprecated) the global lint endpoint, and now is per project, that's why a Project ID is now required.
-3. Access token: create a Gitlab personal access token with api access, the link on the label will open the browser at [https://gitlab.com/-/profile/personal_access_tokens](https://gitlab.com/-/profile/personal_access_tokens) to obtain a token if needed. 
+3. Access token: create a Gitlab personal access token with api access, the link on the label will open the browser at [https://gitlab.com/-/user_settings/personal_access_tokens](https://gitlab.com/-/user_settings/personal_access_tokens) to create a token. 
 
 Alternatively, whenever the plugin is invoked with incomplete configuration, the settings can be entered by clicking on the notification link:
 

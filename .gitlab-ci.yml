@@ -49,12 +49,14 @@ image: "gradle:8.10.2-jdk21"
 build_artifact:
   extends: .build_artifact
   script:
-    - gradle -Dversion.prerelease=$CI_PIPELINE_ID-SNAPSHOT test buildPlugin
+    - gradle -Dversion.prerelease=$CI_PIPELINE_ID-SNAPSHOT test
+    - gradle buildPlugin
 
 build_release_artifact:
   extends: .build_release
   script:
-    - gradle test buildPlugin
+    - gradle test
+    - gradle buildPlugin
 
 build-documentation:
   image: registry.jetbrains.team/p/writerside/builder/writerside-builder:$WRS_VERSION
@@ -101,8 +103,8 @@ prepare_release_notes:
     - if: '$CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+$/'
   script:
     - npm i -g downdoc
-    - downdoc CHANGELOG.adoc
-    - awk '/^### /{if(x)exit;x=1}x' CHANGELOG.md > release_notes.md
+    - downdoc changelog.adoc
+    - awk '/^### /{if(x)exit;x=1}x' changelog.md > release_notes.md
   artifacts:
     paths:
       - release_notes.md
@@ -127,21 +129,21 @@ release_job:
     ref: '$CI_COMMIT_SHA'
     assets:
       links:
-        - name: "Gitlab Pipeline Lint Plugin v$CI_COMMIT_TAG for Jetbrain's IDEs"
+        - name: "CI Pipeline Lint Plugin v$CI_COMMIT_TAG for Jetbrain's IDEs"
           url: "$CI_SERVER_URL/$CI_PROJECT_PATH/-/jobs/$CI_JOB_ID/artifacts/file/build/distributions/yaml-pipeline-lint-$CI_COMMIT_TAG.zip"
   artifacts:
     when: always
     paths:
       - build/distributions/*.zip
 
-#upload_marketplace:
-#  stage: release
-#  rules:
-#    - if: '$CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+$/'
-#  needs:
-#    - job: build_release_artifact
-#      artifacts: true
-#    - job: release_job
-#      artifacts: false
-#  script:
-#    - gradle publishPlugin
+upload_marketplace:
+  stage: release
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+$/'
+  needs:
+    - job: build_release_artifact
+      artifacts: true
+    - job: release_job
+      artifacts: false
+  script:
+    - gradle publishPlugin
