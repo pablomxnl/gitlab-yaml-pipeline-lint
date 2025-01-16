@@ -5,6 +5,7 @@ import com.intellij.ide.plugins.IdeaPluginDescriptor
 import com.intellij.ide.plugins.PluginManagerCore.getPlugin
 import com.intellij.notification.*
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.application.PathManager
 import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.ProjectActivity
@@ -31,7 +32,19 @@ class YamlPipelineLintPluginStartupActivity : ProjectActivity {
                 showUpdateNotification(project, pluginDescriptor, pluginSettings)
             }
 
-            withBackgroundProgress(project, "Loading token", true) {
+            withBackgroundProgress(project, "Migrating settings", false) {
+                val oldSettings = PathManager.getOptionsFile("gitlabPipelineYamlLinter")
+                val newSettings = PathManager.getOptionsFile("CIPipelineLint")
+                if (oldSettings.exists() && !newSettings.exists()){
+                    var content = oldSettings.readText(Charsets.UTF_8)
+                    val newComponentName = PLUGIN_ID + "-Linter"
+                    content = content.replace("\"PluginSettingsState\"", "\"$newComponentName\"")
+                    newSettings.writeText(content, Charsets.UTF_8)
+                    oldSettings.deleteOnExit()
+                }
+            }
+
+            withBackgroundProgress(project, "Loading token", false) {
                 val settings = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState::class.java)
                 settings.gitlabToken = PasswordSafeService.retrieveToken()
             }
