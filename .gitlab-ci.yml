@@ -49,8 +49,8 @@ image: "gradle:8.10.2-jdk21"
 build_artifact:
   extends: .build_artifact
   script:
-    - gradle -Dversion.prerelease=$CI_PIPELINE_ID-SNAPSHOT test
-    - gradle buildPlugin
+    - gradle -Dversion.prerelease=$CI_PIPELINE_ID-SNAPSHOT test --stacktrace --info
+    - gradle buildPlugin --stacktrace --info
 
 build_release_artifact:
   extends: .build_release

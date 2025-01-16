@@ -3,7 +3,7 @@
 gson = "2.11.0"
 okhttp = "4.12.0"
 sentrysdk = "7.20.0"
-annotations = "26.0.0"
+annotations = "26.0.1"
 
 # test libraries
 junit = "5.9.2"
@@ -17,7 +17,7 @@ gradleIntelliJPlugin = "2.2.1"
 semver = "1.0.4"
 jacocolog = "3.1.0"
 asciidoc = "4.0.2"
-kotlin = "1.9.25"
+kotlin = "2.1.0"
 
 [libraries]
 gson = { group = "com.google.code.gson", name= "gson",  version.ref = "gson" }
