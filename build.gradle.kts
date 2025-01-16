@@ -84,7 +84,6 @@ dependencies {
     intellijPlatform {
         create(properties("platformType"), properties("platformVersion"), useInstaller = false)
         bundledPlugins(properties("platformBundledPlugins").map { it.split(',') })
-        instrumentationTools()
         pluginVerifier()
         zipSigner()
         testFramework(TestFrameworkType.Platform)

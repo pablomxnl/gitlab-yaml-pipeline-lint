@@ -8,11 +8,12 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.intellij.openapi.components.SettingsCategory.TOOLS;
 import static org.ideplugins.ci_pipeline_lint.linter.Constants.GITLAB_HOST;
+import static org.ideplugins.ci_pipeline_lint.linter.Constants.PLUGIN_ID;
 
 @Service
 @State(
-        name = "PluginSettingsState",
-        storages = {@Storage("gitlabPipelineYamlLinter.xml")},
+        name = PLUGIN_ID+"-Linter",
+        storages = {@Storage("CIPipelineLint.xml")},
         category = TOOLS
 )
 public final class YamlPipelineLintSettingsState implements PersistentStateComponent<YamlPipelineLintSettingsState> {

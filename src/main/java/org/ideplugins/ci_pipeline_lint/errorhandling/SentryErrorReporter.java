@@ -86,6 +86,7 @@ public class SentryErrorReporter extends ErrorReportSubmitter {
         options.setDsn(pluginSettings.getSentryDsn());
         options.setRelease(pluginDescriptor.getVersion());
         options.setServerName("");
+        options.setSendDefaultPii(false);
         options.setEnvironment(pluginDescriptor.getPluginId().getIdString());
         options.setDiagnosticLevel(SentryLevel.ERROR);
         Hub hub = new Hub(options);
@@ -100,6 +101,7 @@ public class SentryErrorReporter extends ErrorReportSubmitter {
         hub.setTag("jb_platform_type", applicationInfo.getBuild().getProductCode());
         hub.setTag("jb_platform_version", applicationInfo.getBuild().asStringWithoutProductCode());
         hub.setTag("jb_ide", applicationInfo.getVersionName());
+	hub.configureScope(scope -> scope.setUser(null));
         return hub;
     }
 
