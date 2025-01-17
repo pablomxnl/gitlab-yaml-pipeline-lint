@@ -8,7 +8,7 @@ This document provides an overview of the changes by release.
 == Release notes
 
 === 0.0.14
-
+- Update to support EAP 251
 - Fixes https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/issues/13[#13] Conflicting component name PluginSettingsState reported by plugin user through sentry error reporter
 
 === 0.0.13

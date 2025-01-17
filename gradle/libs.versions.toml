@@ -3,7 +3,7 @@
 gson = "2.11.0"
 okhttp = "4.12.0"
 sentrysdk = "7.20.0"
-annotations = "26.0.0"
+annotations = "26.0.1"
 
 # test libraries
 junit = "5.9.2"
