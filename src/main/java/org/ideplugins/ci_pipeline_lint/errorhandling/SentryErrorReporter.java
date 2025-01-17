@@ -1,7 +1,5 @@
 package org.ideplugins.ci_pipeline_lint.errorhandling;
 
-import com.intellij.diagnostic.AbstractMessage;
-import com.intellij.diagnostic.IdeaReportingEvent;
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -33,11 +31,8 @@ public class SentryErrorReporter extends ErrorReportSubmitter {
 
     private static void submitErrors(IdeaLoggingEvent[] events, String additionalInfo, IHub sentryHub) {
         for (IdeaLoggingEvent ideaEvent : events) {
-            if (ideaEvent instanceof IdeaReportingEvent) {
-                Throwable throwable = ((AbstractMessage) ideaEvent.getData()).getThrowable();
                 sentryHub.setExtra("userMessage", additionalInfo);
-                sentryHub.captureException(throwable);
-            }
+                sentryHub.captureMessage(ideaEvent.getThrowableText(), SentryLevel.ERROR);
         }
     }
 
@@ -101,7 +96,7 @@ public class SentryErrorReporter extends ErrorReportSubmitter {
         hub.setTag("jb_platform_type", applicationInfo.getBuild().getProductCode());
         hub.setTag("jb_platform_version", applicationInfo.getBuild().asStringWithoutProductCode());
         hub.setTag("jb_ide", applicationInfo.getVersionName());
-	hub.configureScope(scope -> scope.setUser(null));
+	    hub.configureScope(scope -> scope.setUser(null));
         return hub;
     }
 

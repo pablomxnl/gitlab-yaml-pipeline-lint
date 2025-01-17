@@ -131,6 +131,11 @@ val runIdeForManualTests by intellijPlatformTesting.runIde.registering {
     }
 }
 
+val runIdeEAP by intellijPlatformTesting.runIde.registering {
+    type = IntelliJPlatformType.IntellijIdeaCommunity
+    version = "251-EAP-SNAPSHOT"
+}
+
 tasks.register<JavaExec>("FetchGitlabVariables") {
     dependsOn("classes")
     classpath = sourceSets["main"].runtimeClasspath

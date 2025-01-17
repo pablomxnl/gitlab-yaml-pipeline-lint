@@ -17,7 +17,7 @@ gradleIntelliJPlugin = "2.2.1"
 semver = "1.0.4"
 jacocolog = "3.1.0"
 asciidoc = "4.0.2"
-kotlin = "2.1.0"
+kotlin = "1.9.25"
 
 [libraries]
 gson = { group = "com.google.code.gson", name= "gson",  version.ref = "gson" }
