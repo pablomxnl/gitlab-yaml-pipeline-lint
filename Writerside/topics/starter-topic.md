@@ -12,7 +12,7 @@ Plugin for JetBrains IDE’s that uses [Gitlab CI Lint API](https://docs.gitlab.
 To install, grab a zip file from 
 <a href="https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/releases">gitlab releases</a> and then install it by going to
 <kbd>Settings</kbd> (or <kbd>Preferences</kbd> if using mac) -> <kbd>Plugins</kbd> -> <kbd>⚙</kbd> -> <kbd>Install Plugin from Disk...</kbd>
-<img src="install_plugin_from_disk.png" border-effect="line" alt="Install plugin from disk" />
+<img src="install_plugin_from_disk.png" border-effect="line" alt="Install plugin from disk" /> 
 Then select the zip file just downloaded from gitlab releases.
     </tab>
 </tabs>
@@ -20,13 +20,13 @@ Then select the zip file just downloaded from gitlab releases.
 ## Configuration
 
 The plugin requires a Gitlab token and a Project ID to work with the Gitlab CI Lint API.
-To setup this configuration go to 
+To set up this configuration go to 
 
 <kbd>Settings</kbd> (or <kbd>Preferences</kbd> if using mac) -> <kbd>Tools</kbd> -> <kbd>CI Pipeline Lint</kbd> 
 
 ![Plugin settings](plugin_settings.png){border-effect="line"}
 
-1. Gitlab host: default to https://gitlab.com , change it if using a private or self hosted instance
+1. Gitlab host: default to https://gitlab.com , change it if using a private or self-hosted instance
 2. Gitlab Project ID: To obtain the Project ID go to a gitlab repository you own and at the top, below the project name the Project ID is displayed, there is also a copy button next to the Project ID. Gitlab 16.0 [deprecated](https://docs.gitlab.com/ee/api/lint.html#validate-the-ci-yaml-configuration-deprecated) the global lint endpoint, and now is per project, that's why a Project ID is now required.
 3. Access token: create a Gitlab personal access token with api access, the link on the label will open the browser at [https://gitlab.com/-/user_settings/personal_access_tokens](https://gitlab.com/-/user_settings/personal_access_tokens) to create a token. 
 

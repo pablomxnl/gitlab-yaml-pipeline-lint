@@ -39,6 +39,7 @@
                            language="yaml"
         />
         <notificationGroup displayType="STICKY_BALLOON" id="ci-pipeline-lint-plugin-update"/>
+        <notificationGroup displayType="STICKY_BALLOON" id="org.ideplugins.pipeline-lint"/>
         <postStartupActivity implementation="org.ideplugins.ci_pipeline_lint.activity.YamlPipelineLintPluginStartupActivity"/>
 
         <errorHandler implementation="org.ideplugins.ci_pipeline_lint.errorhandling.SentryErrorReporter"/>

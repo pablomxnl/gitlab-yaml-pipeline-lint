@@ -1,6 +1,9 @@
 package org.ideplugins.ci_pipeline_lint.errorhandling;
 
 import com.intellij.ide.DataManager;
+import com.intellij.ide.IdeBundle;
+import com.intellij.ide.plugins.InstalledPluginsState;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.ApplicationInfo;
@@ -9,6 +12,7 @@ import com.intellij.openapi.diagnostic.ErrorReportSubmitter;
 import com.intellij.openapi.diagnostic.IdeaLoggingEvent;
 import com.intellij.openapi.diagnostic.SubmittedReportInfo;
 import com.intellij.openapi.extensions.PluginDescriptor;
+import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
@@ -26,13 +30,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.Component;
 
+import static org.ideplugins.ci_pipeline_lint.actions.ActionHelper.displayNotificationWithAction;
+
 
 public class SentryErrorReporter extends ErrorReportSubmitter {
 
     private static void submitErrors(IdeaLoggingEvent[] events, String additionalInfo, IHub sentryHub) {
         for (IdeaLoggingEvent ideaEvent : events) {
-                sentryHub.setExtra("userMessage", additionalInfo);
-                sentryHub.captureMessage(ideaEvent.getThrowableText(), SentryLevel.ERROR);
+            sentryHub.setExtra("userMessage", additionalInfo);
+            sentryHub.captureMessage(ideaEvent.getThrowableText(), SentryLevel.ERROR);
         }
     }
 
@@ -57,6 +63,13 @@ public class SentryErrorReporter extends ErrorReportSubmitter {
                           @NotNull Consumer<? super SubmittedReportInfo> consumer) {
         DataContext context = DataManager.getInstance().getDataContext(parentComponent);
         Project project = CommonDataKeys.PROJECT.getData(context);
+        PluginDescriptor pluginDescriptor = getPluginDescriptor();
+        InstalledPluginsState pluginState = InstalledPluginsState.getInstance();
+        if ( pluginState.hasNewerVersion(pluginDescriptor.getPluginId()) ) {
+            showOutdatedPluginErrorNotification(pluginDescriptor);
+            consumer.consume(new SubmittedReportInfo(SubmittedReportInfo.SubmissionStatus.DUPLICATE));
+            return true;
+        }
         IHub sentryHub = initSentry();
         new Task.Backgroundable(project, "Sending error report") {
             @Override
@@ -64,13 +77,25 @@ public class SentryErrorReporter extends ErrorReportSubmitter {
                 ApplicationManager.getApplication().invokeLater(() -> {
                     submitErrors(events, additionalInfo, sentryHub);
                     Messages.showInfoMessage(parentComponent,
-                            "Thank you for submitting your report!", "Error Report");
+                            "Thanks!! Error will be reviewed in a few days.", "Error Report Submitted");
                     consumer.consume(new SubmittedReportInfo(SubmittedReportInfo.SubmissionStatus.NEW_ISSUE));
                 });
             }
         }.queue();
 
         return true;
+    }
+
+    private void showOutdatedPluginErrorNotification(PluginDescriptor descriptor) {
+        ApplicationManager.getApplication().invokeLater( () ->
+                displayNotificationWithAction(NotificationType.ERROR,
+                    "Error won't be submitted because there is a newer version available",
+                        "Update %s Plugin".formatted(descriptor.getName()),
+                        () ->
+                        ShowSettingsUtil.getInstance()
+                                .showSettingsDialog(null, IdeBundle.message("title.plugins"))
+                )
+        );
     }
 
     private IHub initSentry() {
@@ -96,7 +121,7 @@ public class SentryErrorReporter extends ErrorReportSubmitter {
         hub.setTag("jb_platform_type", applicationInfo.getBuild().getProductCode());
         hub.setTag("jb_platform_version", applicationInfo.getBuild().asStringWithoutProductCode());
         hub.setTag("jb_ide", applicationInfo.getVersionName());
-	    hub.configureScope(scope -> scope.setUser(null));
+        hub.configureScope(scope -> scope.setUser(null));
         return hub;
     }
 
