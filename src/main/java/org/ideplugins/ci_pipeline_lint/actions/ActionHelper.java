@@ -73,14 +73,24 @@ public final class ActionHelper implements Constants {
         Notifications.Bus.notify(notification);
     }
 
-    public static void displayNotificationWithAction(final NotificationType notificationType, final String notificationBody) {
+    public static void displayNotificationWithAction(final NotificationType notificationType,
+                                                     final String notificationBody) {
+        displayNotificationWithAction(notificationType, notificationBody,
+                "Configure CI Pipeline Lint", ()->
+                        ShowSettingsUtil.getInstance()
+                                .showSettingsDialog(null, YamlPipelineLintSettingsConfigurable.class)
+        );
+    }
+
+    public static void displayNotificationWithAction(final NotificationType notificationType,
+                                                     final String notificationBody,
+                                                     final String actionTitle, Runnable r) {
         Notification notification =
                 new Notification(GROUP_DISPLAY_ID, NOTIFICATION_TITLE, notificationBody, notificationType);
-        notification.addAction(new NotificationAction("Configure CI Pipeline Lint") {
+        notification.addAction(new NotificationAction(actionTitle) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent anActionEvent, @NotNull Notification notification) {
-                ShowSettingsUtil.getInstance().showSettingsDialog(null,
-                        YamlPipelineLintSettingsConfigurable.class);
+                r.run();
             }
         });
         Notifications.Bus.notify(notification);
