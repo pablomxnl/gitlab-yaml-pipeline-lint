@@ -48,6 +48,8 @@ image: "gradle:8.10.2-jdk21"
 
 build_artifact:
   extends: .build_artifact
+  variables:
+    PUSH_EAP: "true"
   script:
     - gradle -Dversion.prerelease=$CI_PIPELINE_ID-SNAPSHOT test --stacktrace --info
     - gradle buildPlugin --stacktrace --info
