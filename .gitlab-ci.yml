@@ -36,6 +36,7 @@ image: "gradle:8.10.2-jdk21"
   coverage: '/    - Instruction Coverage: ([0-9.]+)%/'
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
   artifacts:
     when: always
     paths:
