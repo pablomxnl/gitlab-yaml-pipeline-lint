@@ -1,6 +1,5 @@
 import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
-import org.jetbrains.intellij.platform.gradle.models.ProductRelease
 import org.jsoup.Jsoup
 
 fun properties(key: String) = providers.gradleProperty(key)
@@ -18,65 +17,15 @@ plugins {
     alias(libs.plugins.kotlin)
 }
 
-develocity {
-    buildScan {
-        publishing.onlyIf { !System.getenv("CI").isNullOrEmpty() }
-        termsOfUseUrl.set("https://gradle.com/help/legal-terms-of-use")
-        termsOfUseAgree.set("yes")
-        uploadInBackground.set(System.getenv("CI").isNullOrEmpty())
-    }
-}
 
-configurations.all {
-    resolutionStrategy.sortArtifacts(ResolutionStrategy.SortOrder.DEPENDENCY_FIRST)
+kotlin {
+    jvmToolchain(21)
 }
 
 repositories {
     mavenCentral()
     intellijPlatform {
         defaultRepositories()
-        jetbrainsRuntime()
-    }
-}
-
-// Configure Gradle IntelliJ Plugin
-intellijPlatform {
-    pluginConfiguration {
-        name = properties("pluginName")
-        changeNotes = provider {
-            Jsoup.parse(file("build/docs/changelog.html"))
-                    .select("#releasenotes")[0].nextElementSibling()?.children()
-                    ?.toString()
-        }
-        ideaVersion {
-            sinceBuild = properties("pluginSinceBuild")
-            untilBuild = properties("pluginUntilBuild")
-        }
-    }
-    pluginVerification {
-        ides {
-            select {
-                types = listOf(IntelliJPlatformType.IntellijIdeaCommunity, IntelliJPlatformType.IntellijIdeaUltimate )
-                channels = listOf(ProductRelease.Channel.EAP)
-            }
-            select {
-                types = listOf(IntelliJPlatformType.IntellijIdeaCommunity, IntelliJPlatformType.IntellijIdeaUltimate )
-                channels = listOf(ProductRelease.Channel.RELEASE)
-            }
-        }
-    }
-
-    signing {
-        certificateChainFile = file(environment("JBM_CERTIFICATE_CHAIN"))
-        privateKeyFile = file(environment("JBM_PRIVATE_KEY"))
-        password = environment("JBM_PRIVATE_KEY_PASSWORD")
-    }
-
-    publishing {
-        token = environment("JBM_PUBLISH_TOKEN")
-        channels.set(
-                listOf(if ("true" == environment("PUSH_EAP").getOrElse("false")) "eap" else "default")
-        )
     }
 }
 
@@ -104,6 +53,42 @@ dependencies {
     testImplementation(libs.junit4)
     testRuntimeOnly(libs.junitplatform)
     testRuntimeOnly(libs.junitengine)
+}
+
+// Configure Gradle IntelliJ Plugin
+intellijPlatform {
+    pluginConfiguration {
+        name = properties("pluginName")
+        changeNotes = provider {
+            Jsoup.parse(file("build/docs/changelog.html"))
+                .select("#releasenotes")[0].nextElementSibling()?.children()
+                ?.toString()
+        }
+        ideaVersion {
+            sinceBuild = properties("pluginSinceBuild")
+            untilBuild = properties("pluginUntilBuild")
+        }
+    }
+
+    signing {
+        certificateChainFile = file(environment("JBM_CERTIFICATE_CHAIN"))
+        privateKeyFile = file(environment("JBM_PRIVATE_KEY"))
+        password = environment("JBM_PRIVATE_KEY_PASSWORD")
+    }
+
+    publishing {
+        token = environment("JBM_PUBLISH_TOKEN")
+        channels.set(
+            listOf(if ("true" == environment("PUSH_EAP").getOrElse("false")) "eap" else "default")
+        )
+    }
+
+    pluginVerification {
+        ides {
+            recommended()
+        }
+    }
+
 }
 
 val runIdeForManualTests by intellijPlatformTesting.runIde.registering {
@@ -185,7 +170,24 @@ tasks {
         dependsOn(asciidoctor)
     }
 
-}
-kotlin {
-    jvmToolchain(21)
+    intellijPlatformTesting {
+        runIde {
+            register("runIdeForUiTests") {
+                task {
+                    jvmArgumentProviders += CommandLineArgumentProvider {
+                        listOf(
+                            "-Drobot-server.port=8082",
+                            "-Dide.mac.message.dialogs.as.sheets=false",
+                            "-Djb.privacy.policy.text=<!--999.999-->",
+                            "-Djb.consents.confirmation.enabled=false",
+                        )
+                    }
+                }
+
+                plugins {
+                    robotServerPlugin()
+                }
+            }
+        }
+    }
 }

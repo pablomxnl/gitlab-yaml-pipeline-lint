@@ -6,8 +6,7 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 
-
-import static org.ideplugins.ci_pipeline_lint.actions.ActionHelper.*;
+import static org.ideplugins.ci_pipeline_lint.actions.ActionHelper.displayNotificationWithAction;
 
 
 public class LintYamlPopupAction extends BaseAction {
@@ -21,7 +20,8 @@ public class LintYamlPopupAction extends BaseAction {
     public void actionPerformed(@NotNull AnActionEvent event) {
         PsiFile psiFile = event.getData(CommonDataKeys.PSI_FILE);
         if (psiFile != null && checkPluginSettings(event.getProject())) {
-            doLintInBackground(event, psiFile);
+            PsiFile f2 = null;
+            doLintInBackground(event, f2);
         } else {
             displayNotificationWithAction(NotificationType.WARNING, "Please setup your Gitlab Host, Token and Project ID");
         }
