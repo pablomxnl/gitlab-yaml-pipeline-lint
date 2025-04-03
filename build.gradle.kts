@@ -17,7 +17,6 @@ plugins {
     alias(libs.plugins.kotlin)
 }
 
-
 kotlin {
     jvmToolchain(21)
 }
@@ -112,6 +111,8 @@ val runIdeForManualTests by intellijPlatformTesting.runIde.registering {
         systemProperty("idea.auto.reload.plugins", "false")
         systemProperty("idea.trust.all.projects", "true")
         systemProperty("ide.show.tips.on.startup.default.value", "false")
+        systemProperty("idea.is.internal", "true")
+        systemProperty("idea.disposer.debug", "on")
         systemProperty("nosplash", "true")
         args = listOf("${projectDir}/src/test/resources/annotator/")
     }
@@ -157,7 +158,6 @@ tasks {
         }
         setOutputDir(file("build/docs"))
     }
-
 
     jacocoTestReport {
         classDirectories.setFrom(instrumentCode)

@@ -3,6 +3,7 @@ package org.ideplugins.ci_pipeline_lint.settings;
 import com.intellij.ui.DocumentAdapter;
 import com.intellij.ui.components.*;
 import com.intellij.util.ui.FormBuilder;
+import org.ideplugins.ci_pipeline_lint.icons.Icons;
 import org.ideplugins.ci_pipeline_lint.linter.Constants;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,7 +45,7 @@ public class YamlPipelineLintSettingsComponent {
     @NotNull
     private JBLabel createProjectIDScreenshot() {
         JBLabel screenshot = new JBLabel();
-        screenshot.setIcon(Constants.gitlabProjectIdScreenshot);
+        screenshot.setIcon(Icons.gitlabProjectIdScreenshot);
         return screenshot;
     }
 

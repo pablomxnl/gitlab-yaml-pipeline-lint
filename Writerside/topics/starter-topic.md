@@ -40,11 +40,17 @@ Alternatively, whenever the plugin is invoked with incomplete configuration, the
 To validate the gitlab pipeline file, do one of the following:
 
 * Using the global tools menu action: <kbd>Tools</kbd> -> <kbd>CI Pipeline Lint</kbd>
-  ![Tools menu action](usage_tools_menu.png){ border-effect="line" }
+
+![Tools menu action](usage_tools_menu.png){ border-effect="line"}
+
 * Using the popup action in the editor window
-  ![Editor popup action](usage_editor_context_menu.png){ border-effect="line" }
+ 
+![Editor popup action](usage_editor_context_menu.png){ border-effect="line"}
+
 * Using the popup action on the project view by selecting the <path>.gitlab-ci.yml</path> file
-  ![Project view popup action](usage_project_context_menu.png){border-effect="line"}
+
+![Project view popup action](usage_project_context_menu.png){border-effect="line"}
+ 
 
 ## Results
 
@@ -79,8 +85,3 @@ When no errors/warnings are returned a simple success message is displayed in th
 > It means the yaml int the pipeline file is correct, but there are no guarantees that the pipeline will succeed
 >
 {style="note"}
-
-
-## Feedback 
-Please report any issues or feature requests at
-[Gitlab Issues](https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues) (a gitlab.com account is required).

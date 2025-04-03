@@ -10,7 +10,7 @@ default:
 variables:
   GRADLE_OPTS: "-Dorg.gradle.internal.launcher.welcomeMessageEnabled=false -Dorg.gradle.daemon=false"
   PRODUCT: Writerside/pd
-  WRS_VERSION: "242.21870"
+  WRS_VERSION: "2025.03.8312"
   ARTIFACT: webHelpPD2-all.zip
 
 image: "gradle:8.13-jdk21"

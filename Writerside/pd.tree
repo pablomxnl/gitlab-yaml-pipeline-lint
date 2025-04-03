@@ -5,7 +5,7 @@
 <instance-profile id="pd"
                  name="gitlab-pipeline-lint-plugin-docs"
                  start-page="starter-topic.md">
-
     <toc-element topic="starter-topic.md"/>
     <toc-element topic="changelog.md"/>
+    <toc-element topic="feedback.md"/>
 </instance-profile>

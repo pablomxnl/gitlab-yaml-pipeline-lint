@@ -3,9 +3,9 @@ package org.ideplugins.ci_pipeline_lint.gitlab;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.util.NlsContexts;
 import com.intellij.openapi.util.NlsSafe;
+import org.ideplugins.ci_pipeline_lint.icons.Icons;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.plugins.gitlab.GitlabIcons;
 import org.jetbrains.yaml.YAMLLanguage;
 
 import javax.swing.*;
@@ -35,6 +35,7 @@ public class GitlabCIFileType extends LanguageFileType {
 
     @Override
     public Icon getIcon() {
-        return GitlabIcons.GitLabLogo;
+        return Icons.FileType;
     }
+
 }

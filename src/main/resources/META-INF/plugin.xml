@@ -40,8 +40,8 @@
                            implementationClass="org.ideplugins.ci_pipeline_lint.annotator.PipelineLintResultsExternalAnnotator"
                            language="yaml"
         />
-        <notificationGroup displayType="STICKY_BALLOON" id="ci-pipeline-lint-plugin-update"/>
-        <notificationGroup displayType="STICKY_BALLOON" id="org.ideplugins.pipeline-lint"/>
+        <notificationGroup displayType="STICKY_BALLOON" id="CI Pipeline Lint Plugin Update"/>
+        <notificationGroup displayType="STICKY_BALLOON" id="org.ideplugins.pipeline-lint" hideFromSettings="true" />
         <postStartupActivity
                 implementation="org.ideplugins.ci_pipeline_lint.activity.YamlPipelineLintPluginStartupActivity"/>
 
@@ -69,5 +69,15 @@
                 description="Validate your gitlab-ci yaml file">
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>
+        <action id="org.ideplugins.vale_cli_plugin.actions.CIPipelineLintFeedbackAction"
+                class="org.ideplugins.ci_pipeline_lint.actions.FeedbackToolwindowToolbarAction"
+                icon="/icons/feature-request.svg" description="Feedback issue"
+                text="Feedback Issue" />
+
+        <action id="org.ideplugins.vale_cli_plugin.actions.CIPipelineLintBugReportAction"
+                class="org.ideplugins.ci_pipeline_lint.actions.FeedbackToolwindowToolbarAction"
+                icon="/icons/bug-report.svg" description="Bug report"
+                text="Bug Report" />
+
     </actions>
 </idea-plugin>
