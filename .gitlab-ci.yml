@@ -5,15 +5,15 @@ stages:
 
 default:
   tags:
-    - pluginbuilder
+    - saas-linux-medium-amd64
 
 variables:
   GRADLE_OPTS: "-Dorg.gradle.internal.launcher.welcomeMessageEnabled=false -Dorg.gradle.daemon=false"
   PRODUCT: Writerside/pd
-  WRS_VERSION: "242.21870"
+  WRS_VERSION: "2025.03.8312"
   ARTIFACT: webHelpPD2-all.zip
 
-image: "gradle:8.10.2-jdk21"
+image: "gradle:8.13-jdk21"
 
 .build_release:
   stage: build
@@ -66,8 +66,6 @@ build_release_artifact:
 build-documentation:
   image: registry.jetbrains.team/p/writerside/builder/writerside-builder:$WRS_VERSION
   stage: build
-#  tags:
-#    - saas-linux-medium-amd64
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

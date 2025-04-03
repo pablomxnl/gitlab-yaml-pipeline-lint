@@ -5,8 +5,7 @@
     <!-- Public plugin name should be written in Title Case.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
     <name>CI Pipeline Lint</name>
-    <vendor email="plugin_dude@yeahwellyouknowthatsjustlikeuhyouropinionman.com"
-            url="https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/">
+    <vendor>
         The Dude Plugins
     </vendor>
 
@@ -27,6 +26,9 @@
                                  instance="org.ideplugins.ci_pipeline_lint.settings.YamlPipelineLintSettingsConfigurable"
                                  id="org.ideplugins.ci_pipeline_lint_configurable"
                                  displayName="CI Pipeline Lint"/>
+        <fileType name="Gitlab CI/CD Configuration" fileNames=".gitlab-ci.yml,.gitlab-ci.yaml" fieldName="INSTANCE"
+                  implementationClass="org.ideplugins.ci_pipeline_lint.gitlab.GitlabCIFileType" order="first"
+                  patterns=".gitlab-ci-*.yml;.gitlab-ci-*.yaml"/>
 
         <toolWindow id="CI Pipeline Lint Results"
                     anchor="bottom"
@@ -38,9 +40,10 @@
                            implementationClass="org.ideplugins.ci_pipeline_lint.annotator.PipelineLintResultsExternalAnnotator"
                            language="yaml"
         />
-        <notificationGroup displayType="STICKY_BALLOON" id="ci-pipeline-lint-plugin-update"/>
-        <notificationGroup displayType="STICKY_BALLOON" id="org.ideplugins.pipeline-lint"/>
-        <postStartupActivity implementation="org.ideplugins.ci_pipeline_lint.activity.YamlPipelineLintPluginStartupActivity"/>
+        <notificationGroup displayType="STICKY_BALLOON" id="CI Pipeline Lint Plugin Update"/>
+        <notificationGroup displayType="STICKY_BALLOON" id="org.ideplugins.pipeline-lint" hideFromSettings="true" />
+        <postStartupActivity
+                implementation="org.ideplugins.ci_pipeline_lint.activity.YamlPipelineLintPluginStartupActivity"/>
 
         <errorHandler implementation="org.ideplugins.ci_pipeline_lint.errorhandling.SentryErrorReporter"/>
         <completion.contributor language="yaml" order="first"
@@ -66,5 +69,15 @@
                 description="Validate your gitlab-ci yaml file">
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>
+        <action id="org.ideplugins.vale_cli_plugin.actions.CIPipelineLintFeedbackAction"
+                class="org.ideplugins.ci_pipeline_lint.actions.FeedbackToolwindowToolbarAction"
+                icon="/icons/feature-request.svg" description="Feedback issue"
+                text="Feedback Issue" />
+
+        <action id="org.ideplugins.vale_cli_plugin.actions.CIPipelineLintBugReportAction"
+                class="org.ideplugins.ci_pipeline_lint.actions.FeedbackToolwindowToolbarAction"
+                icon="/icons/bug-report.svg" description="Bug report"
+                text="Bug Report" />
+
     </actions>
 </idea-plugin>

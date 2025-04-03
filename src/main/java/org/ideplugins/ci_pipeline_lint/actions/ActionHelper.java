@@ -20,12 +20,14 @@ import com.intellij.ui.content.ContentManager;
 import org.ideplugins.ci_pipeline_lint.linter.Constants;
 import org.ideplugins.ci_pipeline_lint.settings.YamlPipelineLintSettingsConfigurable;
 import org.ideplugins.ci_pipeline_lint.settings.YamlPipelineLintSettingsState;
+import org.ideplugins.ci_pipeline_lint.toolwindow.YamlPipelineLintToolWindow;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
 import java.net.HttpURLConnection;
 import java.util.HashSet;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.intellij.execution.ui.ConsoleViewContentType.ERROR_OUTPUT;
@@ -48,24 +50,26 @@ public final class ActionHelper implements Constants {
     }
 
     public static void showResultsInConsole(@Nullable Project project, String text, ConsoleViewContentType level) {
-        JComponent component = getConsole(project);
-        if (component instanceof ConsoleView consoleView) {
-            consoleView.clear();
-            consoleView.print(text, level);
+        ToolWindow toolWindow = ToolWindowManager.getInstance(Objects.requireNonNull(project))
+                .getToolWindow("CI Pipeline Lint Results");
+        if (toolWindow != null) {
+            ContentManager contentManager = toolWindow.getContentManager();
+            Optional<Content> content = Optional.ofNullable(contentManager.findContent("Lint Results"));
+            if (content.isEmpty()) {
+                YamlPipelineLintToolWindow vtw = new YamlPipelineLintToolWindow();
+                vtw.createToolWindowContent(project, toolWindow);
+                content = Optional.ofNullable(contentManager.findContent("Lint Results"));
+            }
+            content.ifPresent(console -> {
+                ConsoleView consoleView = (ConsoleView) console.getComponent().getComponent(0);
+                consoleView.clear();
+                consoleView.print(text, level);
+                toolWindow.show(null);
+            });
         }
-        getToolWindow(project).show(null);
     }
 
-    private static JComponent getConsole(@Nullable Project project) {
-        ToolWindow toolWindow = getToolWindow(project);
-        ContentManager contentManager = toolWindow.getContentManager();
-        Content content = contentManager.findContent("Lint Results");
-        return content.getComponent();
-    }
 
-    public static ToolWindow getToolWindow(Project project) {
-        return ToolWindowManager.getInstance(project).getToolWindow("CI Pipeline Lint Results");
-    }
 
     public static void displayNotification(final NotificationType notificationType, final String notificationBody) {
         Notification notification =

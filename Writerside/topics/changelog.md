@@ -2,6 +2,18 @@ What&apos;s new
 =====
 This document provides an overview of the changes by release.
 
+0.0.15
+------
+
+- Added toolbar with feedback buttons to the plugin tool window
+- Gitlab Variables autocomplete on CI/CD catalog component files matching patterns
+    * `.gitlab-ci-*.yml`
+    * `.gitlab-ci-*.yaml`
+    * `gitlab-ci-*.yml`
+    * `gitlab-ci-*.yaml`
+- Ignore [error reports](https://plugins.jetbrains.com/plugin/19972-ci-pipeline-lint/docs/feedback.html#automatic-error-reporting) from outdated plugin versions.
+
+
 0.0.14
 ------
 

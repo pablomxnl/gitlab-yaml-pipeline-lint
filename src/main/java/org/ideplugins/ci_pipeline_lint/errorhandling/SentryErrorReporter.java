@@ -20,25 +20,29 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.NlsActions;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.util.Consumer;
-import io.sentry.Hub;
-import io.sentry.IHub;
+import io.sentry.Sentry;
 import io.sentry.SentryLevel;
-import io.sentry.SentryOptions;
 import org.ideplugins.ci_pipeline_lint.settings.PipelinePluginConfigurationState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.Component;
+import java.awt.*;
 
 import static org.ideplugins.ci_pipeline_lint.actions.ActionHelper.displayNotificationWithAction;
 
 
 public class SentryErrorReporter extends ErrorReportSubmitter {
 
-    private static void submitErrors(IdeaLoggingEvent[] events, String additionalInfo, IHub sentryHub) {
+    private static boolean isSentryInit;
+
+
+    private static void submitErrors(IdeaLoggingEvent @NotNull [] events, String additionalInfo) {
         for (IdeaLoggingEvent ideaEvent : events) {
-            sentryHub.setExtra("userMessage", additionalInfo);
-            sentryHub.captureMessage(ideaEvent.getThrowableText(), SentryLevel.ERROR);
+            Sentry.captureMessage(ideaEvent.getThrowableText(),
+                    SentryLevel.ERROR, cb -> {
+                        cb.setExtra("userMessage", additionalInfo);
+                        cb.setUser(null);
+                    });
         }
     }
 
@@ -62,20 +66,20 @@ public class SentryErrorReporter extends ErrorReportSubmitter {
                           @Nullable String additionalInfo, @NotNull Component parentComponent,
                           @NotNull Consumer<? super SubmittedReportInfo> consumer) {
         DataContext context = DataManager.getInstance().getDataContext(parentComponent);
-        Project project = CommonDataKeys.PROJECT.getData(context);
         PluginDescriptor pluginDescriptor = getPluginDescriptor();
+        Project project = CommonDataKeys.PROJECT.getData(context);
+        initSentry(pluginDescriptor);
         InstalledPluginsState pluginState = InstalledPluginsState.getInstance();
-        if ( pluginState.hasNewerVersion(pluginDescriptor.getPluginId()) ) {
+        if (pluginState.hasNewerVersion(pluginDescriptor.getPluginId())) {
             showOutdatedPluginErrorNotification(pluginDescriptor);
             consumer.consume(new SubmittedReportInfo(SubmittedReportInfo.SubmissionStatus.DUPLICATE));
             return true;
         }
-        IHub sentryHub = initSentry();
         new Task.Backgroundable(project, "Sending error report") {
             @Override
             public void run(@NotNull ProgressIndicator indicator) {
                 ApplicationManager.getApplication().invokeLater(() -> {
-                    submitErrors(events, additionalInfo, sentryHub);
+                    submitErrors(events, additionalInfo);
                     Messages.showInfoMessage(parentComponent,
                             "Thanks!! Error will be reviewed in a few days.", "Error Report Submitted");
                     consumer.consume(new SubmittedReportInfo(SubmittedReportInfo.SubmissionStatus.NEW_ISSUE));
@@ -87,42 +91,49 @@ public class SentryErrorReporter extends ErrorReportSubmitter {
     }
 
     private void showOutdatedPluginErrorNotification(PluginDescriptor descriptor) {
-        ApplicationManager.getApplication().invokeLater( () ->
+        ApplicationManager.getApplication().invokeLater(() ->
                 displayNotificationWithAction(NotificationType.ERROR,
-                    "Error won't be submitted because there is a newer version available",
+                        "Error won't be submitted because there is a newer version available",
                         "Update %s Plugin".formatted(descriptor.getName()),
                         () ->
-                        ShowSettingsUtil.getInstance()
-                                .showSettingsDialog(null, IdeBundle.message("title.plugins"))
+                                ShowSettingsUtil.getInstance()
+                                        .showSettingsDialog(null, IdeBundle.message("title.plugins"))
                 )
         );
     }
 
-    private IHub initSentry() {
-        PluginDescriptor pluginDescriptor = getPluginDescriptor();
-        PipelinePluginConfigurationState pluginSettings =
-                ApplicationManager.getApplication().getService(PipelinePluginConfigurationState.class);
-        SentryOptions options = new SentryOptions();
-        options.setDsn(pluginSettings.getSentryDsn());
-        options.setRelease(pluginDescriptor.getVersion());
-        options.setServerName("");
-        options.setSendDefaultPii(false);
-        options.setEnvironment(pluginDescriptor.getPluginId().getIdString());
-        options.setDiagnosticLevel(SentryLevel.ERROR);
-        Hub hub = new Hub(options);
-        String os = SystemInfo.getOsNameAndVersion() + "-" + SystemInfo.OS_ARCH;
-        if (SystemInfo.isLinux) {
-            os += (SystemInfo.isChromeOS) ? " [Chrome OS] " : "";
-            os += (SystemInfo.isKDE) ? " [KDE] " : "";
-            os += (SystemInfo.isGNOME) ? " [GNOME] " : "";
+    static synchronized void initSentry(final PluginDescriptor pluginDescriptor) {
+        if (!isSentryInit) {
+            PipelinePluginConfigurationState pluginSettings =
+                    ApplicationManager.getApplication().getService(PipelinePluginConfigurationState.class);
+
+            ApplicationInfo applicationInfo = ApplicationInfo.getInstance();
+            String os = SystemInfo.getOsNameAndVersion() + "-" + SystemInfo.OS_ARCH;
+            if (SystemInfo.isLinux) {
+                os += (SystemInfo.isChromeOS) ? " [Chrome OS] " : "";
+                os += (SystemInfo.isKDE) ? " [KDE] " : "";
+                os += (SystemInfo.isGNOME) ? " [GNOME] " : "";
+            }
+            final String operatingSystem = os;
+            Sentry.init(options -> {
+                options.setDsn(pluginSettings.getSentryDsn());
+                options.setRelease(pluginDescriptor.getVersion());
+                options.setServerName("");
+                options.setSendDefaultPii(false);
+                options.setEnvironment(pluginDescriptor.getPluginId().getIdString());
+                options.setDiagnosticLevel(SentryLevel.ERROR);
+            });
+
+            Sentry.configureScope(scope -> {
+                scope.setUser(null);
+                scope.setTag("os_name_version", operatingSystem);
+                scope.setTag("jb_platform_type", applicationInfo.getBuild().getProductCode());
+                scope.setTag("jb_platform_version", applicationInfo.getBuild().asStringWithoutProductCode());
+                scope.setTag("jb_ide", applicationInfo.getVersionName());
+
+            });
+            isSentryInit = true;
         }
-        hub.setTag("os_name_version", os);
-        ApplicationInfo applicationInfo = ApplicationInfo.getInstance();
-        hub.setTag("jb_platform_type", applicationInfo.getBuild().getProductCode());
-        hub.setTag("jb_platform_version", applicationInfo.getBuild().asStringWithoutProductCode());
-        hub.setTag("jb_ide", applicationInfo.getVersionName());
-        hub.configureScope(scope -> scope.setUser(null));
-        return hub;
     }
 
 }

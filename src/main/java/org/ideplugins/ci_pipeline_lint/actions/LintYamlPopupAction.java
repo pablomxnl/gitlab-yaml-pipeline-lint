@@ -6,8 +6,7 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 
-
-import static org.ideplugins.ci_pipeline_lint.actions.ActionHelper.*;
+import static org.ideplugins.ci_pipeline_lint.actions.ActionHelper.displayNotificationWithAction;
 
 
 public class LintYamlPopupAction extends BaseAction {

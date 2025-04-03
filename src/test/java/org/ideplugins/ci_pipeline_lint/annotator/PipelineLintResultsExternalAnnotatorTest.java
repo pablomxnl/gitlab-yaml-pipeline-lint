@@ -6,44 +6,43 @@ import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.psi.PsiFile;
-import com.intellij.testFramework.EdtTestUtil;
-import com.intellij.testFramework.fixtures.BasePlatformTestCase;
+import com.intellij.testFramework.fixtures.CodeInsightTestFixture;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.ideplugins.ci_pipeline_lint.actions.ActionHelper;
 import org.ideplugins.ci_pipeline_lint.linter.YamlPipelineLinter;
 import org.ideplugins.ci_pipeline_lint.service.PipelineIssuesReporter;
+import org.ideplugins.ci_pipeline_lint.testing.PluginTest;
+import org.ideplugins.ci_pipeline_lint.testing.RunInEdtExtension;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
 import java.util.Map;
 
 import static org.mockito.Mockito.*;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class PipelineLintResultsExternalAnnotatorTest extends BasePlatformTestCase {
+@PluginTest
+@ExtendWith(RunInEdtExtension.class)
+public class PipelineLintResultsExternalAnnotatorTest {
 
     private MockWebServer mockWebServer;
     private YamlPipelineLinter pipelineLinter;
 
-    @Override
-    protected String getTestDataPath() {
-        return "build/resources/test";
-    }
-
-    @BeforeAll
-    public void setup() throws Exception {
-        super.setUp();
+    @BeforeEach
+    public void setup(CodeInsightTestFixture myFixture) throws Exception {
         mockWebServer = new MockWebServer();
         mockWebServer.start();
         pipelineLinter = new YamlPipelineLinter(mockWebServer.url("/").toString(), "");
-        EdtTestUtil.runInEdtAndWait( ()-> myFixture.copyDirectoryToProject("annotator", "src")
-        );
+        myFixture.copyDirectoryToProject("annotator", "src");
     }
 
     @Test
-    public void testAnnotator() {
+    public void testAnnotator(CodeInsightTestFixture myFixture) {
         PipelineLintResultsExternalAnnotator annotator = new PipelineLintResultsExternalAnnotator();
         PsiFile file = myFixture.configureByFile("src/.gitlab-ci.yml");
         PsiFile expectedResponse = myFixture.configureByFile("src/gitlab_ci_lint_response.json");
@@ -52,7 +51,7 @@ public class PipelineLintResultsExternalAnnotatorTest extends BasePlatformTestCa
         PipelineIssuesReporter reporter = myFixture.getProject().getService(PipelineIssuesReporter.class);
         reporter.populateIssues(
                 Map.of(file.getVirtualFile().getPath(), List.of(linterResult))
-                );
+        );
         PipelineInitialAnnotatorInfo info = annotator.collectInformation(file, myFixture.getEditor(), false);
         PipelineLintResult result = annotator.doAnnotate(info);
         Assertions.assertNotNull(result, "Annotation result shouldn't be null");
@@ -74,9 +73,8 @@ public class PipelineLintResultsExternalAnnotatorTest extends BasePlatformTestCa
 
     }
 
-    @AfterAll
+    @AfterEach
     public void tearDown() throws Exception {
         mockWebServer.shutdown();
-        super.tearDown();
     }
 }
