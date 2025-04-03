@@ -18,11 +18,15 @@ public class GitlabCIVariablesCompletionContributor extends CompletionContributo
                         .inFile(PlatformPatterns.psiFile().withName(".gitlab-ci.yml", ".gitlab-ci.yaml")),
                 new GitLabCompletionProvider()
         );
+
         extend(CompletionType.BASIC,
                 PlatformPatterns.psiElement().withLanguage(YAMLLanguage.INSTANCE)
-                        .inFile(PlatformPatterns.psiFile().withName(StandardPatterns.string().startsWith(".gitlab-ci-"))),
+                        .inFile(PlatformPatterns.psiFile().withName(
+                                StandardPatterns.string().matches("(\\.)?gitlab-ci-.*\\.(yml|yaml)")
+                        )),
                 new GitLabCompletionProvider()
         );
+
         extend(CompletionType.BASIC,
                 PlatformPatterns.psiElement().withLanguage(YAMLLanguage.INSTANCE)
                         .inFile(PlatformPatterns.psiFile().withName(".gitlab-ci.yml"))
