@@ -22,7 +22,7 @@ Then select the zip file just downloaded from gitlab releases.
 The plugin requires a Gitlab token and a Project ID to work with the Gitlab CI Lint API.
 To set up this configuration go to 
 
-<kbd>Settings</kbd> (or <kbd>Preferences</kbd> if using mac) -> <kbd>Tools</kbd> -> <kbd>CI Pipeline Lint</kbd> 
+<kbd>Settings</kbd> -> <kbd>Tools</kbd> -> <kbd>CI Pipeline Lint</kbd> 
 
 ![Plugin settings](plugin_settings.png){border-effect="line"}
 
