@@ -82,6 +82,6 @@ When no errors/warnings are returned a simple success message is displayed in th
 
 > **NOTE:**
 >
-> It means the yaml int the pipeline file is correct, but there are no guarantees that the pipeline will succeed
+> It means the yaml in the pipeline file is correct, but there are no guarantees that the pipeline will succeed
 >
 {style="note"}
