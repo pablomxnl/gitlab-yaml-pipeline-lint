@@ -65,7 +65,6 @@ intellijPlatform {
         }
         ideaVersion {
             sinceBuild = properties("pluginSinceBuild")
-            untilBuild = properties("pluginUntilBuild")
         }
     }
 
@@ -120,7 +119,7 @@ val runIdeForManualTests by intellijPlatformTesting.runIde.registering {
 
 val runIdeEAP by intellijPlatformTesting.runIde.registering {
     type = IntelliJPlatformType.IntellijIdeaCommunity
-    version = "251-EAP-SNAPSHOT"
+    version = "252-EAP-SNAPSHOT"
 }
 
 tasks.register<JavaExec>("FetchGitlabVariables") {

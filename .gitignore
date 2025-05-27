@@ -12,6 +12,7 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 .intellijPlatform
+.kotlin
 
 ### Eclipse ###
 .apt_generated
@@ -37,3 +38,5 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+*.env

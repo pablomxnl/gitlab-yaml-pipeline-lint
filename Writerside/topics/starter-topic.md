@@ -17,6 +17,20 @@ Then select the zip file just downloaded from gitlab releases.
     </tab>
 </tabs>
 
+### EAP versions
+
+These versions are available either when a new EAP is available (around ~ 3 per year),
+or before releasing a new version of the plugin, a snapshot eap version is available on the EAP channel.
+
+To enable the EAP channel for this plugin copy the following url 
+```
+https://plugins.jetbrains.com/plugin/19972-ci-pipeline-lint/versions/eap
+```
+and paste it on the IDE plugin repositories via <kbd>Plugins</kbd> -> <kbd>⚙</kbd> -> <kbd>Manage Plugin Repositories ...</kbd>
+
+<img src="eap-ci-pipeline-lint.png" alt="EAP Plugin repository" border-effect="line" />
+
+
 ## Configuration
 
 The plugin requires a Gitlab token and a Project ID to work with the Gitlab CI Lint API.

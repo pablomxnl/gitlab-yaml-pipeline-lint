@@ -2,6 +2,11 @@ What&apos;s new
 =====
 This document provides an overview of the changes by release.
 
+0.0.16
+------
+
+- Remove `untilBuild` version constraint so plugin does not need change to support newer IJ platform versions
+
 0.0.15
 ------
 
