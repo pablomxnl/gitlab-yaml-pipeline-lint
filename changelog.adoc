@@ -7,7 +7,12 @@ This document provides an overview of the changes by release.
 [[releasenotes]]
 == Release notes
 
+=== 0.0.16
+
+- Remove `untilBuild` version constraint so plugin does not need change to support newer IJ platform versions
+
 === 0.0.15
+
 - Added toolbar with feedback buttons to the plugin tool window
 - Gitlab Variables autocomplete on CI/CD catalog component files matching patterns
 ** `.gitlab-ci-*.yml`

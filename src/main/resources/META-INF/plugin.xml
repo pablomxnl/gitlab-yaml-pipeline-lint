@@ -13,14 +13,9 @@
     <description><![CDATA[
     Validates content of your .gitlab-ci.yaml file by posting it to Gitlab Pipeline CI Lint API
     ]]></description>
-
-    <!-- Product and plugin compatibility requirements.
-         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
     <depends>org.jetbrains.plugins.yaml</depends>
 
-    <!-- Extension points defined by the plugin.
-         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable parentId="tools"
                                  instance="org.ideplugins.ci_pipeline_lint.settings.YamlPipelineLintSettingsConfigurable"
