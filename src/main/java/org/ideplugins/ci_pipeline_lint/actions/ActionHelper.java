@@ -131,8 +131,9 @@ public final class ActionHelper implements Constants {
                 }
                 break;
             case HttpURLConnection.HTTP_UNAUTHORIZED:
+            case HttpURLConnection.HTTP_FORBIDDEN:
                 showResultsInConsole(actionEvent.getProject(),
-                        String.format("Unauthorized:, click the link in the notification to setup " +
+                        String.format("⛔ Unauthorized/Forbidden:, click the link in the notification to setup " +
                                 "a valid gitlab token for %s\n", gitlabHost) + result,
                         ERROR_OUTPUT);
                 displayNotificationWithAction(NotificationType.ERROR,
@@ -141,7 +142,7 @@ public final class ActionHelper implements Constants {
             case HttpURLConnection.HTTP_NOT_FOUND:
                 showResultsInConsole(actionEvent.getProject(),
                         String.format("""
-                                Project ID not found:
+                                ⁉️ Project ID not found:
                                 Please double check your project ID at %s, click the link in the notification to set it up\s
                                 """, gitlabHost) + result,
                         ERROR_OUTPUT);

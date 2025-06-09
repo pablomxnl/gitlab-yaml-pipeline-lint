@@ -2,6 +2,11 @@ What&apos;s new
 =====
 This document provides an overview of the changes by release.
 
+0.0.17
+------
+
+- Fixes [\#16](https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues/16) Diagnostic Freeze at YamlPipelineLinter.ciLint reported by plugin user through error reporter
+
 0.0.16
 ------
 
