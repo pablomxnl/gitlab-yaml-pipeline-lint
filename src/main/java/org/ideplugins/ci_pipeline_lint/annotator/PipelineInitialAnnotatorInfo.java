@@ -6,7 +6,7 @@ import com.intellij.psi.PsiFile;
 
 import java.util.List;
 
-class PipelineInitialAnnotatorInfo {
+public class PipelineInitialAnnotatorInfo {
 
     final Document document;
     final PsiFile file;

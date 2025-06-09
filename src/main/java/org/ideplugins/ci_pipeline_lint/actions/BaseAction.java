@@ -20,6 +20,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.ideplugins.ci_pipeline_lint.actions.ActionHelper.*;
 
@@ -43,12 +45,19 @@ public abstract class BaseAction extends AnAction implements Constants {
         JsonObject yamlJson = ActionHelper.getYamlJson(psiFile);
         YamlPipelineLinter linter =
                 new YamlPipelineLinter(gitlabCILintEndpoint, PasswordSafeService.retrieveToken());
-        JsonObject gitlabResponse = linter.ciLint(yamlJson);
-        showLintResult(gitlabResponse, event);
-
+        AtomicReference<JsonObject> reference = new AtomicReference<>();
+        try {
+            ApplicationManager.getApplication().executeOnPooledThread(()-> {
+                reference.getAndSet(linter.ciLint(yamlJson));
+            }).get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+        showLintResult(reference.get(), event);
         PipelineIssuesReporter reporter =
                 Objects.requireNonNull(getEventProject(event)).getService(PipelineIssuesReporter.class);
-        reporter.populateIssues(Map.of(psiFile.getVirtualFile().getPath(), List.of(gitlabResponse)));
+        reporter.populateIssues(Map.of(psiFile.getVirtualFile().getPath(), List.of(reference.get())));
+
         FileContentUtil.reparseFiles(Objects.requireNonNull(getEventProject(event)),
                 List.of(psiFile.getVirtualFile()), true);
     }
