@@ -7,9 +7,12 @@ import com.google.gson.JsonSyntaxException;
 import com.intellij.openapi.diagnostic.Logger;
 import okhttp3.*;
 import org.apache.http.HttpStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 
@@ -35,31 +38,66 @@ public class YamlPipelineLinter implements Constants {
     }
 
     public JsonObject ciLint(JsonObject yamlJson) {
-        String result="";
-        JsonObject jsonObject = new JsonObject();
-        Request request = createPostRequest(yamlJson);
-        String host = request.url().host();
-        try (Response response = client.newCall(request).execute()) {
-            Optional<ResponseBody> body = Optional.ofNullable(response.body());
-            if (body.isPresent()){
-                result = body.get().string();
-            }
-            jsonObject.addProperty(GITLAB_RESPONSE_STATUS, response.code());
-        } catch (IOException ioe) {
-            LOGGER.info(String.format("Not able to reach gitlab at %s", host), ioe);
-            jsonObject.addProperty(GITLAB_RESPONSE_STATUS, HttpStatus.SC_REQUEST_TIMEOUT);
-            JsonObject error = new JsonObject();
-            error.addProperty("status", "UNKNOWN");
-            error.addProperty("exceptionMessage", ioe.getMessage());
-            result = error.toString();
-        }
         try {
-            JsonElement jsonElement = JsonParser.parseString(result);
-            jsonObject.add(GITLAB_RESPONSE_BODY, jsonElement);
-        } catch (JsonSyntaxException jse) {
-            jsonObject.addProperty(GITLAB_RESPONSE_BODY, result);
+            return ciLintPooled(yamlJson).get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
         }
-        return jsonObject;
+    }
+
+    private CompletableFuture<JsonObject> ciLintPooled(JsonObject yamlJson) {
+        CompletableFuture<JsonObject> future = new CompletableFuture<>();
+        Request request = createPostRequest(yamlJson);
+        LOGGER.info(String.format("Posting pipeline to %s", request.url()));
+        callCILintEndpoint(request)
+                .thenAccept(response -> {
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty(GITLAB_RESPONSE_STATUS, response.code());
+                    Optional<ResponseBody> body = Optional.ofNullable(response.body());
+                    String gitlabResponse = "";
+                    if (body.isPresent()) {
+                        try {
+                            gitlabResponse = body.get().string();
+                            LOGGER.info(String.format("Received response %s", gitlabResponse));
+                            JsonElement jsonElement = JsonParser.parseString(gitlabResponse);
+                            jsonObject.add(GITLAB_RESPONSE_BODY, jsonElement);
+                            future.complete(jsonObject);
+                        } catch (JsonSyntaxException jse) {
+                            jsonObject.addProperty(GITLAB_RESPONSE_BODY, gitlabResponse);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    }
+
+                })
+                .exceptionally(ex -> {
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty(GITLAB_RESPONSE_STATUS, HttpStatus.SC_REQUEST_TIMEOUT);
+                    JsonObject error = new JsonObject();
+                    error.addProperty("status", "UNKNOWN");
+                    error.addProperty("exceptionMessage", ex.getMessage());
+                    jsonObject.add(GITLAB_RESPONSE_BODY, error);
+                    future.complete(jsonObject);
+                    return null;
+                });
+        return future;
+    }
+
+    private CompletableFuture<Response> callCILintEndpoint(Request request) {
+        CompletableFuture<Response> future = new CompletableFuture<>();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException ioe) {
+                future.completeExceptionally(ioe);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                future.complete(response);
+            }
+        });
+        return future;
     }
 
     private Request createPostRequest(JsonObject yaml) {
