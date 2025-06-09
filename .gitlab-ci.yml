@@ -14,6 +14,10 @@ variables:
   ARTIFACT: webHelpPD2-all.zip
 
 image: "gradle:8.13-jdk21"
+cache:
+  key: ${CI_PROJECT_NAME}
+  paths:
+    - .gradle
 
 .build_release:
   stage: build
@@ -51,14 +55,14 @@ build_artifact:
   extends: .build_artifact
   script:
     - gradle -Dversion.prerelease=$CI_PIPELINE_ID-SNAPSHOT build
-    - gradle -Dversion.prerelease=$CI_PIPELINE_ID-SNAPSHOT buildPlugin
+    - gradle buildPlugin
 
 publish_eap:
   stage: deploy
   variables:
     PUSH_EAP: true
   script:
-    - gradle -Dversion.prerelease=$CI_PIPELINE_ID-SNAPSHOT publishPlugin
+    - gradle publishPlugin
   needs:
     - build_artifact
   rules:
