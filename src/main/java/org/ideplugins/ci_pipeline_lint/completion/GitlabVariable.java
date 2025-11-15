@@ -10,11 +10,9 @@ public class GitlabVariable {
     @SerializedName("Description")
     private String description;
 
-    @SerializedName("GitLab")
-    private String gitlabVersion;
+    @SerializedName("Availability")
+    private String availability;
 
-    @SerializedName("Runner")
-    private String runnerVersion;
 
     public String getName() {
         return "$" + name;
@@ -24,11 +22,8 @@ public class GitlabVariable {
         return description;
     }
 
-    public String getVersion() {
-        return gitlabVersion;
+    public String getAvailability() {
+        return availability;
     }
 
-    public String getRunner() {
-        return runnerVersion;
-    }
 }

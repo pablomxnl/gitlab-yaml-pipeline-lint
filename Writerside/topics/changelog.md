@@ -2,6 +2,12 @@ What&apos;s new
 =====
 This document provides an overview of the changes by release.
 
+0.0.18
+------
+
+- Fixes [\#17](https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues/17) Event Dispatch Thread (EDT) only error reported by plugin user
+- Updates to support `2025.3`. This is the last version supporting IDE versions `2024.*`
+
 0.0.17
 ------
 

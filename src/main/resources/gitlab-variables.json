@@ -1,1075 +1,817 @@
 [
   {
     "Variable": "CHAT_CHANNEL",
-    "Defined for": "Pipeline",
-    "GitLab": "10.6",
-    "Runner": "all",
-    "Description": "The Source chat channel that triggered the [ChatOps](../chatops/index.md) command. "
+    "Availability": "Pipeline",
+    "Description": "The Source chat channel that triggered the ChatOps command."
   },
   {
     "Variable": "CHAT_INPUT",
-    "Defined for": "Pipeline",
-    "GitLab": "10.6",
-    "Runner": "all",
-    "Description": "The additional arguments passed with the [ChatOps](../chatops/index.md) command. "
+    "Availability": "Pipeline",
+    "Description": "The additional arguments passed with the ChatOps command."
   },
   {
     "Variable": "CHAT_USER_ID",
-    "Defined for": "Pipeline",
-    "GitLab": "14.4",
-    "Runner": "all",
-    "Description": "The chat service's user ID of the user who triggered the [ChatOps](../chatops/index.md) command. "
+    "Availability": "Pipeline",
+    "Description": "The chat service's user ID of the user who triggered the ChatOps command."
   },
   {
     "Variable": "CI",
-    "Defined for": "Pipeline",
-    "GitLab": "all",
-    "Runner": "0.4",
-    "Description": "Available for all jobs executed in CI/CD. `true` when available. "
+    "Availability": "Pre-pipeline",
+    "Description": "Available for all jobs executed in CI/CD. true when available."
   },
   {
     "Variable": "CI_API_V4_URL",
-    "Defined for": "Pipeline",
-    "GitLab": "11.7",
-    "Runner": "all",
-    "Description": "The GitLab API v4 root URL. "
+    "Availability": "Pre-pipeline",
+    "Description": "The GitLab API v4 root URL."
   },
   {
     "Variable": "CI_API_GRAPHQL_URL",
-    "Defined for": "Pipeline",
-    "GitLab": "15.11",
-    "Runner": "all",
-    "Description": "The GitLab API GraphQL root URL. "
+    "Availability": "Pre-pipeline",
+    "Description": "The GitLab API GraphQL root URL. Introduced in GitLab 15.11."
   },
   {
     "Variable": "CI_BUILDS_DIR",
-    "Defined for": "Jobs only",
-    "GitLab": "all",
-    "Runner": "11.10",
-    "Description": "The top-level directory where builds are executed. "
+    "Availability": "Job-only",
+    "Description": "The top-level directory where builds are executed."
   },
   {
     "Variable": "CI_COMMIT_AUTHOR",
-    "Defined for": "Pipeline",
-    "GitLab": "13.11",
-    "Runner": "all",
-    "Description": "The author of the commit in `Name <email>` format. "
+    "Availability": "Pre-pipeline",
+    "Description": "The author of the commit in Name <email> format."
   },
   {
     "Variable": "CI_COMMIT_BEFORE_SHA",
-    "Defined for": "Pipeline",
-    "GitLab": "11.2",
-    "Runner": "all",
-    "Description": "The previous latest commit present on a branch or tag. Is always `0000000000000000000000000000000000000000` for merge request pipelines, the first commit in pipelines for branches or tags, or when manually running a pipeline. "
+    "Availability": "Pre-pipeline",
+    "Description": "The previous latest commit present on a branch or tag. Is always 0000000000000000000000000000000000000000 for merge request pipelines, scheduled pipelines, the first commit in pipelines for branches or tags, or when manually running a pipeline."
   },
   {
     "Variable": "CI_COMMIT_BRANCH",
-    "Defined for": "Pipeline",
-    "GitLab": "12.6",
-    "Runner": "0.5",
-    "Description": "The commit branch name. Available in branch pipelines, including pipelines for the default branch. Not available in merge request pipelines or tag pipelines. "
+    "Availability": "Pre-pipeline",
+    "Description": "The commit branch name. Available in branch pipelines, including pipelines for the default branch. Not available in merge request pipelines or tag pipelines."
   },
   {
     "Variable": "CI_COMMIT_DESCRIPTION",
-    "Defined for": "Pipeline",
-    "GitLab": "10.8",
-    "Runner": "all",
-    "Description": "The description of the commit. If the title is shorter than 100 characters, the message without the first line. "
+    "Availability": "Pre-pipeline",
+    "Description": "The description of the commit. If the title is shorter than 100 characters, the message without the first line."
   },
   {
     "Variable": "CI_COMMIT_MESSAGE",
-    "Defined for": "Pipeline",
-    "GitLab": "10.8",
-    "Runner": "all",
-    "Description": "The full commit message. "
+    "Availability": "Pre-pipeline",
+    "Description": "The full commit message."
   },
   {
     "Variable": "CI_COMMIT_REF_NAME",
-    "Defined for": "Pipeline",
-    "GitLab": "9.0",
-    "Runner": "all",
-    "Description": "The branch or tag name for which project is built. "
+    "Availability": "Pre-pipeline",
+    "Description": "The branch or tag name for which project is built."
   },
   {
     "Variable": "CI_COMMIT_REF_PROTECTED",
-    "Defined for": "Pipeline",
-    "GitLab": "11.11",
-    "Runner": "all",
-    "Description": "`true` if the job is running for a protected reference, `false` otherwise. "
+    "Availability": "Pre-pipeline",
+    "Description": "true if the job is running for a protected reference, false otherwise."
   },
   {
     "Variable": "CI_COMMIT_REF_SLUG",
-    "Defined for": "Pipeline",
-    "GitLab": "9.0",
-    "Runner": "all",
-    "Description": "`CI_COMMIT_REF_NAME` in lowercase, shortened to 63 bytes, and with everything except `0-9` and `a-z` replaced with `-`. No leading / trailing `-`. Use in URLs, host names and domain names. "
+    "Availability": "Pre-pipeline",
+    "Description": "CI_COMMIT_REF_NAME in lowercase, shortened to 63 bytes, and with everything except 0-9 and a-z replaced with -. No leading / trailing -. Use in URLs, host names and domain names."
   },
   {
     "Variable": "CI_COMMIT_SHA",
-    "Defined for": "Pipeline",
-    "GitLab": "9.0",
-    "Runner": "all",
-    "Description": "The commit revision the project is built for. "
+    "Availability": "Pre-pipeline",
+    "Description": "The commit revision the project is built for."
   },
   {
     "Variable": "CI_COMMIT_SHORT_SHA",
-    "Defined for": "Pipeline",
-    "GitLab": "11.7",
-    "Runner": "all",
-    "Description": "The first eight characters of `CI_COMMIT_SHA`. "
+    "Availability": "Pre-pipeline",
+    "Description": "The first eight characters of CI_COMMIT_SHA."
   },
   {
     "Variable": "CI_COMMIT_TAG",
-    "Defined for": "Pipeline",
-    "GitLab": "9.0",
-    "Runner": "0.5",
-    "Description": "The commit tag name. Available only in pipelines for tags. "
+    "Availability": "Pre-pipeline",
+    "Description": "The commit tag name. Available only in pipelines for tags."
   },
   {
     "Variable": "CI_COMMIT_TAG_MESSAGE",
-    "Defined for": "Pipeline",
-    "GitLab": "15.5",
-    "Runner": "all",
-    "Description": "The commit tag message. Available only in pipelines for tags. "
+    "Availability": "Pre-pipeline",
+    "Description": "The commit tag message. Available only in pipelines for tags. Introduced in GitLab 15.5."
   },
   {
     "Variable": "CI_COMMIT_TIMESTAMP",
-    "Defined for": "Pipeline",
-    "GitLab": "13.4",
-    "Runner": "all",
-    "Description": "The timestamp of the commit in the [ISO 8601](https://www.rfc-editor.org/rfc/rfc3339#appendix-A) format. For example, `2022-01-31T16:47:55Z`. [UTC by default](../../administration/timezone.md). "
+    "Availability": "Pre-pipeline",
+    "Description": "The timestamp of the commit in the ISO 8601 format. For example, 2022-01-31T16:47:55Z. UTC by default."
   },
   {
     "Variable": "CI_COMMIT_TITLE",
-    "Defined for": "Pipeline",
-    "GitLab": "10.8",
-    "Runner": "all",
-    "Description": "The title of the commit. The full first line of the message. "
+    "Availability": "Pre-pipeline",
+    "Description": "The title of the commit. The full first line of the message."
   },
   {
     "Variable": "CI_CONCURRENT_ID",
-    "Defined for": "Jobs only",
-    "GitLab": "all",
-    "Runner": "11.10",
-    "Description": "The unique ID of build execution in a single executor. "
+    "Availability": "Job-only",
+    "Description": "The unique ID of build execution in a single executor."
   },
   {
     "Variable": "CI_CONCURRENT_PROJECT_ID",
-    "Defined for": "Jobs only",
-    "GitLab": "all",
-    "Runner": "11.10",
-    "Description": "The unique ID of build execution in a single executor and project. "
+    "Availability": "Job-only",
+    "Description": "The unique ID of build execution in a single executor and project."
   },
   {
     "Variable": "CI_CONFIG_PATH",
-    "Defined for": "Pipeline",
-    "GitLab": "9.4",
-    "Runner": "0.5",
-    "Description": "The path to the CI/CD configuration file. Defaults to `.gitlab-ci.yml`. "
+    "Availability": "Pre-pipeline",
+    "Description": "The path to the CI/CD configuration file. Defaults to .gitlab-ci.yml."
   },
   {
     "Variable": "CI_DEBUG_TRACE",
-    "Defined for": "Pipeline",
-    "GitLab": "all",
-    "Runner": "1.7",
-    "Description": "`true` if [debug logging (tracing)](index.md#enable-debug-logging) is enabled. "
+    "Availability": "Pipeline",
+    "Description": "true if debug logging (tracing) is enabled."
   },
   {
     "Variable": "CI_DEBUG_SERVICES",
-    "Defined for": "Pipeline",
-    "GitLab": "15.7",
-    "Runner": "15.7",
-    "Description": "`true` if [service container logging](../services/index.md#capturing-service-container-logs) is enabled. "
+    "Availability": "Pipeline",
+    "Description": "true if service container logging is enabled. Introduced in GitLab 15.7. Requires GitLab Runner 15.7."
   },
   {
     "Variable": "CI_DEFAULT_BRANCH",
-    "Defined for": "Pipeline",
-    "GitLab": "12.4",
-    "Runner": "all",
-    "Description": "The name of the project's default branch. "
+    "Availability": "Pre-pipeline",
+    "Description": "The name of the project's default branch."
+  },
+  {
+    "Variable": "CI_DEFAULT_BRANCH_SLUG",
+    "Availability": "Pre-pipeline",
+    "Description": "CI_DEFAULT_BRANCH in lowercase, shortened to 63 bytes, and with everything except 0-9 and a-z replaced with -. No leading / trailing -. Use in URLs, host names and domain names."
   },
   {
     "Variable": "CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX",
-    "Defined for": "Pipeline",
-    "GitLab": "14.3",
-    "Runner": "all",
-    "Description": "The direct group image prefix for pulling images through the Dependency Proxy. "
+    "Availability": "Pre-pipeline",
+    "Description": "The direct group image prefix for pulling images through the Dependency Proxy."
   },
   {
     "Variable": "CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX",
-    "Defined for": "Pipeline",
-    "GitLab": "13.7",
-    "Runner": "all",
-    "Description": "The top-level group image prefix for pulling images through the Dependency Proxy. "
+    "Availability": "Pre-pipeline",
+    "Description": "The top-level group image prefix for pulling images through the Dependency Proxy."
   },
   {
     "Variable": "CI_DEPENDENCY_PROXY_PASSWORD",
-    "Defined for": "Pipeline",
-    "GitLab": "13.7",
-    "Runner": "all",
-    "Description": "The password to pull images through the Dependency Proxy. "
+    "Availability": "Pipeline",
+    "Description": "The password to pull images through the Dependency Proxy."
   },
   {
     "Variable": "CI_DEPENDENCY_PROXY_SERVER",
-    "Defined for": "Pipeline",
-    "GitLab": "13.7",
-    "Runner": "all",
-    "Description": "The server for logging in to the Dependency Proxy. This is equivalent to `$CI_SERVER_HOST:$CI_SERVER_PORT`. "
+    "Availability": "Pre-pipeline",
+    "Description": "The server for logging in to the Dependency Proxy. This variable is equivalent to $CI_SERVER_HOST:$CI_SERVER_PORT."
   },
   {
     "Variable": "CI_DEPENDENCY_PROXY_USER",
-    "Defined for": "Pipeline",
-    "GitLab": "13.7",
-    "Runner": "all",
-    "Description": "The username to pull images through the Dependency Proxy. "
+    "Availability": "Pipeline",
+    "Description": "The username to pull images through the Dependency Proxy."
   },
   {
     "Variable": "CI_DEPLOY_FREEZE",
-    "Defined for": "Pipeline",
-    "GitLab": "13.2",
-    "Runner": "all",
-    "Description": "Only available if the pipeline runs during a [deploy freeze window](../../user/project/releases/index.md#prevent-unintentional-releases-by-setting-a-deploy-freeze). `true` when available. "
+    "Availability": "Pre-pipeline",
+    "Description": "Only available if the pipeline runs during a deploy freeze window. true when available."
   },
   {
     "Variable": "CI_DEPLOY_PASSWORD",
-    "Defined for": "Jobs only",
-    "GitLab": "10.8",
-    "Runner": "all",
-    "Description": "The authentication password of the [GitLab Deploy Token](../../user/project/deploy_tokens/index.md#gitlab-deploy-token), if the project has one. "
+    "Availability": "Job-only",
+    "Description": "The authentication password of the GitLab Deploy Token, if the project has one."
   },
   {
     "Variable": "CI_DEPLOY_USER",
-    "Defined for": "Jobs only",
-    "GitLab": "10.8",
-    "Runner": "all",
-    "Description": "The authentication username of the [GitLab Deploy Token](../../user/project/deploy_tokens/index.md#gitlab-deploy-token), if the project has one. "
+    "Availability": "Job-only",
+    "Description": "The authentication username of the GitLab Deploy Token, if the project has one."
   },
   {
     "Variable": "CI_DISPOSABLE_ENVIRONMENT",
-    "Defined for": "Pipeline",
-    "GitLab": "all",
-    "Runner": "10.1",
-    "Description": "Only available if the job is executed in a disposable environment (something that is created only for this job and disposed of/destroyed after the execution - all executors except `shell` and `ssh`). `true` when available. "
+    "Availability": "Pipeline",
+    "Description": "Only available if the job is executed in a disposable environment (something that is created only for this job and disposed of/destroyed after the execution - all executors except shell and ssh). true when available."
+  },
+  {
+    "Variable": "CI_ENVIRONMENT_ID",
+    "Availability": "Pipeline",
+    "Description": "The ID of the environment for this job. Available if environment:name is set."
   },
   {
     "Variable": "CI_ENVIRONMENT_NAME",
-    "Defined for": "Pipeline",
-    "GitLab": "8.15",
-    "Runner": "all",
-    "Description": "The name of the environment for this job. Available if [`environment:name`](../yaml/index.md#environmentname) is set. "
+    "Availability": "Pipeline",
+    "Description": "The name of the environment for this job. Available if environment:name is set."
   },
   {
     "Variable": "CI_ENVIRONMENT_SLUG",
-    "Defined for": "Pipeline",
-    "GitLab": "8.15",
-    "Runner": "all",
-    "Description": "The simplified version of the environment name, suitable for inclusion in DNS, URLs, Kubernetes labels, and so on. Available if [`environment:name`](../yaml/index.md#environmentname) is set. The slug is [truncated to 24 characters](https://gitlab.com/gitlab-org/gitlab/-/issues/20941). A random suffix is automatically added to [uppercase environment names](https://gitlab.com/gitlab-org/gitlab/-/issues/415526). "
+    "Availability": "Pipeline",
+    "Description": "The simplified version of the environment name, suitable for inclusion in DNS, URLs, Kubernetes labels, and so on. Available if environment:name is set. The slug is truncated to 24 characters. A random suffix is automatically added to uppercase environment names."
   },
   {
     "Variable": "CI_ENVIRONMENT_URL",
-    "Defined for": "Pipeline",
-    "GitLab": "9.3",
-    "Runner": "all",
-    "Description": "The URL of the environment for this job. Available if [`environment:url`](../yaml/index.md#environmenturl) is set. "
+    "Availability": "Pipeline",
+    "Description": "The URL of the environment for this job. Available if environment:url is set."
   },
   {
     "Variable": "CI_ENVIRONMENT_ACTION",
-    "Defined for": "Pipeline",
-    "GitLab": "13.11",
-    "Runner": "all",
-    "Description": "The action annotation specified for this job's environment. Available if [`environment:action`](../yaml/index.md#environmentaction) is set. Can be `start`, `prepare`, or `stop`. "
+    "Availability": "Pipeline",
+    "Description": "The action annotation specified for this job's environment. Available if environment:action is set. Can be start, prepare, or stop."
   },
   {
     "Variable": "CI_ENVIRONMENT_TIER",
-    "Defined for": "Pipeline",
-    "GitLab": "14.0",
-    "Runner": "all",
-    "Description": "The [deployment tier of the environment](../environments/index.md#deployment-tier-of-environments) for this job. "
+    "Availability": "Pipeline",
+    "Description": "The deployment tier of the environment for this job."
   },
   {
     "Variable": "CI_GITLAB_FIPS_MODE",
-    "Defined for": "Pipeline",
-    "GitLab": "14.10",
-    "Runner": "all",
-    "Description": "Only available if [FIPS mode](../../development/fips_compliance.md) is enabled in the GitLab instance. `true` when available. "
+    "Availability": "Pre-pipeline",
+    "Description": "Only available if FIPS mode is enabled in the GitLab instance. true when available."
   },
   {
     "Variable": "CI_HAS_OPEN_REQUIREMENTS",
-    "Defined for": "Pipeline",
-    "GitLab": "13.1",
-    "Runner": "all",
-    "Description": "Only available if the pipeline's project has an open [requirement](../../user/project/requirements/index.md). `true` when available. "
+    "Availability": "Pipeline",
+    "Description": "Only available if the pipeline's project has an open requirement. true when available."
+  },
+  {
+    "Variable": "CI_JOB_GROUP_NAME",
+    "Availability": "Pipeline",
+    "Description": "The shared name of a group of jobs, when using either parallel or manually grouped jobs. For example, if the job name is rspec:test: [ruby, ubuntu], the CI_JOB_GROUP_NAME is rspec:test. It is the same as CI_JOB_NAME otherwise. Introduced in GitLab 17.10."
   },
   {
     "Variable": "CI_JOB_ID",
-    "Defined for": "Jobs only",
-    "GitLab": "9.0",
-    "Runner": "all",
-    "Description": "The internal ID of the job, unique across all jobs in the GitLab instance. "
+    "Availability": "Job-only",
+    "Description": "The internal ID of the job, unique across all jobs in the GitLab instance."
   },
   {
     "Variable": "CI_JOB_IMAGE",
-    "Defined for": "Pipeline",
-    "GitLab": "12.9",
-    "Runner": "12.9",
-    "Description": "The name of the Docker image running the job. "
-  },
-  {
-    "Variable": "CI_JOB_JWT (Deprecated)",
-    "Defined for": "Pipeline",
-    "GitLab": "12.10",
-    "Runner": "all",
-    "Description": "A RS256 JSON web token to authenticate with third party systems that support JWT authentication, for example [HashiCorp's Vault](../secrets/index.md). [Deprecated in GitLab 15.9](../../update/deprecations.md#old-versions-of-json-web-tokens-are-deprecated) and scheduled to be removed in GitLab 17.0. Use [ID tokens](../yaml/index.md#id_tokens) instead. "
-  },
-  {
-    "Variable": "CI_JOB_JWT_V1 (Deprecated)",
-    "Defined for": "Pipeline",
-    "GitLab": "14.6",
-    "Runner": "all",
-    "Description": "The same value as `CI_JOB_JWT`. [Deprecated in GitLab 15.9](../../update/deprecations.md#old-versions-of-json-web-tokens-are-deprecated) and scheduled to be removed in GitLab 17.0. Use [ID tokens](../yaml/index.md#id_tokens) instead. "
-  },
-  {
-    "Variable": "CI_JOB_JWT_V2 (Deprecated)",
-    "Defined for": "Pipeline",
-    "GitLab": "14.6",
-    "Runner": "all",
-    "Description": "A newly formatted RS256 JSON web token to increase compatibility. Similar to `CI_JOB_JWT`, except the issuer (`iss`) claim is changed from `gitlab.com` to `https://gitlab.com`, `sub` has changed from `job_id` to a string that contains the project path, and an `aud` claim is added. The `aud` field is a constant value. Trusting JWTs in multiple relying parties can lead to [one RP sending a JWT to another one and acting maliciously as a job](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/72555#note_769112331). [Deprecated in GitLab 15.9](../../update/deprecations.md#old-versions-of-json-web-tokens-are-deprecated) and scheduled to be removed in GitLab 17.0. Use [ID tokens](../yaml/index.md#id_tokens) instead. "
+    "Availability": "Job-only",
+    "Description": "The name of the Docker image running the job. Only available when the job explicitly specifies a Docker image."
   },
   {
     "Variable": "CI_JOB_MANUAL",
-    "Defined for": "Pipeline",
-    "GitLab": "8.12",
-    "Runner": "all",
-    "Description": "Only available if the job was started manually. `true` when available. "
+    "Availability": "Pipeline",
+    "Description": "Only available if the job was started manually. true when available."
   },
   {
     "Variable": "CI_JOB_NAME",
-    "Defined for": "Pipeline",
-    "GitLab": "9.0",
-    "Runner": "0.5",
-    "Description": "The name of the job. "
+    "Availability": "Pipeline",
+    "Description": "The name of the job."
   },
   {
     "Variable": "CI_JOB_NAME_SLUG",
-    "Defined for": "Pipeline",
-    "GitLab": "15.4",
-    "Runner": "all",
-    "Description": "`CI_JOB_NAME` in lowercase, shortened to 63 bytes, and with everything except `0-9` and `a-z` replaced with `-`. No leading / trailing `-`. Use in paths. "
+    "Availability": "Pipeline",
+    "Description": "CI_JOB_NAME in lowercase, shortened to 63 bytes, and with everything except 0-9 and a-z replaced with -. No leading / trailing -. Use in paths. Introduced in GitLab 15.4."
   },
   {
     "Variable": "CI_JOB_STAGE",
-    "Defined for": "Pipeline",
-    "GitLab": "9.0",
-    "Runner": "0.5",
-    "Description": "The name of the job's stage. "
+    "Availability": "Pipeline",
+    "Description": "The name of the job's stage."
   },
   {
     "Variable": "CI_JOB_STATUS",
-    "Defined for": "Jobs only",
-    "GitLab": "all",
-    "Runner": "13.5",
-    "Description": "The status of the job as each runner stage is executed. Use with [`after_script`](../yaml/index.md#after_script). Can be `success`, `failed`, or `canceled`. "
+    "Availability": "Job-only",
+    "Description": "The status of the job as each runner stage is executed. Use with after_script. Can be success, failed, or canceled."
   },
   {
     "Variable": "CI_JOB_TIMEOUT",
-    "Defined for": "Jobs only",
-    "GitLab": "15.7",
-    "Runner": "15.7",
-    "Description": "The job timeout, in seconds. "
+    "Availability": "Job-only",
+    "Description": "The job timeout, in seconds. Introduced in GitLab 15.7. Requires GitLab Runner 15.7."
   },
   {
     "Variable": "CI_JOB_TOKEN",
-    "Defined for": "Jobs only",
-    "GitLab": "9.0",
-    "Runner": "1.2",
-    "Description": "A token to authenticate with [certain API endpoints](../jobs/ci_job_token.md). The token is valid as long as the job is running. "
+    "Availability": "Job-only",
+    "Description": "A token to authenticate with certain API endpoints. The token is valid as long as the job is running."
   },
   {
     "Variable": "CI_JOB_URL",
-    "Defined for": "Jobs only",
-    "GitLab": "11.1",
-    "Runner": "0.5",
-    "Description": "The job details URL. "
+    "Availability": "Job-only",
+    "Description": "The job details URL."
   },
   {
     "Variable": "CI_JOB_STARTED_AT",
-    "Defined for": "Jobs only",
-    "GitLab": "13.10",
-    "Runner": "all",
-    "Description": "The date and time when a job started, in [ISO 8601](https://www.rfc-editor.org/rfc/rfc3339#appendix-A) format. For example, `2022-01-31T16:47:55Z`. [UTC by default](../../administration/timezone.md). "
+    "Availability": "Job-only",
+    "Description": "The date and time when a job started, in ISO 8601 format. For example, 2022-01-31T16:47:55Z. UTC by default."
   },
   {
     "Variable": "CI_KUBERNETES_ACTIVE",
-    "Defined for": "Pipeline",
-    "GitLab": "13.0",
-    "Runner": "all",
-    "Description": "Only available if the pipeline has a Kubernetes cluster available for deployments. `true` when available. "
+    "Availability": "Pre-pipeline",
+    "Description": "Only available if the pipeline has a Kubernetes cluster available for deployments. true when available."
   },
   {
     "Variable": "CI_NODE_INDEX",
-    "Defined for": "Pipeline",
-    "GitLab": "11.5",
-    "Runner": "all",
-    "Description": "The index of the job in the job set. Only available if the job uses [`parallel`](../yaml/index.md#parallel). "
+    "Availability": "Pipeline",
+    "Description": "The index of the job in the job set. Only available if the job uses parallel."
   },
   {
     "Variable": "CI_NODE_TOTAL",
-    "Defined for": "Pipeline",
-    "GitLab": "11.5",
-    "Runner": "all",
-    "Description": "The total number of instances of this job running in parallel. Set to `1` if the job does not use [`parallel`](../yaml/index.md#parallel). "
+    "Availability": "Pipeline",
+    "Description": "The total number of instances of this job running in parallel. Set to 1 if the job does not use parallel."
   },
   {
     "Variable": "CI_OPEN_MERGE_REQUESTS",
-    "Defined for": "Pipeline",
-    "GitLab": "13.8",
-    "Runner": "all",
-    "Description": "A comma-separated list of up to four merge requests that use the current branch and project as the merge request source. Only available in branch and merge request pipelines if the branch has an associated merge request. For example, `gitlab-org/gitlab!333,gitlab-org/gitlab-foss!11`. "
+    "Availability": "Pre-pipeline",
+    "Description": "A comma-separated list of up to four merge requests that use the current branch and project as the merge request source. Only available in branch and merge request pipelines if the branch has an associated merge request. For example, gitlab-org/gitlab!333,gitlab-org/gitlab-foss!11."
   },
   {
     "Variable": "CI_PAGES_DOMAIN",
-    "Defined for": "Pipeline",
-    "GitLab": "11.8",
-    "Runner": "all",
-    "Description": "The configured domain that hosts GitLab Pages. "
+    "Availability": "Pre-pipeline",
+    "Description": "The instance's domain that hosts GitLab Pages, not including the namespace subdomain. To use the full hostname, use CI_PAGES_HOSTNAME instead."
+  },
+  {
+    "Variable": "CI_PAGES_HOSTNAME",
+    "Availability": "Job-only",
+    "Description": "The full hostname of the Pages deployment."
   },
   {
     "Variable": "CI_PAGES_URL",
-    "Defined for": "Pipeline",
-    "GitLab": "11.8",
-    "Runner": "all",
-    "Description": "The URL for a GitLab Pages site. Always a subdomain of `CI_PAGES_DOMAIN`. "
+    "Availability": "Job-only",
+    "Description": "The URL for a GitLab Pages site. Always a subdomain of CI_PAGES_DOMAIN. In GitLab 17.9 and later, the value includes the path_prefix when one is specified."
   },
   {
     "Variable": "CI_PIPELINE_ID",
-    "Defined for": "Jobs only",
-    "GitLab": "8.10",
-    "Runner": "all",
-    "Description": "The instance-level ID of the current pipeline. This ID is unique across all projects on the GitLab instance. "
+    "Availability": "Job-only",
+    "Description": "The instance-level ID of the current pipeline. This ID is unique across all projects on the GitLab instance."
   },
   {
     "Variable": "CI_PIPELINE_IID",
-    "Defined for": "Pipeline",
-    "GitLab": "11.0",
-    "Runner": "all",
-    "Description": "The project-level IID (internal ID) of the current pipeline. This ID is unique only within the current project. "
+    "Availability": "Pipeline",
+    "Description": "The project-level IID (internal ID) of the current pipeline. This ID is unique only in the current project."
   },
   {
     "Variable": "CI_PIPELINE_SOURCE",
-    "Defined for": "Pipeline",
-    "GitLab": "10.0",
-    "Runner": "all",
-    "Description": "How the pipeline was triggered. The value can be one of the [pipeline sources](../jobs/job_rules.md#ci_pipeline_source-predefined-variable). "
+    "Availability": "Pre-pipeline",
+    "Description": "How the pipeline was triggered. The value can be one of the pipeline sources."
   },
   {
     "Variable": "CI_PIPELINE_TRIGGERED",
-    "Defined for": "Pipeline",
-    "GitLab": "all",
-    "Runner": "all",
-    "Description": "`true` if the job was [triggered](../triggers/index.md). "
+    "Availability": "Pipeline",
+    "Description": "true if the job was triggered."
   },
   {
     "Variable": "CI_PIPELINE_URL",
-    "Defined for": "Jobs only",
-    "GitLab": "11.1",
-    "Runner": "0.5",
-    "Description": "The URL for the pipeline details. "
+    "Availability": "Job-only",
+    "Description": "The URL for the pipeline details."
   },
   {
     "Variable": "CI_PIPELINE_CREATED_AT",
-    "Defined for": "Pipeline",
-    "GitLab": "13.10",
-    "Runner": "all",
-    "Description": "The date and time when the pipeline was created, in [ISO 8601](https://www.rfc-editor.org/rfc/rfc3339#appendix-A) format. For example, `2022-01-31T16:47:55Z`. [UTC by default](../../administration/timezone.md). "
+    "Availability": "Job-only",
+    "Description": "The date and time when the pipeline was created, in ISO 8601 format. For example, 2022-01-31T16:47:55Z. UTC by default."
   },
   {
     "Variable": "CI_PIPELINE_NAME",
-    "Defined for": "Pipeline",
-    "GitLab": "16.3",
-    "Runner": "all",
-    "Description": "The pipeline name defined in [`workflow:name`](../yaml/index.md#workflowname) "
+    "Availability": "Pre-pipeline",
+    "Description": "The pipeline name defined in workflow:name. Introduced in GitLab 16.3."
+  },
+  {
+    "Variable": "CI_PIPELINE_SCHEDULE_DESCRIPTION",
+    "Availability": "Pre-pipeline",
+    "Description": "The description of the pipeline schedule. Only available in scheduled pipelines. Introduced in GitLab 17.8."
   },
   {
     "Variable": "CI_PROJECT_DIR",
-    "Defined for": "Jobs only",
-    "GitLab": "all",
-    "Runner": "all",
-    "Description": "The full path the repository is cloned to, and where the job runs from. If the GitLab Runner `builds_dir` parameter is set, this variable is set relative to the value of `builds_dir`. For more information, see the [Advanced GitLab Runner configuration](https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runners-section). "
+    "Availability": "Job-only",
+    "Description": "The full path the repository is cloned to, and where the job runs from. If the GitLab Runner builds_dir parameter is set, this variable is set relative to the value of builds_dir. For more information, see the Advanced GitLab Runner configuration."
   },
   {
     "Variable": "CI_PROJECT_ID",
-    "Defined for": "Pipeline",
-    "GitLab": "all",
-    "Runner": "all",
-    "Description": "The ID of the current project. This ID is unique across all projects on the GitLab instance. "
+    "Availability": "Pre-pipeline",
+    "Description": "The ID of the current project. This ID is unique across all projects on the GitLab instance."
   },
   {
     "Variable": "CI_PROJECT_NAME",
-    "Defined for": "Pipeline",
-    "GitLab": "8.10",
-    "Runner": "0.5",
-    "Description": "The name of the directory for the project. For example if the project URL is `gitlab.example.com/group-name/project-1`, `CI_PROJECT_NAME` is `project-1`. "
+    "Availability": "Pre-pipeline",
+    "Description": "The name of the directory for the project. For example if the project URL is gitlab.example.com/group-name/project-1, CI_PROJECT_NAME is project-1."
   },
   {
     "Variable": "CI_PROJECT_NAMESPACE",
-    "Defined for": "Pipeline",
-    "GitLab": "8.10",
-    "Runner": "0.5",
-    "Description": "The project namespace (username or group name) of the job. "
+    "Availability": "Pre-pipeline",
+    "Description": "The project namespace (username or group name) of the job."
   },
   {
     "Variable": "CI_PROJECT_NAMESPACE_ID",
-    "Defined for": "Pipeline",
-    "GitLab": "15.7",
-    "Runner": "0.5",
-    "Description": "The project namespace ID of the job. "
+    "Availability": "Pre-pipeline",
+    "Description": "The project namespace ID of the job. Introduced in GitLab 15.7."
+  },
+  {
+    "Variable": "CI_PROJECT_NAMESPACE_SLUG",
+    "Availability": "Pre-pipeline",
+    "Description": "$CI_PROJECT_NAMESPACE in lowercase with characters that are not a-z or 0-9 replaced with - and shortened to 63 bytes."
   },
   {
     "Variable": "CI_PROJECT_PATH_SLUG",
-    "Defined for": "Pipeline",
-    "GitLab": "9.3",
-    "Runner": "all",
-    "Description": "`$CI_PROJECT_PATH` in lowercase with characters that are not `a-z` or `0-9` replaced with `-` and shortened to 63 bytes. Use in URLs and domain names. "
+    "Availability": "Pre-pipeline",
+    "Description": "$CI_PROJECT_PATH in lowercase with characters that are not a-z or 0-9 replaced with - and shortened to 63 bytes. Use in URLs and domain names."
   },
   {
     "Variable": "CI_PROJECT_PATH",
-    "Defined for": "Pipeline",
-    "GitLab": "8.10",
-    "Runner": "0.5",
-    "Description": "The project namespace with the project name included. "
+    "Availability": "Pre-pipeline",
+    "Description": "The project namespace with the project name included."
   },
   {
     "Variable": "CI_PROJECT_REPOSITORY_LANGUAGES",
-    "Defined for": "Pipeline",
-    "GitLab": "12.3",
-    "Runner": "all",
-    "Description": "A comma-separated, lowercase list of the languages used in the repository. For example `ruby,javascript,html,css`. The maximum number of languages is limited to 5. An issue [proposes to increase the limit](https://gitlab.com/gitlab-org/gitlab/-/issues/368925). "
+    "Availability": "Pre-pipeline",
+    "Description": "A comma-separated, lowercase list of the languages used in the repository. For example ruby,javascript,html,css. The maximum number of languages is limited to 5. An issue proposes to increase the limit."
   },
   {
     "Variable": "CI_PROJECT_ROOT_NAMESPACE",
-    "Defined for": "Pipeline",
-    "GitLab": "13.2",
-    "Runner": "0.5",
-    "Description": "The root project namespace (username or group name) of the job. For example, if `CI_PROJECT_NAMESPACE` is `root-group/child-group/grandchild-group`, `CI_PROJECT_ROOT_NAMESPACE` is `root-group`. "
+    "Availability": "Pre-pipeline",
+    "Description": "The root project namespace (username or group name) of the job. For example, if CI_PROJECT_NAMESPACE is root-group/child-group/grandchild-group, CI_PROJECT_ROOT_NAMESPACE is root-group."
   },
   {
     "Variable": "CI_PROJECT_TITLE",
-    "Defined for": "Pipeline",
-    "GitLab": "12.4",
-    "Runner": "all",
-    "Description": "The human-readable project name as displayed in the GitLab web interface. "
+    "Availability": "Pre-pipeline",
+    "Description": "The human-readable project name as displayed in the GitLab web interface."
   },
   {
     "Variable": "CI_PROJECT_DESCRIPTION",
-    "Defined for": "Pipeline",
-    "GitLab": "15.1",
-    "Runner": "all",
-    "Description": "The project description as displayed in the GitLab web interface. "
+    "Availability": "Pre-pipeline",
+    "Description": "The project description as displayed in the GitLab web interface. Introduced in GitLab 15.1."
+  },
+  {
+    "Variable": "CI_PROJECT_TOPICS",
+    "Availability": "Pre-pipeline",
+    "Description": "A comma-separated, lowercase list of topics (limited to the first 20) assigned to the project. Introduced in GitLab 18.3"
   },
   {
     "Variable": "CI_PROJECT_URL",
-    "Defined for": "Pipeline",
-    "GitLab": "8.10",
-    "Runner": "0.5",
-    "Description": "The HTTP(S) address of the project. "
+    "Availability": "Pre-pipeline",
+    "Description": "The HTTP(S) address of the project."
   },
   {
     "Variable": "CI_PROJECT_VISIBILITY",
-    "Defined for": "Pipeline",
-    "GitLab": "10.3",
-    "Runner": "all",
-    "Description": "The project visibility. Can be `internal`, `private`, or `public`. "
+    "Availability": "Pre-pipeline",
+    "Description": "The project visibility. Can be internal, private, or public."
   },
   {
     "Variable": "CI_PROJECT_CLASSIFICATION_LABEL",
-    "Defined for": "Pipeline",
-    "GitLab": "14.2",
-    "Runner": "all",
-    "Description": "The project [external authorization classification label](../../administration/settings/external_authorization.md). "
+    "Availability": "Pre-pipeline",
+    "Description": "The project external authorization classification label."
   },
   {
     "Variable": "CI_REGISTRY",
-    "Defined for": "Pipeline",
-    "GitLab": "8.10",
-    "Runner": "0.5",
-    "Description": "Address of the [container registry](../../user/packages/container_registry/index.md) server, formatted as `<host>[:<port>]`. For example: `registry.gitlab.example.com`. Only available if the container registry is enabled for the GitLab instance. "
+    "Availability": "Pre-pipeline",
+    "Description": "Address of the container registry server, formatted as <host>[:<port>]. For example: registry.gitlab.example.com. Only available if the container registry is enabled for the GitLab instance."
   },
   {
     "Variable": "CI_REGISTRY_IMAGE",
-    "Defined for": "Pipeline",
-    "GitLab": "8.10",
-    "Runner": "0.5",
-    "Description": "Base address for the container registry to push, pull, or tag project's images, formatted as `<host>[:<port>]/<project_full_path>`. For example: `registry.gitlab.example.com/my_group/my_project`. Image names must follow the [container registry naming convention](../../user/packages/container_registry/index.md#naming-convention-for-your-container-images). Only available if the container registry is enabled for the project. "
+    "Availability": "Pre-pipeline",
+    "Description": "Base address for the container registry to push, pull, or tag project's images, formatted as <host>:<port>]/<project_full_path>. For example: registry.gitlab.example.com/my_group/my_project. Image names must follow the [container registry naming convention. Only available if the container registry is enabled for the project."
   },
   {
     "Variable": "CI_REGISTRY_PASSWORD",
-    "Defined for": "Jobs only",
-    "GitLab": "9.0",
-    "Runner": "all",
-    "Description": "The password to push containers to the GitLab project's container registry. Only available if the container registry is enabled for the project. This password value is the same as the `CI_JOB_TOKEN` and is valid only as long as the job is running. Use the `CI_DEPLOY_PASSWORD` for long-lived access to the registry "
+    "Availability": "Job-only",
+    "Description": "The password to push containers to the GitLab project's container registry. Only available if the container registry is enabled for the project. This password value is the same as the CI_JOB_TOKEN and is valid only as long as the job is running. Use the CI_DEPLOY_PASSWORD for long-lived access to the registry"
   },
   {
     "Variable": "CI_REGISTRY_USER",
-    "Defined for": "Jobs only",
-    "GitLab": "9.0",
-    "Runner": "all",
-    "Description": "The username to push containers to the project's GitLab container registry. Only available if the container registry is enabled for the project. "
+    "Availability": "Job-only",
+    "Description": "The username to push containers to the project's GitLab container registry. Only available if the container registry is enabled for the project."
   },
   {
     "Variable": "CI_RELEASE_DESCRIPTION",
-    "Defined for": "Pipeline",
-    "GitLab": "15.5",
-    "Runner": "all",
-    "Description": "The description of the release. Available only on pipelines for tags. Description length is limited to first 1024 characters. "
+    "Availability": "Pipeline",
+    "Description": "The description of the release. Available only on pipelines for tags. Description length is limited to first 1024 characters. Introduced in GitLab 15.5."
   },
   {
     "Variable": "CI_REPOSITORY_URL",
-    "Defined for": "Jobs only",
-    "GitLab": "9.0",
-    "Runner": "all",
-    "Description": "The full path to Git clone (HTTP) the repository with a [CI/CD job token](../jobs/ci_job_token.md), in the format `https://gitlab-ci-token:$CI_JOB_TOKEN@gitlab.example.com/my-group/my-project.git`. "
+    "Availability": "Job-only",
+    "Description": "The full path to Git clone (HTTP) the repository with a CI/CD job token, in the format https://gitlab-ci-token:$CI_JOB_TOKEN@gitlab.example.com/my-group/my-project.git."
   },
   {
     "Variable": "CI_RUNNER_DESCRIPTION",
-    "Defined for": "Jobs only",
-    "GitLab": "8.10",
-    "Runner": "0.5",
-    "Description": "The description of the runner. "
+    "Availability": "Job-only",
+    "Description": "The description of the runner."
   },
   {
     "Variable": "CI_RUNNER_EXECUTABLE_ARCH",
-    "Defined for": "Jobs only",
-    "GitLab": "all",
-    "Runner": "10.6",
-    "Description": "The OS/architecture of the GitLab Runner executable. Might not be the same as the environment of the executor. "
+    "Availability": "Job-only",
+    "Description": "The OS/architecture of the GitLab Runner executable. Might not be the same as the environment of the executor."
   },
   {
     "Variable": "CI_RUNNER_ID",
-    "Defined for": "Jobs only",
-    "GitLab": "8.10",
-    "Runner": "0.5",
-    "Description": "The unique ID of the runner being used. "
+    "Availability": "Job-only",
+    "Description": "The unique ID of the runner being used."
   },
   {
     "Variable": "CI_RUNNER_REVISION",
-    "Defined for": "Jobs only",
-    "GitLab": "all",
-    "Runner": "10.6",
-    "Description": "The revision of the runner running the job. "
+    "Availability": "Job-only",
+    "Description": "The revision of the runner running the job."
   },
   {
     "Variable": "CI_RUNNER_SHORT_TOKEN",
-    "Defined for": "Jobs only",
-    "GitLab": "all",
-    "Runner": "12.3",
-    "Description": "The runner's unique ID, used to authenticate new job requests. The token contains a prefix, and the first 17 characters are used. "
+    "Availability": "Job-only",
+    "Description": "The runner's unique ID, used to authenticate new job requests. The token contains a prefix, and the first 17 characters are used."
   },
   {
     "Variable": "CI_RUNNER_TAGS",
-    "Defined for": "Jobs only",
-    "GitLab": "8.10",
-    "Runner": "0.5",
-    "Description": "A comma-separated list of the runner tags. "
+    "Availability": "Job-only",
+    "Description": "A JSON array of runner tags. For example [\"tag_1\", \"tag_2\"]."
   },
   {
     "Variable": "CI_RUNNER_VERSION",
-    "Defined for": "Jobs only",
-    "GitLab": "all",
-    "Runner": "10.6",
-    "Description": "The version of the GitLab Runner running the job. "
+    "Availability": "Job-only",
+    "Description": "The version of the GitLab Runner running the job."
   },
   {
     "Variable": "CI_SERVER_FQDN",
-    "Defined for": "Pipeline",
-    "GitLab": "16.10",
-    "Runner": "all",
-    "Description": "The fully qualified domain name (FQDN) of the instance. For example `gitlab.example.com:8080`. "
+    "Availability": "Pre-pipeline",
+    "Description": "The fully qualified domain name (FQDN) of the instance. For example gitlab.example.com:8080. Introduced in GitLab 16.10."
   },
   {
     "Variable": "CI_SERVER_HOST",
-    "Defined for": "Pipeline",
-    "GitLab": "12.1",
-    "Runner": "all",
-    "Description": "The host of the GitLab instance URL, without protocol or port. For example `gitlab.example.com`. "
+    "Availability": "Pre-pipeline",
+    "Description": "The host of the GitLab instance URL, without protocol or port. For example gitlab.example.com."
   },
   {
     "Variable": "CI_SERVER_NAME",
-    "Defined for": "Pipeline",
-    "GitLab": "all",
-    "Runner": "all",
-    "Description": "The name of CI/CD server that coordinates jobs. "
+    "Availability": "Pre-pipeline",
+    "Description": "The name of CI/CD server that coordinates jobs."
   },
   {
     "Variable": "CI_SERVER_PORT",
-    "Defined for": "Pipeline",
-    "GitLab": "12.8",
-    "Runner": "all",
-    "Description": "The port of the GitLab instance URL, without host or protocol. For example `8080`. "
+    "Availability": "Pre-pipeline",
+    "Description": "The port of the GitLab instance URL, without host or protocol. For example 8080."
   },
   {
     "Variable": "CI_SERVER_PROTOCOL",
-    "Defined for": "Pipeline",
-    "GitLab": "12.8",
-    "Runner": "all",
-    "Description": "The protocol of the GitLab instance URL, without host or port. For example `https`. "
+    "Availability": "Pre-pipeline",
+    "Description": "The protocol of the GitLab instance URL, without host or port. For example https."
   },
   {
     "Variable": "CI_SERVER_SHELL_SSH_HOST",
-    "Defined for": "Pipeline",
-    "GitLab": "15.11",
-    "Runner": "all",
-    "Description": "The SSH host of the GitLab instance, used for access to Git repositories via SSH. For example `gitlab.com`. "
+    "Availability": "Pre-pipeline",
+    "Description": "The SSH host of the GitLab instance, used for access to Git repositories through SSH. For example gitlab.com. Introduced in GitLab 15.11."
   },
   {
     "Variable": "CI_SERVER_SHELL_SSH_PORT",
-    "Defined for": "Pipeline",
-    "GitLab": "15.11",
-    "Runner": "all",
-    "Description": "The SSH port of the GitLab instance, used for access to Git repositories via SSH. For example `22`. "
+    "Availability": "Pre-pipeline",
+    "Description": "The SSH port of the GitLab instance, used for access to Git repositories through SSH. For example 22. Introduced in GitLab 15.11."
   },
   {
     "Variable": "CI_SERVER_REVISION",
-    "Defined for": "Pipeline",
-    "GitLab": "all",
-    "Runner": "all",
-    "Description": "GitLab revision that schedules jobs. "
+    "Availability": "Pre-pipeline",
+    "Description": "GitLab revision that schedules jobs."
   },
   {
     "Variable": "CI_SERVER_TLS_CA_FILE",
-    "Defined for": "Pipeline",
-    "GitLab": "all",
-    "Runner": "all",
-    "Description": "File containing the TLS CA certificate to verify the GitLab server when `tls-ca-file` set in [runner settings](https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runners-section). "
+    "Availability": "Pipeline",
+    "Description": "File containing the TLS CA certificate to verify the GitLab server when tls-ca-file set in runner settings."
   },
   {
     "Variable": "CI_SERVER_TLS_CERT_FILE",
-    "Defined for": "Pipeline",
-    "GitLab": "all",
-    "Runner": "all",
-    "Description": "File containing the TLS certificate to verify the GitLab server when `tls-cert-file` set in [runner settings](https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runners-section). "
+    "Availability": "Pipeline",
+    "Description": "File containing the TLS certificate to verify the GitLab server when tls-cert-file set in runner settings."
   },
   {
     "Variable": "CI_SERVER_TLS_KEY_FILE",
-    "Defined for": "Pipeline",
-    "GitLab": "all",
-    "Runner": "all",
-    "Description": "File containing the TLS key to verify the GitLab server when `tls-key-file` set in [runner settings](https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runners-section). "
+    "Availability": "Pipeline",
+    "Description": "File containing the TLS key to verify the GitLab server when tls-key-file set in runner settings."
   },
   {
     "Variable": "CI_SERVER_URL",
-    "Defined for": "Pipeline",
-    "GitLab": "12.7",
-    "Runner": "all",
-    "Description": "The base URL of the GitLab instance, including protocol and port. For example `https://gitlab.example.com:8080`. "
+    "Availability": "Pre-pipeline",
+    "Description": "The base URL of the GitLab instance, including protocol and port. For example https://gitlab.example.com:8080."
   },
   {
     "Variable": "CI_SERVER_VERSION_MAJOR",
-    "Defined for": "Pipeline",
-    "GitLab": "11.4",
-    "Runner": "all",
-    "Description": "The major version of the GitLab instance. For example, if the GitLab version is `13.6.1`, the `CI_SERVER_VERSION_MAJOR` is `13`. "
+    "Availability": "Pre-pipeline",
+    "Description": "The major version of the GitLab instance. For example, if the GitLab version is 17.2.1, the CI_SERVER_VERSION_MAJOR is 17."
   },
   {
     "Variable": "CI_SERVER_VERSION_MINOR",
-    "Defined for": "Pipeline",
-    "GitLab": "11.4",
-    "Runner": "all",
-    "Description": "The minor version of the GitLab instance. For example, if the GitLab version is `13.6.1`, the `CI_SERVER_VERSION_MINOR` is `6`. "
+    "Availability": "Pre-pipeline",
+    "Description": "The minor version of the GitLab instance. For example, if the GitLab version is 17.2.1, the CI_SERVER_VERSION_MINOR is 2."
   },
   {
     "Variable": "CI_SERVER_VERSION_PATCH",
-    "Defined for": "Pipeline",
-    "GitLab": "11.4",
-    "Runner": "all",
-    "Description": "The patch version of the GitLab instance. For example, if the GitLab version is `13.6.1`, the `CI_SERVER_VERSION_PATCH` is `1`. "
+    "Availability": "Pre-pipeline",
+    "Description": "The patch version of the GitLab instance. For example, if the GitLab version is 17.2.1, the CI_SERVER_VERSION_PATCH is 1."
   },
   {
     "Variable": "CI_SERVER_VERSION",
-    "Defined for": "Pipeline",
-    "GitLab": "all",
-    "Runner": "all",
-    "Description": "The full version of the GitLab instance. "
+    "Availability": "Pre-pipeline",
+    "Description": "The full version of the GitLab instance."
   },
   {
     "Variable": "CI_SERVER",
-    "Defined for": "Jobs only",
-    "GitLab": "all",
-    "Runner": "all",
-    "Description": "Available for all jobs executed in CI/CD. `yes` when available. "
+    "Availability": "Job-only",
+    "Description": "Available for all jobs executed in CI/CD. yes when available."
   },
   {
     "Variable": "CI_SHARED_ENVIRONMENT",
-    "Defined for": "Pipeline",
-    "GitLab": "all",
-    "Runner": "10.1",
-    "Description": "Only available if the job is executed in a shared environment (something that is persisted across CI/CD invocations, like the `shell` or `ssh` executor). `true` when available. "
+    "Availability": "Pipeline",
+    "Description": "Only available if the job is executed in a shared environment (something that is persisted across CI/CD invocations, like the shell or ssh executor). true when available."
   },
   {
     "Variable": "CI_TEMPLATE_REGISTRY_HOST",
-    "Defined for": "Pipeline",
-    "GitLab": "15.3",
-    "Runner": "all",
-    "Description": "The host of the registry used by CI/CD templates. Defaults to `registry.gitlab.com`. "
+    "Availability": "Pre-pipeline",
+    "Description": "The host of the registry used by CI/CD templates. Defaults to registry.gitlab.com. Introduced in GitLab 15.3."
   },
   {
     "Variable": "CI_TRIGGER_SHORT_TOKEN",
-    "Defined for": "Jobs only",
-    "GitLab": "17.0",
-    "Runner": "all",
-    "Description": "First 4 characters of the [trigger token](../triggers/index.md#create-a-pipeline-trigger-token) of the current job. Only available if the pipeline was [triggered with a trigger token](../triggers/index.md). For example, for a trigger token of `glptt-dbf556605bcad4d9db3ec5fcef84f78f9b4fec28`, `CI_TRIGGER_SHORT_TOKEN` would be `dbf5`. "
+    "Availability": "Job-only",
+    "Description": "First 4 characters of the trigger token of the current job. Only available if the pipeline was triggered with a trigger token. For example, for a trigger token of glptt-1234567890abcdefghij, CI_TRIGGER_SHORT_TOKEN would be 1234. Introduced in GitLab 17.0. <!-- gitleaks:allow -->"
   },
   {
     "Variable": "GITLAB_CI",
-    "Defined for": "Pipeline",
-    "GitLab": "all",
-    "Runner": "all",
-    "Description": "Available for all jobs executed in CI/CD. `true` when available. "
+    "Availability": "Pre-pipeline",
+    "Description": "Available for all jobs executed in CI/CD. true when available."
   },
   {
     "Variable": "GITLAB_FEATURES",
-    "Defined for": "Pipeline",
-    "GitLab": "10.6",
-    "Runner": "all",
-    "Description": "The comma-separated list of licensed features available for the GitLab instance and license. "
+    "Availability": "Pre-pipeline",
+    "Description": "The comma-separated list of licensed features available for the GitLab instance and license."
   },
   {
     "Variable": "GITLAB_USER_EMAIL",
-    "Defined for": "Pipeline",
-    "GitLab": "8.12",
-    "Runner": "all",
-    "Description": "The email of the user who started the pipeline, unless the job is a manual job. In manual jobs, the value is the email of the user who started the job. "
+    "Availability": "Pipeline",
+    "Description": "The email of the user who started the pipeline, unless the job is a manual job. In manual jobs, the value is the email of the user who started the job."
   },
   {
     "Variable": "GITLAB_USER_ID",
-    "Defined for": "Pipeline",
-    "GitLab": "8.12",
-    "Runner": "all",
-    "Description": "The numeric ID of the user who started the pipeline, unless the job is a manual job. In manual jobs, the value is the ID of the user who started the job. "
+    "Availability": "Pipeline",
+    "Description": "The numeric ID of the user who started the pipeline, unless the job is a manual job. In manual jobs, the value is the ID of the user who started the job."
   },
   {
     "Variable": "GITLAB_USER_LOGIN",
-    "Defined for": "Pipeline",
-    "GitLab": "10.0",
-    "Runner": "all",
-    "Description": "The unique username of the user who started the pipeline, unless the job is a manual job. In manual jobs, the value is the username of the user who started the job. "
+    "Availability": "Pipeline",
+    "Description": "The unique username of the user who started the pipeline, unless the job is a manual job. In manual jobs, the value is the username of the user who started the job."
   },
   {
     "Variable": "GITLAB_USER_NAME",
-    "Defined for": "Pipeline",
-    "GitLab": "10.0",
-    "Runner": "all",
-    "Description": "The display name (user-defined **Full name** in the profile settings) of the user who started the pipeline, unless the job is a manual job. In manual jobs, the value is the name of the user who started the job. "
+    "Availability": "Pipeline",
+    "Description": "The display name (user-defined Full name in the profile settings) of the user who started the pipeline, unless the job is a manual job. In manual jobs, the value is the name of the user who started the job."
   },
   {
     "Variable": "KUBECONFIG",
-    "Defined for": "Pipeline",
-    "GitLab": "14.2",
-    "Runner": "all",
-    "Description": "The path to the `kubeconfig` file with contexts for every shared agent connection. Only available when a [GitLab agent is authorized to access the project](../../user/clusters/agent/ci_cd_workflow.md#authorize-the-agent). "
+    "Availability": "Pipeline",
+    "Description": "The path to the kubeconfig file with contexts for every shared agent connection. Only available when a GitLab agent for Kubernetes is authorized to access the project."
   },
   {
     "Variable": "TRIGGER_PAYLOAD",
-    "Defined for": "Pipeline",
-    "GitLab": "13.9",
-    "Runner": "all",
-    "Description": "The webhook payload. Only available when a pipeline is [triggered with a webhook](../triggers/index.md#access-webhook-payload). "
+    "Availability": "Pipeline",
+    "Description": "The webhook payload. Only available when a pipeline is triggered with a webhook."
   },
   {
     "Variable": "CI_MERGE_REQUEST_APPROVED",
-    "GitLab": "14.1",
-    "Runner": "all",
-    "Description": "Approval status of the merge request. `true` when [merge request approvals](../../user/project/merge_requests/approvals/index.md) is available and the merge request has been approved. "
+    "Availability": "Merge request pipelines",
+    "Description": "Approval status of the merge request. true when merge request approvals is available and the merge request has been approved."
   },
   {
     "Variable": "CI_MERGE_REQUEST_ASSIGNEES",
-    "GitLab": "11.9",
-    "Runner": "all",
-    "Description": "Comma-separated list of usernames of assignees for the merge request. "
+    "Availability": "Merge request pipelines",
+    "Description": "Comma-separated list of usernames of assignees for the merge request. Only available if the merge request has at least one assignee."
   },
   {
     "Variable": "CI_MERGE_REQUEST_DIFF_BASE_SHA",
-    "GitLab": "13.7",
-    "Runner": "all",
-    "Description": "The base SHA of the merge request diff. "
+    "Availability": "Merge request pipelines",
+    "Description": "The base SHA of the merge request diff."
   },
   {
     "Variable": "CI_MERGE_REQUEST_DIFF_ID",
-    "GitLab": "13.7",
-    "Runner": "all",
-    "Description": "The version of the merge request diff. "
+    "Availability": "Merge request pipelines",
+    "Description": "The version of the merge request diff."
   },
   {
     "Variable": "CI_MERGE_REQUEST_EVENT_TYPE",
-    "GitLab": "12.3",
-    "Runner": "all",
-    "Description": "The event type of the merge request. Can be `detached`, `merged_result` or `merge_train`. "
+    "Availability": "Merge request pipelines",
+    "Description": "The event type of the merge request. Can be detached, merged_result or merge_train."
   },
   {
     "Variable": "CI_MERGE_REQUEST_DESCRIPTION",
-    "GitLab": "16.7",
-    "Runner": "all",
-    "Description": "The description of the merge request. If the description is more than 2700 characters long, only the first 2700 characters are stored in the variable. "
+    "Availability": "Merge request pipelines",
+    "Description": "The description of the merge request. If the description is more than 2700 characters long, only the first 2700 characters are stored in the variable. Introduced in GitLab 16.7."
   },
   {
     "Variable": "CI_MERGE_REQUEST_DESCRIPTION_IS_TRUNCATED",
-    "GitLab": "16.8",
-    "Runner": "all",
-    "Description": "`true` if `CI_MERGE_REQUEST_DESCRIPTION` is truncated down to 2700 characters because the description of the merge request is too long. "
+    "Availability": "Merge request pipelines",
+    "Description": "true if CI_MERGE_REQUEST_DESCRIPTION is truncated down to 2700 characters because the description of the merge request is too long, otherwise false. Introduced in GitLab 16.8."
   },
   {
     "Variable": "CI_MERGE_REQUEST_ID",
-    "GitLab": "11.6",
-    "Runner": "all",
-    "Description": "The instance-level ID of the merge request. This is a unique ID across all projects on the GitLab instance. "
+    "Availability": "Merge request pipelines",
+    "Description": "The instance-level ID of the merge request. The ID is unique across all projects on the GitLab instance."
   },
   {
     "Variable": "CI_MERGE_REQUEST_IID",
-    "GitLab": "11.6",
-    "Runner": "all",
-    "Description": "The project-level IID (internal ID) of the merge request. This ID is unique for the current project, and is the number used in the merge request URL, page title, and other visible locations. "
+    "Availability": "Merge request pipelines",
+    "Description": "The project-level IID (internal ID) of the merge request. This ID is unique for the current project, and is the number used in the merge request URL, page title, and other visible locations."
   },
   {
     "Variable": "CI_MERGE_REQUEST_LABELS",
-    "GitLab": "11.9",
-    "Runner": "all",
-    "Description": "Comma-separated label names of the merge request. "
+    "Availability": "Merge request pipelines",
+    "Description": "Comma-separated label names of the merge request. Only available if the merge request has at least one label."
   },
   {
     "Variable": "CI_MERGE_REQUEST_MILESTONE",
-    "GitLab": "11.9",
-    "Runner": "all",
-    "Description": "The milestone title of the merge request. "
+    "Availability": "Merge request pipelines",
+    "Description": "The milestone title of the merge request. Only available if the merge request has a milestone set."
   },
   {
     "Variable": "CI_MERGE_REQUEST_PROJECT_ID",
-    "GitLab": "11.6",
-    "Runner": "all",
-    "Description": "The ID of the project of the merge request. "
+    "Availability": "Merge request pipelines",
+    "Description": "The ID of the project of the merge request."
   },
   {
     "Variable": "CI_MERGE_REQUEST_PROJECT_PATH",
-    "GitLab": "11.6",
-    "Runner": "all",
-    "Description": "The path of the project of the merge request. For example `namespace/awesome-project`. "
+    "Availability": "Merge request pipelines",
+    "Description": "The path of the project of the merge request. For example namespace/awesome-project."
   },
   {
     "Variable": "CI_MERGE_REQUEST_PROJECT_URL",
-    "GitLab": "11.6",
-    "Runner": "all",
-    "Description": "The URL of the project of the merge request. For example, `http://192.168.10.15:3000/namespace/awesome-project`. "
+    "Availability": "Merge request pipelines",
+    "Description": "The URL of the project of the merge request. For example, http://192.168.10.15:3000/namespace/awesome-project."
   },
   {
     "Variable": "CI_MERGE_REQUEST_REF_PATH",
-    "GitLab": "11.6",
-    "Runner": "all",
-    "Description": "The ref path of the merge request. For example, `refs/merge-requests/1/head`. "
+    "Availability": "Merge request pipelines",
+    "Description": "The ref path of the merge request. For example, refs/merge-requests/1/head."
   },
   {
     "Variable": "CI_MERGE_REQUEST_SOURCE_BRANCH_NAME",
-    "GitLab": "11.6",
-    "Runner": "all",
-    "Description": "The source branch name of the merge request. "
+    "Availability": "Merge request pipelines",
+    "Description": "The source branch name of the merge request."
   },
   {
     "Variable": "CI_MERGE_REQUEST_SOURCE_BRANCH_PROTECTED",
-    "GitLab": "16.4",
-    "Runner": "all",
-    "Description": "`true` when the source branch of the merge request is [protected](../../user/project/protected_branches.md). "
+    "Availability": "Merge request pipelines",
+    "Description": "true when the source branch of the merge request is protected. Introduced in GitLab 16.4."
   },
   {
     "Variable": "CI_MERGE_REQUEST_SOURCE_BRANCH_SHA",
-    "GitLab": "11.9",
-    "Runner": "all",
-    "Description": "The HEAD SHA of the source branch of the merge request. The variable is empty in merge request pipelines. The SHA is present only in [merged results pipelines](../pipelines/merged_results_pipelines.md). "
+    "Availability": "Merge request pipelines",
+    "Description": "The HEAD SHA of the source branch of the merge request. The variable is empty in merge request pipelines. The SHA is present only in merged results pipelines."
   },
   {
     "Variable": "CI_MERGE_REQUEST_SOURCE_PROJECT_ID",
-    "GitLab": "11.6",
-    "Runner": "all",
-    "Description": "The ID of the source project of the merge request. "
+    "Availability": "Merge request pipelines",
+    "Description": "The ID of the source project of the merge request."
   },
   {
     "Variable": "CI_MERGE_REQUEST_SOURCE_PROJECT_PATH",
-    "GitLab": "11.6",
-    "Runner": "all",
-    "Description": "The path of the source project of the merge request. "
+    "Availability": "Merge request pipelines",
+    "Description": "The path of the source project of the merge request."
   },
   {
     "Variable": "CI_MERGE_REQUEST_SOURCE_PROJECT_URL",
-    "GitLab": "11.6",
-    "Runner": "all",
-    "Description": "The URL of the source project of the merge request. "
+    "Availability": "Merge request pipelines",
+    "Description": "The URL of the source project of the merge request."
   },
   {
     "Variable": "CI_MERGE_REQUEST_SQUASH_ON_MERGE",
-    "GitLab": "16.4",
-    "Runner": "all",
-    "Description": "`true` when the [squash on merge](../../user/project/merge_requests/squash_and_merge.md) option is set. "
+    "Availability": "Merge request pipelines",
+    "Description": "true when the squash on merge option is set. Introduced in GitLab 16.4."
   },
   {
     "Variable": "CI_MERGE_REQUEST_TARGET_BRANCH_NAME",
-    "GitLab": "11.6",
-    "Runner": "all",
-    "Description": "The target branch name of the merge request. "
+    "Availability": "Merge request pipelines",
+    "Description": "The target branch name of the merge request."
   },
   {
     "Variable": "CI_MERGE_REQUEST_TARGET_BRANCH_PROTECTED",
-    "GitLab": "15.2",
-    "Runner": "all",
-    "Description": "`true` when the target branch of the merge request is [protected](../../user/project/protected_branches.md). "
+    "Availability": "Merge request pipelines",
+    "Description": "true when the target branch of the merge request is protected. Introduced in GitLab 15.2."
   },
   {
     "Variable": "CI_MERGE_REQUEST_TARGET_BRANCH_SHA",
-    "GitLab": "11.9",
-    "Runner": "all",
-    "Description": "The HEAD SHA of the target branch of the merge request. The variable is empty in merge request pipelines. The SHA is present only in [merged results pipelines](../pipelines/merged_results_pipelines.md). "
+    "Availability": "Merge request pipelines",
+    "Description": "The HEAD SHA of the target branch of the merge request. The variable is empty in merge request pipelines. The SHA is present only in merged results pipelines."
   },
   {
     "Variable": "CI_MERGE_REQUEST_TITLE",
-    "GitLab": "11.9",
-    "Runner": "all",
-    "Description": "The title of the merge request. "
+    "Availability": "Merge request pipelines",
+    "Description": "The title of the merge request."
+  },
+  {
+    "Variable": "CI_MERGE_REQUEST_DRAFT",
+    "Availability": "Merge request pipelines",
+    "Description": "true if the merge request is a draft. Introduced in GitLab 17.10."
   },
   {
     "Variable": "CI_EXTERNAL_PULL_REQUEST_IID",
-    "GitLab": "12.3",
-    "Runner": "all",
-    "Description": "Pull request ID from GitHub. "
+    "Availability": "External pull request pipelines",
+    "Description": "Pull request ID from GitHub."
   },
   {
     "Variable": "CI_EXTERNAL_PULL_REQUEST_SOURCE_REPOSITORY",
-    "GitLab": "13.3",
-    "Runner": "all",
-    "Description": "The source repository name of the pull request. "
+    "Availability": "External pull request pipelines",
+    "Description": "The source repository name of the pull request."
   },
   {
     "Variable": "CI_EXTERNAL_PULL_REQUEST_TARGET_REPOSITORY",
-    "GitLab": "13.3",
-    "Runner": "all",
-    "Description": "The target repository name of the pull request. "
+    "Availability": "External pull request pipelines",
+    "Description": "The target repository name of the pull request."
   },
   {
     "Variable": "CI_EXTERNAL_PULL_REQUEST_SOURCE_BRANCH_NAME",
-    "GitLab": "12.3",
-    "Runner": "all",
-    "Description": "The source branch name of the pull request. "
+    "Availability": "External pull request pipelines",
+    "Description": "The source branch name of the pull request."
   },
   {
     "Variable": "CI_EXTERNAL_PULL_REQUEST_SOURCE_BRANCH_SHA",
-    "GitLab": "12.3",
-    "Runner": "all",
-    "Description": "The HEAD SHA of the source branch of the pull request. "
+    "Availability": "External pull request pipelines",
+    "Description": "The HEAD SHA of the source branch of the pull request."
   },
   {
     "Variable": "CI_EXTERNAL_PULL_REQUEST_TARGET_BRANCH_NAME",
-    "GitLab": "12.3",
-    "Runner": "all",
-    "Description": "The target branch name of the pull request. "
+    "Availability": "External pull request pipelines",
+    "Description": "The target branch name of the pull request."
   },
   {
     "Variable": "CI_EXTERNAL_PULL_REQUEST_TARGET_BRANCH_SHA",
-    "GitLab": "12.3",
-    "Runner": "all",
-    "Description": "The HEAD SHA of the target branch of the pull request. "
+    "Availability": "External pull request pipelines",
+    "Description": "The HEAD SHA of the target branch of the pull request."
   }
 ]
