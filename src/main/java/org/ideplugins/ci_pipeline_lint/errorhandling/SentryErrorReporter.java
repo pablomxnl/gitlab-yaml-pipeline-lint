@@ -12,6 +12,7 @@ import com.intellij.openapi.diagnostic.ErrorReportSubmitter;
 import com.intellij.openapi.diagnostic.IdeaLoggingEvent;
 import com.intellij.openapi.diagnostic.SubmittedReportInfo;
 import com.intellij.openapi.extensions.PluginDescriptor;
+import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
@@ -20,6 +21,7 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.NlsActions;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.util.Consumer;
+import com.intellij.util.system.OS;
 import io.sentry.Sentry;
 import io.sentry.SentryLevel;
 import org.ideplugins.ci_pipeline_lint.settings.PipelinePluginConfigurationState;
@@ -27,8 +29,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.io.File;
 
+import static com.intellij.ide.plugins.PluginManagerCore.getPlugin;
 import static org.ideplugins.ci_pipeline_lint.actions.ActionHelper.displayNotificationWithAction;
+import static org.ideplugins.ci_pipeline_lint.linter.Constants.PLUGIN_ID;
 
 
 public class SentryErrorReporter extends ErrorReportSubmitter {
@@ -66,7 +71,7 @@ public class SentryErrorReporter extends ErrorReportSubmitter {
                           @Nullable String additionalInfo, @NotNull Component parentComponent,
                           @NotNull Consumer<? super SubmittedReportInfo> consumer) {
         DataContext context = DataManager.getInstance().getDataContext(parentComponent);
-        PluginDescriptor pluginDescriptor = getPluginDescriptor();
+        PluginDescriptor pluginDescriptor = getMyPluginDescriptor();
         Project project = CommonDataKeys.PROJECT.getData(context);
         initSentry(pluginDescriptor);
         InstalledPluginsState pluginState = InstalledPluginsState.getInstance();
@@ -108,11 +113,9 @@ public class SentryErrorReporter extends ErrorReportSubmitter {
                     ApplicationManager.getApplication().getService(PipelinePluginConfigurationState.class);
 
             ApplicationInfo applicationInfo = ApplicationInfo.getInstance();
-            String os = SystemInfo.getOsNameAndVersion() + "-" + SystemInfo.OS_ARCH;
+            String os = OS.CURRENT.name()+" " + SystemInfo.OS_VERSION + "-" + SystemInfo.OS_ARCH;
             if (SystemInfo.isLinux) {
-                os += (SystemInfo.isChromeOS) ? " [Chrome OS] " : "";
-                os += (SystemInfo.isKDE) ? " [KDE] " : "";
-                os += (SystemInfo.isGNOME) ? " [GNOME] " : "";
+                os += getLinuxDetails();
             }
             final String operatingSystem = os;
             Sentry.init(options -> {
@@ -136,4 +139,26 @@ public class SentryErrorReporter extends ErrorReportSubmitter {
         }
     }
 
+    private static String getLinuxDetails() {
+        String linuxDetails = "";
+        File chromebookOSCheck = new File("/dev/.cros_milestone");
+        linuxDetails += ( chromebookOSCheck.exists()) ? " [Chrome OS] " : "";
+        String windowManager = System.getenv("XDG_CURRENT_DESKTOP");
+        if (windowManager == null || windowManager.isEmpty()) {
+            windowManager = System.getenv("XDG_SESSION_DESKTOP");
+        }
+        if (windowManager != null && !windowManager.trim().isEmpty()) {
+            linuxDetails += " [" + windowManager + "] ";
+        }
+        String sessionType = System.getenv("XDG_SESSION_TYPE");
+        if (sessionType != null && !sessionType.trim().isEmpty()) {
+            linuxDetails += " ( " + sessionType.toLowerCase() + " )";
+        }
+        return linuxDetails;
+    }
+
+    private PluginDescriptor getMyPluginDescriptor() {
+        var pluginId = PluginId.getId(PLUGIN_ID);
+        return getPlugin(pluginId);
+    }
 }

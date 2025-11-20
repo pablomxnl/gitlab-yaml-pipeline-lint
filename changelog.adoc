@@ -7,6 +7,11 @@ This document provides an overview of the changes by release.
 [[releasenotes]]
 == Release notes
 
+=== 0.0.18
+
+- Fixes https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues/17[#17] Event Dispatch Thread (EDT) only error reported by plugin user
+- Updates to support `2025.3`. This is the last version supporting IDE versions `2024.*`
+
 === 0.0.17
 
 - Fixes https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues/16[#16] Diagnostic Freeze at YamlPipelineLinter.ciLint reported by plugin user through error reporter

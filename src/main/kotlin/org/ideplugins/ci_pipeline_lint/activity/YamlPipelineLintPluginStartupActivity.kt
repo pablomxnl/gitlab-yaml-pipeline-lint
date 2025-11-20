@@ -6,6 +6,8 @@ import com.intellij.ide.plugins.PluginManagerCore.getPlugin
 import com.intellij.notification.*
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.PathManager
+import com.intellij.openapi.application.PathManager.DEFAULT_EXT
+import com.intellij.openapi.application.PathManager.OPTIONS_DIRECTORY
 import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.ProjectActivity
@@ -33,8 +35,9 @@ class YamlPipelineLintPluginStartupActivity : ProjectActivity {
             }
 
             withBackgroundProgress(project, "Migrating settings", false) {
-                val oldSettings = PathManager.getOptionsFile("gitlabPipelineYamlLinter")
-                val newSettings = PathManager.getOptionsFile("CIPipelineLint")
+                val optionsPath = PathManager.getConfigDir().resolve(OPTIONS_DIRECTORY)
+                val oldSettings = optionsPath.resolve("gitlabPipelineYamlLinter$DEFAULT_EXT").toFile()
+                val newSettings = optionsPath.resolve("CIPipelineLint$DEFAULT_EXT").toFile()
                 if (oldSettings.exists() && !newSettings.exists()){
                     var content = oldSettings.readText(Charsets.UTF_8)
                     val newComponentName = PLUGIN_ID + "-Linter"

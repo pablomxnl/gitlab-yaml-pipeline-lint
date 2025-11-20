@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationInfo;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.SystemInfo;
+import com.intellij.util.system.OS;
 import org.ideplugins.ci_pipeline_lint.settings.PipelinePluginConfigurationState;
 
 import java.net.URLEncoder;
@@ -77,7 +78,7 @@ Attach a screencast/screenshot to help reproduce the issue.
         title = "Bug Report".equals(actionEvent.getPresentation().getText())?
                 "Plugin Bug Report" : "Plugin Feature Request";
         ApplicationInfo applicationInfo = ApplicationInfo.getInstance();
-        operatingSystem = SystemInfo.getOsNameAndVersion() + "-" + SystemInfo.OS_ARCH;
+        operatingSystem = OS.CURRENT.name()+" " + SystemInfo.OS_VERSION + "-" + SystemInfo.OS_ARCH;
         ideVersion = String.join(" ", applicationInfo.getVersionName(),
                 applicationInfo.getFullVersion(), applicationInfo.getBuild().asString());
         jdkVersion = String.join(" ", System.getProperty("java.vm.name"),
