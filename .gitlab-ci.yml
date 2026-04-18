@@ -13,7 +13,7 @@ variables:
   WRS_VERSION: "2025.03.8312"
   ARTIFACT: webHelpPD2-all.zip
 
-image: "gradle:8.13-jdk21"
+image: "gradle:9.1.0-jdk21"
 cache:
   key: ${CI_PROJECT_NAME}
   paths:
@@ -55,6 +55,8 @@ build_artifact:
   script:
     - gradle -Dversion.prerelease=$CI_PIPELINE_ID-SNAPSHOT build
     - gradle buildPlugin
+  after_script:
+    - gradle printCoverageForGitlab
 
 publish_eap:
   stage: deploy
@@ -74,6 +76,8 @@ build_release_artifact:
   script:
     - gradle test
     - gradle buildPlugin
+  after_script:
+    - gradle printCoverageForGitlab
 
 build-documentation:
   image: registry.jetbrains.team/p/writerside/builder/writerside-builder:$WRS_VERSION
