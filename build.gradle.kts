@@ -13,7 +13,6 @@ plugins {
     alias(libs.plugins.asciidoc)
     alias(libs.plugins.gradleIntelliJPlugin)
     alias(libs.plugins.semver)
-    alias(libs.plugins.jacocolog)
     alias(libs.plugins.kotlin)
 }
 
@@ -28,16 +27,87 @@ repositories {
     }
 }
 
+asciidoc {
+    publications {
+        named("main") {
+            sourceSet {
+                setSourceDir(project.projectDir.path)
+                sources {
+                    include("changelog.adoc")
+                }
+            }
+            output("asciidoctorj", "html")
+        }
+    }
+}
+
+tasks.named("asciidoctorHtml"){
+    dependsOn(listOf("generateManifest","compileKotlin","compileJava"))
+    doNotTrackState("doNotTrack")
+    outputs.cacheIf { false }
+}
+
+@Suppress("unused")
+val runIdeForManualTests by intellijPlatformTesting.runIde.registering {
+    prepareSandboxTask {
+        sandboxDirectory = project.layout.buildDirectory.dir("custom-sandbox")
+        sandboxSuffix = ""
+    }
+
+    task {
+        autoReload = true
+        doFirst {
+            copy {
+                from("${projectDir}/src/test/resources/ide/options/")
+                into(project.layout.buildDirectory.dir("custom-sandbox/config/options"))
+                include("*.xml")
+            }
+        }
+        systemProperty("idea.trust.all.projects", "true")
+        systemProperty("ide.show.tips.on.startup.default.value", "false")
+        systemProperty("idea.is.internal", "true")
+        systemProperty("idea.disposer.debug", "on")
+        systemProperty("nosplash", "true")
+        args = listOf("${projectDir}/src/test/resources/annotator/")
+    }
+}
+
+@Suppress("unused")
+val runIdeEAP by intellijPlatformTesting.runIde.registering {
+    type = IntelliJPlatformType.IntellijIdea
+    version = "253-EAP-SNAPSHOT"
+    useInstaller = false
+}
+
+tasks.register("printCoverageForGitlab") {
+    outputs.cacheIf { false }
+    var report = file("build/reports/jacoco/test/html/index.html")
+    if (report.exists()){
+        var coverage = Jsoup.parse(report)
+            .select("tfoot td")[2]?.text()
+        print("    - Instruction Coverage: $coverage")
+    }
+}
+
+tasks.register<JavaExec>("FetchGitlabVariables") {
+    dependsOn("classes")
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("org.ideplugins.ci_pipeline_lint.gitlab.FetchGitlabVariables")
+    setArgsString(file("${projectDir}/src/main/resources/gitlab-variables.json").path)
+}
+
+
 dependencies {
     intellijPlatform {
-        create(properties("platformType"), properties("platformVersion"), useInstaller = false)
+        intellijIdeaCommunity("2025.2")
         bundledPlugins(properties("platformBundledPlugins").map { it.split(',') })
-//        plugins(properties("platformPlugins").map { it.split(',') })
+        testBundledPlugins(properties("platformBundledPlugins").map { it.split(',')})
         pluginVerifier()
         zipSigner()
         testFramework(TestFrameworkType.Platform)
-        testFramework(TestFrameworkType.Plugin.Java)
+//        testFramework(TestFrameworkType.Plugin.Java)
     }
+
     implementation(libs.okhttp)
     implementation(libs.gson)
     implementation(libs.sentrysdk) {
@@ -49,29 +119,37 @@ dependencies {
     testImplementation(libs.mockwebserver) {
         exclude("junit")
     }
+    testImplementation(libs.mockwebserverjunit5)
     testImplementation(libs.junit4)
     testRuntimeOnly(libs.junitplatform)
     testRuntimeOnly(libs.junitengine)
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
 }
 
 // Configure Gradle IntelliJ Plugin
 intellijPlatform {
     pluginConfiguration {
         name = properties("pluginName")
-        changeNotes = provider {
-            Jsoup.parse(file("build/docs/changelog.html"))
-                .select("#releasenotes")[0].nextElementSibling()?.children()
-                ?.toString()
-        }
-        ideaVersion {
-            sinceBuild = properties("pluginSinceBuild")
+        var changelog = file("build/docs/asciidoc/html/CHANGELOG.html")
+        if (changelog.exists()){
+            changeNotes = provider {
+                Jsoup.parse(changelog)
+                    .select("#releasenotes")[0].nextElementSibling()!!.children().subList(0, 10)
+                    .joinToString("\n")
+            }
         }
     }
 
     signing {
-        certificateChainFile = file(environment("JBM_CERTIFICATE_CHAIN"))
-        privateKeyFile = file(environment("JBM_PRIVATE_KEY"))
-        password = environment("JBM_PRIVATE_KEY_PASSWORD")
+        val certChain = environment("JBM_CERTIFICATE_CHAIN").orNull
+        val privateKey = environment("JBM_PRIVATE_KEY").orNull
+        val password = environment("JBM_PRIVATE_KEY_PASSWORD").orNull
+
+        if (certChain != null && privateKey != null && password != null) {
+            certificateChainFile = file(certChain)
+            privateKeyFile = file(privateKey)
+            this.password = password
+        }
     }
 
     publishing {
@@ -80,54 +158,9 @@ intellijPlatform {
             listOf(if ("true" == environment("PUSH_EAP").getOrElse("false")) "eap" else "default")
         )
     }
-
-    pluginVerification {
-        ides {
-            recommended()
-        }
-    }
-
 }
 
-val runIdeForManualTests by intellijPlatformTesting.runIde.registering {
-    prepareSandboxTask {
-        sandboxDirectory = project.layout.buildDirectory.dir("custom-sandbox")
-        sandboxSuffix = ""
-    }
 
-    task {
-        doFirst {
-            copy {
-                from("${projectDir}/src/test/resources/ide/options/")
-                into(project.layout.buildDirectory.dir("custom-sandbox/config/options"))
-                include("*.xml")
-            }
-            copy {
-                from("${projectDir}/src/test/resources/ide/options/inspectionProfiles")
-                into(project.layout.buildDirectory.dir("custom-sandbox/config/options/inspectionProfiles"))
-            }
-        }
-        systemProperty("idea.auto.reload.plugins", "false")
-        systemProperty("idea.trust.all.projects", "true")
-        systemProperty("ide.show.tips.on.startup.default.value", "false")
-        systemProperty("idea.is.internal", "true")
-        systemProperty("idea.disposer.debug", "on")
-        systemProperty("nosplash", "true")
-        args = listOf("${projectDir}/src/test/resources/annotator/")
-    }
-}
-
-val runIdeEAP by intellijPlatformTesting.runIde.registering {
-    type = IntelliJPlatformType.IntellijIdeaCommunity
-    version = "252-EAP-SNAPSHOT"
-}
-
-tasks.register<JavaExec>("FetchGitlabVariables") {
-    dependsOn("classes")
-    classpath = sourceSets["main"].runtimeClasspath
-    mainClass.set("org.ideplugins.ci_pipeline_lint.gitlab.FetchGitlabVariables")
-    setArgsString(file("${projectDir}/src/main/resources/gitlab-variables.json").path)
-}
 
 tasks {
     // Set the JVM compatibility versions
@@ -146,47 +179,21 @@ tasks {
         finalizedBy("jacocoTestReport")
     }
 
-    init {
-        version = semver.version
-    }
-
-    asciidoctor {
-        setSourceDir(baseDir)
-        sources {
-            include("changelog.adoc")
-        }
-        setOutputDir(file("build/docs"))
-    }
-
     jacocoTestReport {
         classDirectories.setFrom(instrumentCode)
         reports {
             xml.required = true
         }
+        finalizedBy("printCoverageForGitlab")
     }
 
     patchPluginXml {
-        dependsOn(asciidoctor)
+        dependsOn("asciidoctorHtml")
     }
 
-    intellijPlatformTesting {
-        runIde {
-            register("runIdeForUiTests") {
-                task {
-                    jvmArgumentProviders += CommandLineArgumentProvider {
-                        listOf(
-                            "-Drobot-server.port=8082",
-                            "-Dide.mac.message.dialogs.as.sheets=false",
-                            "-Djb.privacy.policy.text=<!--999.999-->",
-                            "-Djb.consents.confirmation.enabled=false",
-                        )
-                    }
-                }
-
-                plugins {
-                    robotServerPlugin()
-                }
-            }
-        }
+    runIde {
+        autoReload = true
+        outputs.cacheIf { false }
     }
+
 }

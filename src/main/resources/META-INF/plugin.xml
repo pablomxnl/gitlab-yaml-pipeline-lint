@@ -9,11 +9,11 @@
         The Dude Plugins
     </vendor>
 
-
     <description><![CDATA[
     Validates content of your .gitlab-ci.yaml file by posting it to Gitlab Pipeline CI Lint API
     ]]></description>
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
     <depends>org.jetbrains.plugins.yaml</depends>
 
     <extensions defaultExtensionNs="com.intellij">
@@ -21,15 +21,12 @@
                                  instance="org.ideplugins.ci_pipeline_lint.settings.YamlPipelineLintSettingsConfigurable"
                                  id="org.ideplugins.ci_pipeline_lint_configurable"
                                  displayName="CI Pipeline Lint"/>
-        <fileType name="Gitlab CI/CD Configuration" fileNames=".gitlab-ci.yml,.gitlab-ci.yaml" fieldName="INSTANCE"
-                  implementationClass="org.ideplugins.ci_pipeline_lint.gitlab.GitlabCIFileType" order="first"
-                  patterns=".gitlab-ci-*.yml;.gitlab-ci-*.yaml"/>
 
         <toolWindow id="CI Pipeline Lint Results"
                     anchor="bottom"
                     canCloseContents="false"
                     factoryClass="org.ideplugins.ci_pipeline_lint.toolwindow.YamlPipelineLintToolWindow"
-                    icon="/icons/file-lines.svg"/>
+                    icon="/icons/file-lines-toolwindow.svg"/>
 
         <externalAnnotator order="last"
                            implementationClass="org.ideplugins.ci_pipeline_lint.annotator.PipelineLintResultsExternalAnnotator"

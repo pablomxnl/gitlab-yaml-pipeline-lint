@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.ExternalAnnotator;
 import com.intellij.lang.annotation.HighlightSeverity;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiFile;
@@ -23,6 +24,8 @@ import static org.ideplugins.ci_pipeline_lint.linter.Constants.GITLAB_RESPONSE_B
 
 public class PipelineLintResultsExternalAnnotator extends ExternalAnnotator<PipelineInitialAnnotatorInfo, PipelineLintResult> {
 
+    private static final Logger LOGGER = Logger.getInstance(PipelineLintResultsExternalAnnotator.class);
+    
     @Override
     public @Nullable PipelineInitialAnnotatorInfo collectInformation(@NotNull PsiFile file, @NotNull Editor editor, boolean hasErrors) {
         PipelineIssuesReporter pipelineServiceReporter = file.getProject().getService(PipelineIssuesReporter.class);
@@ -66,6 +69,7 @@ public class PipelineLintResultsExternalAnnotator extends ExternalAnnotator<Pipe
                 job = word.substring(0, word.indexOf(':'));
             }
             String errorMessage = messageLine.substring(job.length() + 1);
+            LOGGER.info("Job: " + job );
             file.accept(new PipelineYamlRecursivePsiElementVisitor(job, holder, severity, errorMessage));
         }));
 
@@ -90,6 +94,7 @@ public class PipelineLintResultsExternalAnnotator extends ExternalAnnotator<Pipe
             Optional.ofNullable(keyValue.getKey()).ifPresent(key -> {
                 String text = key.getText();
                 if (job.equals(text)) {
+                    LOGGER.info("Creating annotation on job: " + job);
                     holder.newAnnotation(severity, job + " " + errorMessage)
                             .tooltip(job + " " + errorMessage)
                             .range(keyValue).create();
