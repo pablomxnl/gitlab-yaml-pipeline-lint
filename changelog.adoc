@@ -7,6 +7,9 @@ This document provides an overview of the changes by release.
 [[releasenotes]]
 == Release notes
 
+=== 0.0.19
+- Adjust plugin toolwindow dark mode icon
+
 === 0.0.18
 
 - Fixes https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues/17[#17] Event Dispatch Thread (EDT) only error reported by plugin user

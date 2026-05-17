@@ -11,7 +11,6 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.ErrorReportSubmitter;
 import com.intellij.openapi.diagnostic.IdeaLoggingEvent;
 import com.intellij.openapi.diagnostic.SubmittedReportInfo;
-import com.intellij.openapi.extensions.PluginDescriptor;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.progress.ProgressIndicator;
@@ -24,22 +23,21 @@ import com.intellij.util.Consumer;
 import com.intellij.util.system.OS;
 import io.sentry.Sentry;
 import io.sentry.SentryLevel;
+import org.ideplugins.ci_pipeline_lint.linter.Constants;
 import org.ideplugins.ci_pipeline_lint.settings.PipelinePluginConfigurationState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.io.File;
+import java.util.ResourceBundle;
 
-import static com.intellij.ide.plugins.PluginManagerCore.getPlugin;
 import static org.ideplugins.ci_pipeline_lint.actions.ActionHelper.displayNotificationWithAction;
-import static org.ideplugins.ci_pipeline_lint.linter.Constants.PLUGIN_ID;
 
-
-public class SentryErrorReporter extends ErrorReportSubmitter {
+public class SentryErrorReporter extends ErrorReportSubmitter implements Constants {
 
     private static boolean isSentryInit;
-
+    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(PLUGIN_BUNDLE);
 
     private static void submitErrors(IdeaLoggingEvent @NotNull [] events, String additionalInfo) {
         for (IdeaLoggingEvent ideaEvent : events) {
@@ -71,12 +69,11 @@ public class SentryErrorReporter extends ErrorReportSubmitter {
                           @Nullable String additionalInfo, @NotNull Component parentComponent,
                           @NotNull Consumer<? super SubmittedReportInfo> consumer) {
         DataContext context = DataManager.getInstance().getDataContext(parentComponent);
-        PluginDescriptor pluginDescriptor = getMyPluginDescriptor();
         Project project = CommonDataKeys.PROJECT.getData(context);
-        initSentry(pluginDescriptor);
+        initSentry();
         InstalledPluginsState pluginState = InstalledPluginsState.getInstance();
-        if (pluginState.hasNewerVersion(pluginDescriptor.getPluginId())) {
-            showOutdatedPluginErrorNotification(pluginDescriptor);
+        if (pluginState.hasNewerVersion(PluginId.getId(PLUGIN_ID))) {
+            showOutdatedPluginErrorNotification();
             consumer.consume(new SubmittedReportInfo(SubmittedReportInfo.SubmissionStatus.DUPLICATE));
             return true;
         }
@@ -95,11 +92,11 @@ public class SentryErrorReporter extends ErrorReportSubmitter {
         return true;
     }
 
-    private void showOutdatedPluginErrorNotification(PluginDescriptor descriptor) {
+    private void showOutdatedPluginErrorNotification() {
         ApplicationManager.getApplication().invokeLater(() ->
                 displayNotificationWithAction(NotificationType.ERROR,
                         "Error won't be submitted because there is a newer version available",
-                        "Update %s Plugin".formatted(descriptor.getName()),
+                        "Update %s Plugin".formatted(PLUGIN_NAME),
                         () ->
                                 ShowSettingsUtil.getInstance()
                                         .showSettingsDialog(null, IdeBundle.message("title.plugins"))
@@ -107,7 +104,7 @@ public class SentryErrorReporter extends ErrorReportSubmitter {
         );
     }
 
-    static synchronized void initSentry(final PluginDescriptor pluginDescriptor) {
+    static synchronized void initSentry() {
         if (!isSentryInit) {
             PipelinePluginConfigurationState pluginSettings =
                     ApplicationManager.getApplication().getService(PipelinePluginConfigurationState.class);
@@ -120,10 +117,10 @@ public class SentryErrorReporter extends ErrorReportSubmitter {
             final String operatingSystem = os;
             Sentry.init(options -> {
                 options.setDsn(pluginSettings.getSentryDsn());
-                options.setRelease(pluginDescriptor.getVersion());
+                options.setRelease(BUNDLE.getString(PLUGIN_VERSION_KEY));
                 options.setServerName("");
                 options.setSendDefaultPii(false);
-                options.setEnvironment(pluginDescriptor.getPluginId().getIdString());
+                options.setEnvironment(PLUGIN_ID);
                 options.setDiagnosticLevel(SentryLevel.ERROR);
             });
 
@@ -157,8 +154,5 @@ public class SentryErrorReporter extends ErrorReportSubmitter {
         return linuxDetails;
     }
 
-    private PluginDescriptor getMyPluginDescriptor() {
-        var pluginId = PluginId.getId(PLUGIN_ID);
-        return getPlugin(pluginId);
-    }
+
 }

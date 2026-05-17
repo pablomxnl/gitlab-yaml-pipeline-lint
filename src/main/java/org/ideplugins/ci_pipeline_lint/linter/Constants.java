@@ -22,5 +22,7 @@ public interface Constants {
     String UPDATE_NOTIFICATION_BODY =
             "Useful? Please rate / review";
     String NOTIFICATION_GROUP = "CI Pipeline Lint Plugin Update";
-
+    String PLUGIN_BUNDLE = "gitlab-pipeline-lint-plugin";
+    String PLUGIN_VERSION_KEY ="cipipelinelint.plugin.version";
+    String PLUGIN_NAME = "CI Pipeline Lint";
 }

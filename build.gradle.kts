@@ -195,5 +195,84 @@ tasks {
         autoReload = true
         outputs.cacheIf { false }
     }
-
 }
+
+// Task to update CHANGELOG.adoc and Writerside/v.list after version bump
+tasks.register<DefaultTask>("updateVersionInDocs") {
+    doLast {
+        val ver = project.version.toString()
+
+        // --- CHANGELOG.adoc update ---
+        val changelog = file("changelog.adoc")
+        if (!changelog.exists()) {
+            throw GradleException("changelog.adoc not found at: ${changelog.path}")
+        }
+
+        val lines = changelog.readLines().toMutableList()
+        val releaseHeaderIndex = lines.indexOfFirst { it.trim() == "== Release notes" }
+        if (releaseHeaderIndex == -1) {
+            throw GradleException("No '== Release notes' header found in changelog.adoc. Please add it before running incrementPatch.")
+        }
+
+        // Idempotency: skip if a section for this version already exists
+        val sectionExists = lines.any { it.trim().startsWith("=== $ver") }
+        if (sectionExists) {
+            logger.lifecycle("CHANGELOG.adoc already contains a section for version $ver; skipping changelog update.")
+        } else {
+            // Backup
+            val changelogBak = file("${changelog.path}.bak")
+            changelog.copyTo(changelogBak, overwrite = true)
+            logger.lifecycle("Backed up CHANGELOG.adoc to ${changelogBak.path}")
+
+            // Prepare insertion block. Keep blank lines around sections and preserve list indentation.
+            val insertBlock = listOf(
+                "",
+                "=== $ver [unreleased]",
+                "- Fixes|Implements https://gitlab.com/pablomxnl/vale-cli-plugin/-/issues/issueNumber[#issueNumber]",
+                ""
+            )
+
+            // Insert right after the '== Release notes' header
+            val insertPos = releaseHeaderIndex + 1
+            lines.addAll(insertPos, insertBlock)
+
+            // Write back
+            changelog.writeText(lines.joinToString("\n"))
+            logger.lifecycle("Inserted unreleased section for version $ver into CHANGELOG.adoc")
+        }
+
+        // --- Writerside/v.list update ---
+        val vlist = file("Writerside/v.list")
+        if (!vlist.exists()) {
+            throw GradleException("Writerside/v.list not found at: ${vlist.path}")
+        }
+
+        val vText = vlist.readText()
+        val pluginVarRegex = Regex("(<var\\s+name=\"plugin_version\"\\s+value=\")[^\"]*(\".*?/?>)")
+        if (!pluginVarRegex.containsMatchIn(vText)) {
+            throw GradleException("Could not find plugin_version var in Writerside/v.list")
+        }
+
+        // Idempotent replace
+        val newVText = vText.replace(pluginVarRegex) { match ->
+            "${match.groups[1]!!.value}$ver${match.groups[2]!!.value}"
+        }
+
+        if (newVText == vText) {
+            logger.lifecycle("Writerside/v.list already up-to-date with version $ver; skipping.")
+        } else {
+            val vBak = file("${vlist.path}.bak")
+            vlist.copyTo(vBak, overwrite = true)
+            logger.lifecycle("Backed up Writerside/v.list to ${vBak.path}")
+
+            vlist.writeText(newVText)
+            logger.lifecycle("Updated plugin_version in Writerside/v.list to $ver")
+        }
+    }
+}
+
+// Ensure updateVersionInDocs runs after semver's incrementPatch when that task is invoked
+tasks.named("incrementPatch") {
+    finalizedBy(tasks.named("updateVersionInDocs"))
+}
+
