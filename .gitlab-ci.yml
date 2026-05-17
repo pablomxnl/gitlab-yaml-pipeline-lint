@@ -97,6 +97,33 @@ build-documentation:
       - public/
       - public/$ARTIFACT
 
+.trigger_teamcity:
+  image: registry.hub.docker.com/badouralix/curl-jq:latest
+  variables:
+    TEAMCITY_BUILD_CONFIG_ID: ""
+  script:
+    - |-
+      curl --silent --fail --request POST \
+        --header "Authorization: Bearer $TEAMCITY_TOKEN" \
+        --header "Content-Type: application/json" \
+        --header "Accept: application/json" \
+        --data "{
+          \"buildType\": { \"id\": \"$TEAMCITY_BUILD_CONFIG_ID\" },
+          \"branchName\": \"$CI_COMMIT_REF_NAME\",
+          \"comment\": { \"text\": \"Deploying from GitLab pipeline $CI_PIPELINE_ID, job $CI_JOB_ID\" }
+        }" \
+        "$TEAMCITY_URL/app/rest/buildQueue"
+
+publish_docs_staging_marketplace:
+  extends: .trigger_teamcity
+  stage: deploy
+  needs:
+    - pages
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  variables:
+    TEAMCITY_BUILD_CONFIG_ID: $TEAMCITY_STAGING_BUILD_CONFIG_ID
+
 pages:
   stage: deploy
   image: alpine:latest
@@ -166,3 +193,14 @@ upload_marketplace:
       artifacts: false
   script:
     - gradle publishPlugin
+
+publish_docs_marketplace:
+  extends: .trigger_teamcity
+  stage: release
+  needs:
+    - job: upload_marketplace
+      artifacts: false
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+$/'
+  variables:
+    TEAMCITY_BUILD_CONFIG_ID: $TEAMCITY_PRODUCTION_BUILD_CONFIG_ID
