@@ -15,9 +15,11 @@ variables:
 
 image: "gradle:9.1.0-jdk21"
 cache:
-  key: ${CI_PROJECT_NAME}
+  key: "$CI_JOB_NAME"
   paths:
-    - .gradle
+    - .gradle/caches/modules-2
+    - .gradle/caches/build-cache-1
+    - .intellijPlatform
 
 .build_release:
   stage: build
@@ -29,6 +31,7 @@ cache:
     when: always
     paths:
       - build/distributions/*.zip
+      - build/docs
       - build/reports/tests
       - build/reports/jacoco/test
     reports:
@@ -44,6 +47,7 @@ cache:
     when: always
     paths:
       - build/distributions/*.zip
+      - build/docs
       - build/reports/tests
       - build/reports/jacoco/test
     reports:
@@ -74,7 +78,7 @@ publish_eap:
 build_release_artifact:
   extends: .build_release
   script:
-    - gradle test
+    - gradle build
     - gradle buildPlugin
   after_script:
     - gradle printCoverageForGitlab
@@ -202,5 +206,6 @@ publish_docs_marketplace:
       artifacts: false
   rules:
     - if: '$CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+$/'
+      when: manual
   variables:
     TEAMCITY_BUILD_CONFIG_ID: $TEAMCITY_PRODUCTION_BUILD_CONFIG_ID
