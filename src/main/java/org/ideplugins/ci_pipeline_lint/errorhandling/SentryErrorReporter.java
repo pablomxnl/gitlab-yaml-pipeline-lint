@@ -1,7 +1,6 @@
 package org.ideplugins.ci_pipeline_lint.errorhandling;
 
 import com.intellij.ide.DataManager;
-import com.intellij.ide.IdeBundle;
 import com.intellij.ide.plugins.InstalledPluginsState;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -99,7 +98,7 @@ public class SentryErrorReporter extends ErrorReportSubmitter implements Constan
                         "Update %s Plugin".formatted(PLUGIN_NAME),
                         () ->
                                 ShowSettingsUtil.getInstance()
-                                        .showSettingsDialog(null, IdeBundle.message("title.plugins"))
+                                        .showSettingsDialog(null, BUNDLE.getString("ide.plugin.settings"))
                 )
         );
     }

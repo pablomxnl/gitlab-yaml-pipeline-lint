@@ -103,7 +103,7 @@ build-documentation:
     TEAMCITY_BUILD_CONFIG_ID: ""
   script:
     - |-
-      curl --silent --fail --request POST \
+      curl --silent --fail --output /dev/null --request POST \
         --header "Authorization: Bearer $TEAMCITY_TOKEN" \
         --header "Content-Type: application/json" \
         --header "Accept: application/json" \
