@@ -130,7 +130,7 @@ dependencies {
 intellijPlatform {
     pluginConfiguration {
         name = properties("pluginName")
-        var changelog = file("build/docs/asciidoc/html/CHANGELOG.html")
+        var changelog = file("build/docs/asciidoc/html/changelog.html")
         if (changelog.exists()){
             changeNotes = provider {
                 Jsoup.parse(changelog)
@@ -217,18 +217,18 @@ tasks.register<DefaultTask>("updateVersionInDocs") {
         // Idempotency: skip if a section for this version already exists
         val sectionExists = lines.any { it.trim().startsWith("=== $ver") }
         if (sectionExists) {
-            logger.lifecycle("CHANGELOG.adoc already contains a section for version $ver; skipping changelog update.")
+            logger.lifecycle("changelog.adoc already contains a section for version $ver; skipping changelog update.")
         } else {
             // Backup
             val changelogBak = file("${changelog.path}.bak")
             changelog.copyTo(changelogBak, overwrite = true)
-            logger.lifecycle("Backed up CHANGELOG.adoc to ${changelogBak.path}")
+            logger.lifecycle("Backed up changelog.adoc to ${changelogBak.path}")
 
             // Prepare insertion block. Keep blank lines around sections and preserve list indentation.
             val insertBlock = listOf(
                 "",
                 "=== $ver [unreleased]",
-                "- Fixes|Implements https://gitlab.com/pablomxnl/vale-cli-plugin/-/issues/issueNumber[#issueNumber]",
+                "- Fixes|Implements https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/issues/issueNumber[#issueNumber]",
                 ""
             )
 
@@ -238,7 +238,7 @@ tasks.register<DefaultTask>("updateVersionInDocs") {
 
             // Write back
             changelog.writeText(lines.joinToString("\n"))
-            logger.lifecycle("Inserted unreleased section for version $ver into CHANGELOG.adoc")
+            logger.lifecycle("Inserted unreleased section for version $ver into changelog.adoc")
         }
 
         // --- Writerside/v.list update ---

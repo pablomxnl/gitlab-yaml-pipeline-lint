@@ -7,6 +7,9 @@ This document provides an overview of the changes by release.
 [[releasenotes]]
 == Release notes
 
+=== 0.0.20
+- Remove usage of internal classes for 2026.2 EAP compatibility
+
 === 0.0.19
 - Adjust plugin toolwindow dark mode icon
 
