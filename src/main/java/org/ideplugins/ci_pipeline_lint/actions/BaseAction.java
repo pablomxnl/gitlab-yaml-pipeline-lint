@@ -5,16 +5,17 @@ import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.FileContentUtil;
 import com.intellij.util.concurrency.annotations.RequiresBackgroundThread;
-import okhttp3.HttpUrl;
 import org.ideplugins.ci_pipeline_lint.linter.Constants;
 import org.ideplugins.ci_pipeline_lint.linter.YamlPipelineLinter;
 import org.ideplugins.ci_pipeline_lint.service.PasswordSafeService;
 import org.ideplugins.ci_pipeline_lint.service.PipelineIssuesReporter;
 import org.ideplugins.ci_pipeline_lint.settings.YamlPipelineLintSettingsState;
+import org.ideplugins.ci_pipeline_lint.settings.ProjectGitSettingsState;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -32,19 +33,37 @@ public abstract class BaseAction extends AnAction implements Constants {
         return !token.isBlank();
     }
 
-    protected boolean checkPluginSettings(Project project) {
-        String gitlabCILintEndpoint = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class)
-                .gitlabEndpoint;
-        return HttpUrl.parse(gitlabCILintEndpoint)!=null && checkGitlabToken() && !gitlabCILintEndpoint.contains("%");
+    protected boolean areHostAndTokenMissing(Project project) {
+        var yamlState = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class);
+        if (yamlState == null) return true;
+        String host = yamlState.gitlabHost;
+        return host == null || host.isBlank() || !checkGitlabToken();
+    }
+
+    protected boolean isProjectIdMissing(Project project) {
+        ProjectGitSettingsState projectState = project == null ? null : project.getService(ProjectGitSettingsState.class);
+        String projectId = projectState != null ? projectState.projectId : "";
+        return projectId == null || projectId.isBlank();
+    }
+
+    protected void promptForProjectId(Project project) {
+        ApplicationManager.getApplication().invokeLater(() -> {
+            String input = Messages.showInputDialog(project,
+                    "Could not detect GitLab project ID automatically.\nPlease enter Project ID:",
+                    "Enter Project ID",
+                    null);
+            if (input != null && !input.isBlank()) {
+                ProjectGitSettingsState projectState = project.getService(ProjectGitSettingsState.class);
+                projectState.projectId = input.trim();
+            }
+        });
     }
 
     @RequiresBackgroundThread
     protected void doLintInBackground(@NotNull AnActionEvent event, @NotNull PsiFile psiFile) {
-        String gitlabCILintEndpoint = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class)
-                .gitlabEndpoint;
         JsonObject yamlJson = ActionHelper.getYamlJson(psiFile);
-        YamlPipelineLinter linter =
-                new YamlPipelineLinter(gitlabCILintEndpoint, PasswordSafeService.retrieveToken());
+        Project project = Objects.requireNonNull(getEventProject(event));
+        YamlPipelineLinter linter = new YamlPipelineLinter(project);
         AtomicReference<JsonObject> reference = new AtomicReference<>();
         try {
             ApplicationManager.getApplication().executeOnPooledThread(()-> {

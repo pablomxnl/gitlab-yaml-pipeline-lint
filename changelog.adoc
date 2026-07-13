@@ -7,6 +7,10 @@ This document provides an overview of the changes by release.
 [[releasenotes]]
 == Release notes
 
+=== 0.0.21 [unreleased]
+- Implements https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/work_items/8[#8] Autodetect gitlab project ID with gitlab api
+
+
 === 0.0.20
 - Remove usage of internal classes for 2026.2 EAP compatibility
 

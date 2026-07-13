@@ -29,20 +29,12 @@ public class LintYamlToolsMenuAction extends BaseAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        if ( checkPluginSettings( event.getProject() ) ) {
-            Project project = getEventProject(event);
-            DumbService dumbService = DumbService.getInstance(Objects.requireNonNull(project));
-            if (dumbService.isDumb()){
-                dumbService.runWhenSmart(() -> lintPipelineFile(project,event));
-            } else {
-                lintPipelineFile(project, event);
-            }
-        } else {
+        Project project = getEventProject(event);
+        if (project == null) {
             displayNotificationWithAction(NotificationType.WARNING, "Please setup your Gitlab Host, Token and Project ID");
+            return;
         }
-    }
 
-    private void lintPipelineFile(@NotNull Project project, @NotNull AnActionEvent event) {
         GlobalSearchScope scope = GlobalSearchScope.projectScope(project);
         List<VirtualFile> files = new ArrayList<>(FilenameIndex.getVirtualFilesByName(GITLAB_CI_YML, scope));
         if (files.isEmpty()) {
@@ -54,6 +46,27 @@ public class LintYamlToolsMenuAction extends BaseAction {
                     "Multiple .gitlab-ci.yml files found on project. Currently not supported");
             return;
         }
+
+        if (areHostAndTokenMissing(project)) {
+            displayNotificationWithAction(NotificationType.WARNING, "Please setup your Gitlab Host and Token");
+            return;
+        }
+
+        if (isProjectIdMissing(project)) {
+            // Prompt user to enter project id before attempting to lint
+            promptForProjectId(project);
+            return;
+        }
+
+        DumbService dumbService = DumbService.getInstance(Objects.requireNonNull(project));
+        if (dumbService.isDumb()){
+            dumbService.runWhenSmart(() -> lintPipelineFile(project,files , event));
+        } else {
+            lintPipelineFile(project, files, event);
+        }
+    }
+
+    private void lintPipelineFile(@NotNull Project project, List<VirtualFile> files,  @NotNull AnActionEvent event) {
         PsiManager psiManager = PsiManager.getInstance(project);
         PsiFile psiFile = psiManager.findFile(files.getFirst());
         if (psiFile != null) {

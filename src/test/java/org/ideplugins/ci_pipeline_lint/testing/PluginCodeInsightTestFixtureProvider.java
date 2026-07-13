@@ -1,13 +1,11 @@
 package org.ideplugins.ci_pipeline_lint.testing;
 
-import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.TestApplicationManager;
 import com.intellij.testFramework.fixtures.*;
 import com.intellij.testFramework.fixtures.impl.LightTempDirTestFixtureImpl;
 import org.junit.jupiter.api.extension.*;
 
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,10 +28,10 @@ public class PluginCodeInsightTestFixtureProvider
     private void initFixture(final String testDataPath, final Class<?> tempDir, ExtensionContext extensionContext) throws Exception {
         String projectName = extensionContext.getRequiredTestMethod().getName() + UUID.randomUUID();
         Path projectPath = Path.of(System.getProperty("java.io.tmpdir", "/tmp"), projectName);
-        Class<?> tmpDirFixtureClazz = Class.forName(tempDir.getName());
+
+        // Instantiate the TempDirTestFixture without reflection
         TempDirTestFixture tempDirFixture = (TempDirTestFixture)
-                Arrays.stream(tmpDirFixtureClazz.getConstructors()).filter(p -> p.getParameterCount() == 0).findFirst().get().newInstance();
-        final LightProjectDescriptor projectDescriptor = LightProjectDescriptor.EMPTY_PROJECT_DESCRIPTOR;
+                tempDir.getConstructor().newInstance();
         final IdeaTestFixtureFactory factory = IdeaTestFixtureFactory.getFixtureFactory();
         final TestFixtureBuilder<IdeaProjectTestFixture> fixtureBuilder =
                 (tempDirFixture instanceof LightTempDirTestFixtureImpl) ? factory.createLightFixtureBuilder(projectName) :

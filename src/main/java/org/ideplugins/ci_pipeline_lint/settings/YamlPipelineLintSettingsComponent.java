@@ -3,8 +3,6 @@ package org.ideplugins.ci_pipeline_lint.settings;
 import com.intellij.ui.DocumentAdapter;
 import com.intellij.ui.components.*;
 import com.intellij.util.ui.FormBuilder;
-import org.ideplugins.ci_pipeline_lint.icons.Icons;
-import org.ideplugins.ci_pipeline_lint.linter.Constants;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -18,8 +16,6 @@ import static org.ideplugins.ci_pipeline_lint.linter.Constants.GITLAB_HOST;
 public class YamlPipelineLintSettingsComponent {
 
     private final JPanel myMainPanel;
-    private final JBTextField gitlabEndpoint = new JBTextField();
-
     private final JBTextField gitlabHost = new JBTextField();
 
     private final JBPasswordField gitLabToken = new JBPasswordField();
@@ -33,43 +29,32 @@ public class YamlPipelineLintSettingsComponent {
         return new DocumentAdapter() {
             @Override
             protected void textChanged(@NotNull DocumentEvent e) {
-                if (gitlabProjectID.getText().matches("\\d+")){
-                    gitlabEndpoint.setText(String.format(Constants.GITLAB_URL, gitlabHost.getText(), gitlabProjectID.getText()));
-                }
+                // No-op: endpoint is computed at runtime per-project; do not show or compute it in global UI.
             }
         };
     }
 
 
 
-    @NotNull
-    private JBLabel createProjectIDScreenshot() {
-        JBLabel screenshot = new JBLabel();
-        screenshot.setIcon(Icons.gitlabProjectIdScreenshot);
-        return screenshot;
-    }
-
     public YamlPipelineLintSettingsComponent() {
-        JBLabel screenshot = createProjectIDScreenshot();
+        // Do not expose project ID or autodetect in the global settings UI. Project-level detection
+        // will run on project startup and store the detected values in a project-local service.
         setChangeListeners();
         BrowserLink tokenLink = new BrowserLink("Enter access token", String.format("https://%s/-/profile/personal_access_tokens",
                 GITLAB_HOST));
+
         myMainPanel = FormBuilder.createFormBuilder()
                 .addLabeledComponent(new JBLabel("Enter Gitlab host"), gitlabHost, 1, false)
-                .addLabeledComponent(new JBLabel("Enter project ID"), gitlabProjectID, 2, false)
-                .addLabeledComponent("How to get Project ID", screenshot,3,false)
-                .addLabeledComponent(tokenLink, gitLabToken, 4, false)
-                .addLabeledComponent("", showToken, 5, false)
-                .addLabeledComponent(new JBLabel("Endpoint to be used"), gitlabEndpoint, 6, false)
+                .addLabeledComponent(tokenLink, gitLabToken, 2, false)
+                .addLabeledComponent("", showToken, 3, false)
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
 
-        myMainPanel.setToolTipText("To get the gitlab Project ID\n, go to your repository and click the copy button in the screenshot.");
+        myMainPanel.setToolTipText("Configure GitLab host and token. Project ID and remote are detected per-project.");
     }
 
     private void setChangeListeners() {
-        gitlabEndpoint.setEditable(false);
-        gitlabProjectID.getDocument().addDocumentListener(changeListener);
+        // project ID is not edited in the global settings UI
         gitlabHost.getDocument().addDocumentListener(changeListener);
         char defaultEcho = gitLabToken.getEchoChar();
         showToken.addItemListener(itemEvent -> {
@@ -80,9 +65,7 @@ public class YamlPipelineLintSettingsComponent {
             }
         });
 
-        gitlabProjectID.setToolTipText("To get the gitlab Project ID\n, " +
-                "go to your repository and click the 'More actions' three dots button, " +
-                "and then click 'Copy project ID' menu item.");
+        gitlabProjectID.setToolTipText("Project ID is detected per-project on startup. If detection fails you will be prompted to enter the project ID.");
     }
 
     public JComponent getPreferredFocusedComponent() {
@@ -93,30 +76,14 @@ public class YamlPipelineLintSettingsComponent {
         return myMainPanel;
     }
 
-    public void setGitlabEndpoint(@NotNull String newText) {
-        gitlabEndpoint.setText(newText);
-    }
 
     public void setGitlabToken(@NotNull String newText) {
         gitLabToken.setText(newText);
     }
 
     @NotNull
-    public String getGitlabEndpoint() {
-        return gitlabEndpoint.getText();
-    }
-
-    @NotNull
     public String getGitlabToken() {
         return new String(gitLabToken.getPassword());
-    }
-
-    public String getGitlabProjectID() {
-        return gitlabProjectID.getText();
-    }
-
-    public void setGitlabProjectID(@NotNull String newText) {
-        gitlabProjectID.setText(newText);
     }
 
     public void setGitlabHost(String host) {
@@ -126,4 +93,6 @@ public class YamlPipelineLintSettingsComponent {
     public String getGitlabHost() {
         return gitlabHost.getText();
     }
+
+
 }

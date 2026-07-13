@@ -36,18 +36,15 @@ public class YamlPipelineLintSettingsConfigurable implements Configurable, Const
     @Override
     public boolean isModified() {
         var settingsState = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class);
-        boolean endpointModified = !settingsComponent.getGitlabEndpoint().equals(settingsState.gitlabEndpoint);
         boolean hostModified = !settingsComponent.getGitlabHost().equals(settingsState.gitlabHost);
         boolean tokenModified = !settingsComponent.getGitlabToken().equals(settingsState.gitlabToken);
-        return endpointModified || tokenModified || hostModified;
+        return tokenModified || hostModified;
     }
 
     @Override
     public void apply() throws ConfigurationException {
         var settingsState = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class);
         settingsState.gitlabHost = settingsComponent.getGitlabHost();
-        settingsState.gitlabEndpoint = settingsComponent.getGitlabEndpoint();
-        settingsState.gitlabProjectID = settingsComponent.getGitlabProjectID();
         PasswordSafeService.storeToken(settingsComponent.getGitlabToken());
         settingsState.gitlabToken = settingsComponent.getGitlabToken();
     }
@@ -55,9 +52,7 @@ public class YamlPipelineLintSettingsConfigurable implements Configurable, Const
     @Override
     public void reset() {
         var settingsState = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class);
-        settingsComponent.setGitlabEndpoint(settingsState.gitlabEndpoint);
         settingsComponent.setGitlabToken(settingsState.gitlabToken!=null? settingsState.gitlabToken : "" );
-        settingsComponent.setGitlabProjectID(settingsState.gitlabProjectID);
         settingsComponent.setGitlabHost(settingsState.gitlabHost);
     }
 
