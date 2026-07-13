@@ -128,6 +128,8 @@ dependencies {
 
 // Configure Gradle IntelliJ Plugin
 intellijPlatform {
+    sandboxContainer.set(layout.buildDirectory.dir("idea-sandbox"))
+
     pluginConfiguration {
         name = properties("pluginName")
         var changelog = file("build/docs/asciidoc/html/changelog.html")
