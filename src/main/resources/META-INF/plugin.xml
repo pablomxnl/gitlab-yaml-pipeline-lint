@@ -14,6 +14,8 @@
     ]]></description>
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.modules.vcs</depends>
+    <depends>Git4Idea</depends>
     <depends>org.jetbrains.plugins.yaml</depends>
 
     <extensions defaultExtensionNs="com.intellij">
@@ -32,7 +34,9 @@
                            implementationClass="org.ideplugins.ci_pipeline_lint.annotator.PipelineLintResultsExternalAnnotator"
                            language="yaml"
         />
-        <notificationGroup displayType="STICKY_BALLOON" id="CI Pipeline Lint Plugin Update"/>
+        <notificationGroup displayType="STICKY_BALLOON" id="CI Pipeline Lint Plugin Update"
+                           bundle="gitlab-pipeline-lint-plugin"
+                           key="notification.group.ci.pipeline.lint.plugin.update"/>
         <notificationGroup displayType="STICKY_BALLOON" id="org.ideplugins.pipeline-lint" hideFromSettings="true" />
         <postStartupActivity
                 implementation="org.ideplugins.ci_pipeline_lint.activity.YamlPipelineLintPluginStartupActivity"/>

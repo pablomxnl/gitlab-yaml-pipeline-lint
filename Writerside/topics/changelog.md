@@ -4,6 +4,9 @@ This document provides an overview of the changes by release.
 
 ## Release notes
 
+### 0.0.21
+* Implements [#8](https://gitlab.com/pablomxnl/gitlab-yaml-pipeline-lint/-/work_items/8) Autodetect gitlab project ID with gitlab api
+
 ### 0.0.20
 * Remove usage of internal classes for 2026.2 EAP compatibility
 

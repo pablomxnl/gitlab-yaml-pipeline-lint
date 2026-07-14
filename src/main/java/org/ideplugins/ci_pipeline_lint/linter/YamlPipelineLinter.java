@@ -5,6 +5,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.project.Project;
 import okhttp3.*;
 import org.apache.http.HttpStatus;
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +18,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 
+import org.ideplugins.ci_pipeline_lint.settings.ProjectGitSettingsState;
+import org.ideplugins.ci_pipeline_lint.settings.YamlPipelineLintSettingsState;
+import org.ideplugins.ci_pipeline_lint.service.PasswordSafeService;
+
 public class YamlPipelineLinter implements Constants {
 
     private static final Logger LOGGER = Logger.getInstance(YamlPipelineLinter.class);
@@ -25,6 +31,7 @@ public class YamlPipelineLinter implements Constants {
     private final String url;
     private final String token;
 
+    // Backwards-compatible constructors (used by tests or other callers)
     public YamlPipelineLinter(String url, String token) {
         this.url = url;
         this.token = token;
@@ -35,6 +42,25 @@ public class YamlPipelineLinter implements Constants {
         this.url = url;
         this.token = token;
         client = new OkHttpClient.Builder().callTimeout(timeout, TimeUnit.MILLISECONDS).build();
+    }
+
+    // New constructors: build URL and token from application/project settings
+    public YamlPipelineLinter(Project project) {
+        this(project, 0L);
+    }
+
+    public YamlPipelineLinter(Project project, long timeout) {
+        YamlPipelineLintSettingsState yamlState = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class);
+        ProjectGitSettingsState projectState = project.getService(ProjectGitSettingsState.class);
+
+        // token is stored in PasswordSafe; retrieve from PasswordSafeService
+        this.token = PasswordSafeService.retrieveToken();
+
+        String projectId = projectState != null && projectState.projectId != null ? projectState.projectId : "";
+        String host = yamlState != null && yamlState.gitlabHost != null ? yamlState.gitlabHost : Constants.GITLAB_HOST;
+        this.url = String.format(Constants.GITLAB_URL, host, projectId);
+        client = timeout > 0 ? new OkHttpClient.Builder().callTimeout(timeout, TimeUnit.MILLISECONDS).build()
+                : new OkHttpClient.Builder().build();
     }
 
     public JsonObject ciLint(JsonObject yamlJson) {
@@ -53,21 +79,18 @@ public class YamlPipelineLinter implements Constants {
                 .thenAccept(response -> {
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty(GITLAB_RESPONSE_STATUS, response.code());
-                    Optional<ResponseBody> body = Optional.ofNullable(response.body());
+                    Optional<ResponseBody> body = Optional.of(response.body());
                     String gitlabResponse = "";
-                    if (body.isPresent()) {
-                        try {
-                            gitlabResponse = body.get().string();
-                            LOGGER.info(String.format("Received response %s", gitlabResponse));
-                            JsonElement jsonElement = JsonParser.parseString(gitlabResponse);
-                            jsonObject.add(GITLAB_RESPONSE_BODY, jsonElement);
-                            future.complete(jsonObject);
-                        } catch (JsonSyntaxException jse) {
-                            jsonObject.addProperty(GITLAB_RESPONSE_BODY, gitlabResponse);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-
+                    try {
+                        gitlabResponse = body.get().string();
+                        LOGGER.info(String.format("Received response %s", gitlabResponse));
+                        JsonElement jsonElement = JsonParser.parseString(gitlabResponse);
+                        jsonObject.add(GITLAB_RESPONSE_BODY, jsonElement);
+                        future.complete(jsonObject);
+                    } catch (JsonSyntaxException jse) {
+                        jsonObject.addProperty(GITLAB_RESPONSE_BODY, gitlabResponse);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
 
                 })
@@ -103,9 +126,12 @@ public class YamlPipelineLinter implements Constants {
     private Request createPostRequest(JsonObject yaml) {
 //        yaml.addProperty("include_jobs", true);
         RequestBody body = RequestBody.create(yaml.toString(), MediaType.get("application/json; charset=utf-8"));
-        return new Request.Builder().addHeader("PRIVATE-TOKEN", token)
-                .addHeader("Content-ype", "application/json")
-                .url(url).post(body).build();
+        Request.Builder builder = new Request.Builder().url(url).post(body);
+        if (token != null && !token.isBlank()) {
+            builder.addHeader("PRIVATE-TOKEN", token);
+        }
+        builder.addHeader("Content-Type", "application/json");
+        return builder.build();
     }
 
 }
