@@ -47,7 +47,6 @@ tasks.named("asciidoctorHtml"){
     outputs.cacheIf { false }
 }
 
-@Suppress("unused")
 val runIdeForManualTests by intellijPlatformTesting.runIde.registering {
     prepareSandboxTask {
         sandboxDirectory = project.layout.buildDirectory.dir("custom-sandbox")
@@ -72,7 +71,6 @@ val runIdeForManualTests by intellijPlatformTesting.runIde.registering {
     }
 }
 
-@Suppress("unused")
 val runIdeEAP by intellijPlatformTesting.runIde.registering {
     type = IntelliJPlatformType.IntellijIdea
     version = "253-EAP-SNAPSHOT"
@@ -80,6 +78,7 @@ val runIdeEAP by intellijPlatformTesting.runIde.registering {
 }
 
 tasks.register("printCoverageForGitlab") {
+    description = "Prints jacoco coverage for gitlab"
     outputs.cacheIf { false }
     var report = file("build/reports/jacoco/test/html/index.html")
     if (report.exists()){
@@ -90,6 +89,7 @@ tasks.register("printCoverageForGitlab") {
 }
 
 tasks.register<JavaExec>("FetchGitlabVariables") {
+    description = "Fetches GitLab variables"
     dependsOn("classes")
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("org.ideplugins.ci_pipeline_lint.gitlab.FetchGitlabVariables")
@@ -128,6 +128,8 @@ dependencies {
 
 // Configure Gradle IntelliJ Plugin
 intellijPlatform {
+    sandboxContainer.set(layout.buildDirectory.dir("idea-sandbox"))
+
     pluginConfiguration {
         name = properties("pluginName")
         var changelog = file("build/docs/asciidoc/html/changelog.html")
@@ -137,6 +139,10 @@ intellijPlatform {
                     .select("#releasenotes")[0].nextElementSibling()!!.children().subList(0, 10)
                     .joinToString("\n")
             }
+        } else {
+            logger.warn("Could not find changelog at ${changelog.absolutePath},\n " +
+                    "Make sure asciidoctor task ran before or inherit previous ci artifacts, " +
+                    "otherwise plugin change notes will be empty")
         }
     }
 
@@ -199,6 +205,7 @@ tasks {
 
 // Task to update CHANGELOG.adoc and Writerside/v.list after version bump
 tasks.register<DefaultTask>("updateVersionInDocs") {
+    description = "Updates version in documentation and properties files"
     doLast {
         val ver = project.version.toString()
 
@@ -267,6 +274,34 @@ tasks.register<DefaultTask>("updateVersionInDocs") {
 
             vlist.writeText(newVText)
             logger.lifecycle("Updated plugin_version in Writerside/v.list to $ver")
+        }
+
+        // --- Update plugin properties file ---
+        val propFile = file("src/main/resources/gitlab-pipeline-lint-plugin.properties")
+        if (!propFile.exists()) {
+            throw GradleException("Plugin properties file not found at: ${propFile.path}")
+        }
+
+        val propKey = "cipipelinelint.plugin.version"
+        val propsText = propFile.readText()
+        val keyRegex = Regex("^${Regex.escape(propKey)}\\s*=.*$", RegexOption.MULTILINE)
+
+        val newPropsText = if (keyRegex.containsMatchIn(propsText)) {
+            propsText.replace(keyRegex, "$propKey=$ver")
+        } else {
+            // Append property if missing
+            propsText.trimEnd() + "\n$propKey=$ver\n"
+        }
+
+        if (newPropsText == propsText) {
+            logger.lifecycle("${propFile.path} already up-to-date with $propKey=$ver; skipping.")
+        } else {
+            val propBak = file("${propFile.path}.bak")
+            propFile.copyTo(propBak, overwrite = true)
+            logger.lifecycle("Backed up ${propFile.path} to ${propBak.path}")
+
+            propFile.writeText(newPropsText)
+            logger.lifecycle("Updated $propKey in ${propFile.path} to $ver")
         }
     }
 }

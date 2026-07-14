@@ -29,7 +29,7 @@ public class FetchGitlabVariables {
     }
 
     private String fetchMarkdownContent() throws IOException {
-        String result = "";
+        String result;
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(URL)
@@ -39,9 +39,7 @@ public class FetchGitlabVariables {
             if (!response.isSuccessful()) {
                 throw new IOException("Failed to fetch content: " + response);
             }
-            if (response.body() != null) {
-                result = response.body().string();
-            }
+            result = response.body().string();
         }
         return result;
     }

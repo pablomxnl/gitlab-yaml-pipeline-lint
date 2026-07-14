@@ -8,10 +8,12 @@ import org.ideplugins.ci_pipeline_lint.service.PasswordSafeService;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.ResourceBundle;
 
 public class YamlPipelineLintSettingsConfigurable implements Configurable, Constants {
 
     private YamlPipelineLintSettingsComponent settingsComponent;
+    private final ResourceBundle BUNDLE = ResourceBundle.getBundle(PLUGIN_BUNDLE);
 
     public YamlPipelineLintSettingsConfigurable(){
 
@@ -36,28 +38,42 @@ public class YamlPipelineLintSettingsConfigurable implements Configurable, Const
     @Override
     public boolean isModified() {
         var settingsState = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class);
-        boolean endpointModified = !settingsComponent.getGitlabEndpoint().equals(settingsState.gitlabEndpoint);
         boolean hostModified = !settingsComponent.getGitlabHost().equals(settingsState.gitlabHost);
         boolean tokenModified = !settingsComponent.getGitlabToken().equals(settingsState.gitlabToken);
-        return endpointModified || tokenModified || hostModified;
+        return tokenModified || hostModified;
     }
 
     @Override
     public void apply() throws ConfigurationException {
+        validateValues();
         var settingsState = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class);
         settingsState.gitlabHost = settingsComponent.getGitlabHost();
-        settingsState.gitlabEndpoint = settingsComponent.getGitlabEndpoint();
-        settingsState.gitlabProjectID = settingsComponent.getGitlabProjectID();
         PasswordSafeService.storeToken(settingsComponent.getGitlabToken());
         settingsState.gitlabToken = settingsComponent.getGitlabToken();
+    }
+
+    private void validateValues() throws ConfigurationException {
+        StringBuilder errors = new StringBuilder();
+        if (settingsComponent.getGitlabHost().isEmpty()) {
+            errors.append(BUNDLE.getString("ci.pipeline.lint.plugin.invalid.settings.host.empty"));
+        }
+
+        if (settingsComponent.getGitlabToken().isEmpty()) {
+            errors.append((errors.isEmpty() ? "" : "\n"))
+                    .append(BUNDLE.getString("ci.pipeline.lint.plugin.invalid.settings.token.empty"));
+        }
+
+        if (!errors.isEmpty()) {
+            throw new ConfigurationException(
+                    errors.toString(),
+                    BUNDLE.getString("ci.pipeline.lint.plugin.invalid.settings.title"));
+        }
     }
 
     @Override
     public void reset() {
         var settingsState = ApplicationManager.getApplication().getService(YamlPipelineLintSettingsState.class);
-        settingsComponent.setGitlabEndpoint(settingsState.gitlabEndpoint);
         settingsComponent.setGitlabToken(settingsState.gitlabToken!=null? settingsState.gitlabToken : "" );
-        settingsComponent.setGitlabProjectID(settingsState.gitlabProjectID);
         settingsComponent.setGitlabHost(settingsState.gitlabHost);
     }
 

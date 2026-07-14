@@ -34,20 +34,23 @@ and paste it on the IDE plugin repositories via <kbd>Plugins</kbd> -> <kbd>⚙</
 ## Configuration
 
 The plugin requires a Gitlab token and a Project ID to work with the Gitlab CI Lint API.
-To set up this configuration go to 
+The plugin tries to detect the project id from the git remote and fallbacks to ask the user the Project ID when it can't find it.
+To set up Gitlab host and token go to 
 
 <kbd>Settings</kbd> -> <kbd>Tools</kbd> -> <kbd>CI Pipeline Lint</kbd> 
 
 ![Plugin settings](plugin_settings.png){border-effect="line"}
 
 1. Gitlab host: default to https://gitlab.com , change it if using a private or self-hosted instance
-2. Gitlab Project ID: To obtain the Project ID go to a gitlab repository you own and at the top, below the project name the Project ID is displayed, there is also a copy button next to the Project ID. Gitlab 16.0 [deprecated](https://docs.gitlab.com/ee/api/lint.html#validate-the-ci-yaml-configuration-deprecated) the global lint endpoint, and now is per project, that's why a Project ID is now required.
 3. Access token: create a Gitlab personal access token with api access, the link on the label will open the browser at [https://gitlab.com/-/user_settings/personal_access_tokens](https://gitlab.com/-/user_settings/personal_access_tokens) to create a token. 
 
 Alternatively, whenever the plugin is invoked with incomplete configuration, the settings can be entered by clicking on the notification link:
 
 ![Plugin settings from notification](plugin_settings_when_not_configured.png){border-effect="line"}
 
+When the plugin cant detect the Project ID using the token and Gitlab API from the git remote or from reading `.git/config` falls back to show a notification with an action to trigger the prompt for the Project ID.
+
+![Prompt for Project ID when not detected from git remote](plugin_settings_project_id_not_detected.png){border-effect="line"}
 
 ## Usage
 
