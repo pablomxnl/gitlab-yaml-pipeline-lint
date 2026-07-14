@@ -4,7 +4,9 @@ import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.PsiFile;
+import org.ideplugins.ci_pipeline_lint.settings.ProjectGitSettingsState;
 import org.jetbrains.annotations.NotNull;
 
 import static org.ideplugins.ci_pipeline_lint.actions.ActionHelper.displayNotificationWithAction;
@@ -29,8 +31,22 @@ public class LintYamlPopupAction extends BaseAction {
             if (areHostAndTokenMissing(project)) {
                 displayNotificationWithAction(NotificationType.WARNING, "Please setup your Gitlab Host and Token");
             } else if (isProjectIdMissing(project)) {
-                // prompt user to enter project id when host and token are configured
-                promptForProjectId(project);
+                displayNotificationWithAction(NotificationType.WARNING,
+                        "Couldn't determine Project ID",
+                        "Please setup your Project ID",
+                        ()->{
+                            String input = Messages.showInputDialog(project,
+                                    "Could not detect GitLab project ID automatically.\nPlease enter Project ID:",
+                                    "Enter Project ID",
+                                    null);
+                            if (input != null && !input.isBlank()) {
+                                ProjectGitSettingsState projectState = project.getService(ProjectGitSettingsState.class);
+                                projectState.projectId = input.trim();
+
+                                doLintInBackground(event, psiFile);
+                            }
+                        }
+                );
             } else {
                 doLintInBackground(event, psiFile);
             }

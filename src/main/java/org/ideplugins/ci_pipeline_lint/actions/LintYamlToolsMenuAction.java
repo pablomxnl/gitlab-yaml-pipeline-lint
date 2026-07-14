@@ -4,11 +4,13 @@ import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
+import org.ideplugins.ci_pipeline_lint.settings.ProjectGitSettingsState;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -53,14 +55,33 @@ public class LintYamlToolsMenuAction extends BaseAction {
         }
 
         if (isProjectIdMissing(project)) {
-            // Prompt user to enter project id before attempting to lint
-            promptForProjectId(project);
+            displayNotificationWithAction(NotificationType.WARNING,
+                    "Couldn't determine Project ID",
+                    "Please setup your Project ID",
+                    ()->{
+                        String input = Messages.showInputDialog(project,
+                                "Could not detect GitLab project ID automatically.\nPlease enter Project ID:",
+                                "Enter Project ID",
+                                null);
+                        if (input != null && !input.isBlank()) {
+                            ProjectGitSettingsState projectState = project.getService(ProjectGitSettingsState.class);
+                            projectState.projectId = input.trim();
+
+                            doLintPipelineFile(event, project, files);
+                        }
+
+                    }
+            );
             return;
         }
 
+        doLintPipelineFile(event, project, files);
+    }
+
+    private void doLintPipelineFile(@NotNull AnActionEvent event, Project project, List<VirtualFile> files) {
         DumbService dumbService = DumbService.getInstance(Objects.requireNonNull(project));
         if (dumbService.isDumb()){
-            dumbService.runWhenSmart(() -> lintPipelineFile(project,files , event));
+            dumbService.runWhenSmart(() -> lintPipelineFile(project, files, event));
         } else {
             lintPipelineFile(project, files, event);
         }

@@ -47,7 +47,6 @@ tasks.named("asciidoctorHtml"){
     outputs.cacheIf { false }
 }
 
-@Suppress("unused")
 val runIdeForManualTests by intellijPlatformTesting.runIde.registering {
     prepareSandboxTask {
         sandboxDirectory = project.layout.buildDirectory.dir("custom-sandbox")
@@ -72,7 +71,6 @@ val runIdeForManualTests by intellijPlatformTesting.runIde.registering {
     }
 }
 
-@Suppress("unused")
 val runIdeEAP by intellijPlatformTesting.runIde.registering {
     type = IntelliJPlatformType.IntellijIdea
     version = "253-EAP-SNAPSHOT"
@@ -80,6 +78,7 @@ val runIdeEAP by intellijPlatformTesting.runIde.registering {
 }
 
 tasks.register("printCoverageForGitlab") {
+    description = "Prints jacoco coverage for gitlab"
     outputs.cacheIf { false }
     var report = file("build/reports/jacoco/test/html/index.html")
     if (report.exists()){
@@ -90,6 +89,7 @@ tasks.register("printCoverageForGitlab") {
 }
 
 tasks.register<JavaExec>("FetchGitlabVariables") {
+    description = "Fetches GitLab variables"
     dependsOn("classes")
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("org.ideplugins.ci_pipeline_lint.gitlab.FetchGitlabVariables")
@@ -205,6 +205,7 @@ tasks {
 
 // Task to update CHANGELOG.adoc and Writerside/v.list after version bump
 tasks.register<DefaultTask>("updateVersionInDocs") {
+    description = "Updates version in documentation and properties files"
     doLast {
         val ver = project.version.toString()
 

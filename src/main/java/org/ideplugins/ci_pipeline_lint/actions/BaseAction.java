@@ -5,7 +5,6 @@ import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.FileContentUtil;
@@ -44,19 +43,6 @@ public abstract class BaseAction extends AnAction implements Constants {
         ProjectGitSettingsState projectState = project == null ? null : project.getService(ProjectGitSettingsState.class);
         String projectId = projectState != null ? projectState.projectId : "";
         return projectId == null || projectId.isBlank();
-    }
-
-    protected void promptForProjectId(Project project) {
-        ApplicationManager.getApplication().invokeLater(() -> {
-            String input = Messages.showInputDialog(project,
-                    "Could not detect GitLab project ID automatically.\nPlease enter Project ID:",
-                    "Enter Project ID",
-                    null);
-            if (input != null && !input.isBlank()) {
-                ProjectGitSettingsState projectState = project.getService(ProjectGitSettingsState.class);
-                projectState.projectId = input.trim();
-            }
-        });
     }
 
     @RequiresBackgroundThread
